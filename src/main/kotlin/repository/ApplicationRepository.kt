@@ -3,10 +3,10 @@ package com.example.repository
 import com.example.model.JobApplication
 
 interface ApplicationRepository {
-    fun findAll(): List<JobApplication>
-    fun findById(id: String): JobApplication?
-    fun create(jobApplication: JobApplication): Boolean
-    fun update(id: String, jobApplication: JobApplication): JobApplication?
-    fun delete(id: String): JobApplication?
+    suspend fun findAll(): List<JobApplication>
+    suspend fun findById(id: String): JobApplication?
+    suspend fun create(jobApplication: JobApplication): Boolean
+    suspend fun update(id: String, jobApplication: JobApplication): JobApplication?
+    suspend fun delete(id: String): JobApplication?
 
 }

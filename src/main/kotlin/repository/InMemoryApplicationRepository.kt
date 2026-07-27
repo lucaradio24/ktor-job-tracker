@@ -1,20 +1,32 @@
 package com.example.repository
 
+import com.example.model.ApplicationStatus
 import com.example.model.JobApplication
+import java.time.Instant
 
-class InMemoryApplicationRepository : ApplicationRepository {
+class InMemoryApplicationRepository (
+    private val applications: MutableList<JobApplication> = mutableListOf(
+        JobApplication(
+            id = "1",
+            company = "JetBrains",
+            status = ApplicationStatus.APPLIED,
+            title = "Front end developer",
+            appliedAt = Instant.now().toString()
 
-    private  val applications = com.example.model.mock.applications
+        )
+    )
+) : ApplicationRepository {
 
-    override fun findAll(): List<JobApplication> {
-        return applications
+
+    override suspend fun findAll(): List<JobApplication> {
+        return applications.toList()
     }
 
-    override fun findById(id: String): JobApplication? {
+    override suspend fun findById(id: String): JobApplication? {
         return applications.find { it.id == id }
     }
 
-    override fun create(jobApplication: JobApplication): Boolean {
+    override suspend fun create(jobApplication: JobApplication): Boolean {
         val alreadyExists = applications.any { it.id == jobApplication.id }
         if (alreadyExists) return false
 
@@ -22,7 +34,7 @@ class InMemoryApplicationRepository : ApplicationRepository {
         return true
     }
 
-    override fun update(
+    override suspend fun update(
         id: String,
         jobApplication: JobApplication
     ): JobApplication? {
@@ -33,7 +45,7 @@ class InMemoryApplicationRepository : ApplicationRepository {
         return updatedApplication
     }
 
-    override fun delete(id: String): JobApplication? {
+    override suspend fun delete(id: String): JobApplication? {
         val applicationToRemove = applications.find { it.id == id } ?: return null
         applications.remove(applicationToRemove)
         return applicationToRemove
