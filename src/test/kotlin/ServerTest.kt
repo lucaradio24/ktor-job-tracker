@@ -15,4 +15,12 @@ class ServerTest {
         assertEquals(HttpStatusCode.OK, client.get("/").status)
     }
 
+    @Test
+    fun `GET applications returns OK`() = testApplication {
+        configure()
+
+        val response = client.get("/applications")
+
+        assertEquals(HttpStatusCode.OK, response.status)
+    }
 }

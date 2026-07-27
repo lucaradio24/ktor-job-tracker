@@ -1,12 +1,15 @@
 package com.example
 
 import com.example.model.Health
+import com.example.repository.ApplicationRepository
+import com.example.repository.InMemoryApplicationRepository
 import com.example.routes.applicationRoutes
 import io.ktor.server.application.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 
 fun Application.configureRouting() {
+    val repository: ApplicationRepository = InMemoryApplicationRepository()
     routing {
         get("/") {
             call.respondText("Hello, World!")
@@ -18,6 +21,6 @@ fun Application.configureRouting() {
             call.respond(Health(status = "ok"))
         }
 
-        applicationRoutes()
+        applicationRoutes(repository)
     }
 }
