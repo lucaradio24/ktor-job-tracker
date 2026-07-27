@@ -45,10 +45,14 @@ class InMemoryApplicationRepository (
         return updatedApplication
     }
 
+
+
     override suspend fun delete(id: String): JobApplication? {
         val applicationToRemove = applications.find { it.id == id } ?: return null
         applications.remove(applicationToRemove)
         return applicationToRemove
     }
+
+
 
 }
