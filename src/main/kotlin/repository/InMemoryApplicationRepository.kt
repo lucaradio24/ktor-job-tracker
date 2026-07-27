@@ -1,8 +1,9 @@
 package com.example.repository
 
+import com.example.dto.PatchJobApplicationRequest
 import com.example.model.ApplicationStatus
 import com.example.model.JobApplication
-import java.time.Instant
+import java.time.LocalDateTime
 
 class InMemoryApplicationRepository (
     private val applications: MutableList<JobApplication> = mutableListOf(
@@ -11,7 +12,7 @@ class InMemoryApplicationRepository (
             company = "JetBrains",
             status = ApplicationStatus.APPLIED,
             title = "Front end developer",
-            appliedAt = Instant.now().toString()
+            appliedAt = LocalDateTime.now().toString()
 
         )
     )
@@ -53,6 +54,8 @@ class InMemoryApplicationRepository (
         return applicationToRemove
     }
 
-
+    override suspend fun patch(id: String, request: PatchJobApplicationRequest): JobApplication? {
+        TODO("Not yet implemented")
+    }
 
 }

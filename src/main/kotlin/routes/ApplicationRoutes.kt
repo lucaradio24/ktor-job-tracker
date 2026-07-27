@@ -41,7 +41,7 @@ fun Route.applicationRoutes(repository: ApplicationRepository) {
 
         post{
 
-            val request = call.receive< CreateJobApplicationRequest>()
+            val request = call.receive<CreateJobApplicationRequest>()
             val application = JobApplication(
                 id = UUID.randomUUID().toString(),
                 company = request.company,

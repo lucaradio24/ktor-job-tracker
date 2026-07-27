@@ -1,1 +1,29 @@
-/.env
+# Variabili d'ambiente e segreti
+.env
+.env.*
+!.env.example
+
+# Gradle
+.gradle/
+build/
+**/build/
+
+# IntelliJ IDEA
+.idea/
+*.iml
+out/
+
+# Kotlin
+.kotlin/
+
+# Log
+*.log
+logs/
+
+# Sistema operativo
+.DS_Store
+Thumbs.db
+
+# File temporanei
+*.tmp
+*.swp
