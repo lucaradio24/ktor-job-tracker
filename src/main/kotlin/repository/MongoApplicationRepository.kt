@@ -1,7 +1,7 @@
 package com.example.repository
 
-import com.example.dto.PatchJobApplicationRequest
 import com.example.model.JobApplication
+import com.example.model.JobApplicationChanges
 import com.mongodb.client.model.Updates.set
 import com.mongodb.client.model.Updates.combine
 import com.mongodb.client.model.Filters.eq
@@ -55,34 +55,34 @@ class MongoApplicationRepository(
         return application
     }
 
-    override suspend fun patch(id: String, request: PatchJobApplicationRequest): JobApplication? {
+    override suspend fun patch(id: String, changes: JobApplicationChanges): JobApplication? {
         val updatedFields = mutableListOf<Bson>()
 
-        request.company?.let {
+        changes.company?.let {
             updatedFields.add(set("company", it))
         }
 
-        request.status?.let {
+        changes.status?.let {
             updatedFields.add(set("status", it))
         }
 
-        request.title?.let {
+        changes.title?.let {
             updatedFields.add(set("title", it))
         }
 
-        request.appliedAt?.let {
+        changes.appliedAt?.let {
             updatedFields.add(set("appliedAt", it))
         }
 
-        request.description?.let {
+        changes.description?.let {
             updatedFields.add(set("description", it))
         }
 
-        request.link?.let {
+        changes.link?.let {
             updatedFields.add(set("link", it))
         }
 
-        request.city?.let {
+        changes.city?.let {
             updatedFields.add(set("city", it))
         }
 

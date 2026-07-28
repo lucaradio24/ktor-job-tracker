@@ -1,8 +1,8 @@
 package com.example.repository
 
-import com.example.dto.PatchJobApplicationRequest
 import com.example.model.ApplicationStatus
 import com.example.model.JobApplication
+import com.example.model.JobApplicationChanges
 import java.time.LocalDateTime
 
 class InMemoryApplicationRepository (
@@ -54,8 +54,26 @@ class InMemoryApplicationRepository (
         return applicationToRemove
     }
 
-    override suspend fun patch(id: String, request: PatchJobApplicationRequest): JobApplication? {
-        TODO("Not yet implemented")
+    override suspend fun patch(id: String, changes: JobApplicationChanges): JobApplication? {
+        val index = applications.indexOfFirst { it.id == id }
+
+        if (index == -1) return null
+
+        val current = applications[index]
+
+        val updated = current.copy(
+            company = changes.company ?: current.company,
+            status = changes.status ?: current.status,
+            title = changes.title ?: current.title,
+            appliedAt = changes.appliedAt ?: current.appliedAt,
+            description = changes.description ?: current.description,
+            link = changes.link ?: current.link,
+            city = changes.city ?: current.city
+        )
+
+        applications[index] = updated
+
+        return updated
     }
 
 }

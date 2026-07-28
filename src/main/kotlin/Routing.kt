@@ -5,6 +5,7 @@ import com.example.model.Health
 import com.example.repository.ApplicationRepository
 import com.example.repository.MongoApplicationRepository
 import com.example.routes.applicationRoutes
+import com.example.service.JobApplicationService
 import io.ktor.server.application.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
@@ -13,6 +14,9 @@ fun Application.configureRouting() {
     val repository: ApplicationRepository = MongoApplicationRepository(
         MongoConfig.jobApplicationsCollection
     )
+
+    val service = JobApplicationService(repository)
+
     routing {
         get("/") {
             call.respondText("Hello, World!")
@@ -30,6 +34,6 @@ fun Application.configureRouting() {
                 "mongo" to result.toJson()))
         }
 
-        applicationRoutes(repository)
+        applicationRoutes(service)
     }
 }

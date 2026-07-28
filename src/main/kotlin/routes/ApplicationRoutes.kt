@@ -3,12 +3,16 @@ package com.example.routes
 import com.example.dto.CreateJobApplicationRequest
 import com.example.dto.PatchJobApplicationRequest
 import com.example.dto.UpdateJobApplicationRequest
+import com.example.error.ApiErrorResponse
 import com.example.model.JobApplication
+import com.example.model.JobApplicationChanges
 import io.ktor.server.response.respond
 import io.ktor.server.routing.Route
 import io.ktor.server.routing.get
 import io.ktor.server.routing.route
-import com.example.repository.ApplicationRepository
+import com.example.service.JobApplicationService
+import com.example.validation.JobApplicationRequestValidator
+import com.example.validation.ValidationResponse
 import io.ktor.http.HttpStatusCode
 import io.ktor.server.request.receive
 
@@ -18,16 +22,16 @@ import io.ktor.server.routing.post
 import io.ktor.server.routing.put
 import java.util.UUID
 
-fun Route.applicationRoutes(repository: ApplicationRepository) {
+fun Route.applicationRoutes(service: JobApplicationService) {
     route("/applications"){
         get {
-            call.respond(HttpStatusCode.OK, repository.findAll())
+            call.respond(HttpStatusCode.OK, service.findAll())
         }
 
         get("/{id}"){
             val id = call.parameters["id"]
             if (id != null){
-                val application = repository.findById(id)
+                val application = service.findById(id)
                 if (application != null){
                     call.respond(application)
                 } else {
@@ -42,6 +46,12 @@ fun Route.applicationRoutes(repository: ApplicationRepository) {
         post{
 
             val request = call.receive<CreateJobApplicationRequest>()
+            val errors = JobApplicationRequestValidator.validateCreate(request)
+
+            if (errors.isNotEmpty()){
+                return@post call.respond(HttpStatusCode.BadRequest, ValidationResponse(errors))
+            }
+
             val application = JobApplication(
                 id = UUID.randomUUID().toString(),
                 company = request.company,
@@ -52,9 +62,9 @@ fun Route.applicationRoutes(repository: ApplicationRepository) {
                 link = request.link,
                 city = request.city,
             )
-            val created = repository.create(application)
+            val created = service.create(application)
             if (!created){
-                return@post call.respond(HttpStatusCode.Conflict,mapOf("error" to "Application already exists"))
+                return@post call.respond(HttpStatusCode.Conflict, ApiErrorResponse("Job application already exists"))
             }
             call.respond(HttpStatusCode.Created, application)
         }
@@ -63,11 +73,14 @@ fun Route.applicationRoutes(repository: ApplicationRepository) {
             val id = call.parameters["id"]
                 ?: return@put call.respond(
                     HttpStatusCode.BadRequest,
-                    mapOf("error" to "Missing or malformed id")
+                    ApiErrorResponse("Missing or malformed id")
                 )
 
             val request = call.receive<UpdateJobApplicationRequest>()
-
+            val errors = JobApplicationRequestValidator.validateUpdate(request)
+            if (errors.isNotEmpty()){
+                return@put call.respond(HttpStatusCode.BadRequest, ValidationResponse(errors))
+            }
 
             val receivedApplication = JobApplication(
                 id = id,
@@ -80,45 +93,50 @@ fun Route.applicationRoutes(repository: ApplicationRepository) {
                 city = request.city,
             )
 
-            val updatedApplication = repository.update(id,receivedApplication)
+            val updatedApplication = service.update(id,receivedApplication)
             if (updatedApplication != null){
                 call.respond(HttpStatusCode.OK, updatedApplication)
             } else {
-                call.respond(HttpStatusCode.NotFound, mapOf("error" to "Application not found"))
+                call.respond(HttpStatusCode.NotFound, ApiErrorResponse("Application not found"))
             }
 
 
         }
 
         patch("/{id}") {
-            val id = call.parameters["id"] ?: return@patch call.respond(HttpStatusCode.BadRequest)
-            val request = call.receive<PatchJobApplicationRequest>()
-            val existingApplication = repository.findById(id) ?: return@patch call.respond(HttpStatusCode.NotFound,
-                mapOf("error" to "Application not found"))
+            val id = call.parameters["id"]
+                ?: return@patch call.respond(HttpStatusCode.BadRequest, ApiErrorResponse("Missing or malformed id"))
+            val request = call.receive< PatchJobApplicationRequest>()
 
-            val applicationToUpdate = existingApplication.copy(
-                company = request.company ?: existingApplication.company,
-                status = request.status ?: existingApplication.status,
-                title = request.title ?: existingApplication.title,
-                description = request.description ?: existingApplication.description,
-                appliedAt = request.appliedAt ?: existingApplication.appliedAt,
-                link = request.link ?: existingApplication.link,
-                city = request.city ?: existingApplication.city,
+            val errors = JobApplicationRequestValidator.validatePatch(request)
 
+
+            if (errors.isNotEmpty()){
+                return@patch call.respond(HttpStatusCode.BadRequest, ValidationResponse(errors))
+            }
+
+            val changes = JobApplicationChanges(
+                company = request.company,
+                status = request.status,
+                title = request.title,
+                description = request.description,
+                appliedAt = request.appliedAt,
+                link = request.link,
+                city = request.city,
             )
 
-            val updatedApplication = repository.update(id, applicationToUpdate)
+            val updatedApplication = service.patch(id, changes)
+                ?: return@patch call.respond(HttpStatusCode.NotFound, ApiErrorResponse("Application not found"))
 
-            call.respond(HttpStatusCode.OK,
-                updatedApplication!!)
+            call.respond(HttpStatusCode.OK,updatedApplication)
         }
 
         delete( "/{id}" ){
             val id = call.parameters["id"]
             ?: return@delete call.respond(HttpStatusCode.BadRequest)
 
-            val applicationToRemove = repository.delete(id) ?: return@delete call.respond(HttpStatusCode.NotFound,
-                mapOf("error" to "Application not found"))
+            val applicationToRemove = service.delete(id) ?: return@delete call.respond(HttpStatusCode.NotFound,
+                ApiErrorResponse("Application not found"))
 
 
             call.respond(HttpStatusCode.OK, applicationToRemove )
