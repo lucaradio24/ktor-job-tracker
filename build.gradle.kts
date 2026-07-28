@@ -22,6 +22,7 @@ dependencies {
     implementation(ktorLibs.server.core)
     implementation(ktorLibs.server.netty)
     implementation(ktorLibs.server.statusPages)
+    implementation(ktorLibs.server.cors)
     implementation(libs.logback.classic)
     implementation("io.github.cdimascio:dotenv-kotlin:6.5.1")
     implementation("org.mongodb:mongodb-driver-kotlin-coroutine:5.5.0")

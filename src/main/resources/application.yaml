@@ -5,4 +5,5 @@ ktor:
     modules:
       - com.example.SerializationKt.configureSerialization
       - com.example.StatusPagesKt.configureStatusPages
+      - com.example.CorsKt.configureCors
       - com.example.RoutingKt.configureRouting
