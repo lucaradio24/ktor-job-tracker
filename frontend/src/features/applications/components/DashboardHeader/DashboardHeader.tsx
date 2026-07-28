@@ -1,0 +1,39 @@
+"use client";
+
+import { Plus } from "lucide-react";
+import { useState } from "react";
+import NewApplicationDialog from "../NewApplicationDialog/NewApplicationDialog";
+import NewApplicationForm from "../NewApplicationForm/NewApplicationForm";
+import styles from "./DashboardHeader.module.css";
+
+export default function DashboardHeader() {
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+
+  return (
+    <header className={styles.header}>
+      <div className={styles.copy}>
+        <p className={styles.eyebrow}>Candidature</p>
+        <h1>Le tue opportunità, in ordine.</h1>
+        <p className={styles.description}>
+          Tieni sotto controllo ogni fase della tua ricerca.
+        </p>
+      </div>
+
+      <button
+        className={styles.primaryAction}
+        type="button"
+        onClick={() => setIsDialogOpen(true)}
+      >
+        <Plus aria-hidden="true" size={19} strokeWidth={2.2} />
+        Nuova candidatura
+      </button>
+
+      <NewApplicationDialog
+        open={isDialogOpen}
+        onClose={() => setIsDialogOpen(false)}
+      >
+        <NewApplicationForm onCancel={() => setIsDialogOpen(false)} />
+      </NewApplicationDialog>
+    </header>
+  );
+}

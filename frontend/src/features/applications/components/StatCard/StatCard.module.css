@@ -1,0 +1,78 @@
+.card {
+  display: flex;
+  gap: var(--space-4);
+  align-items: center;
+  min-height: 5.5rem;
+  padding: var(--space-4);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+}
+
+.icon {
+  display: grid;
+  flex: 0 0 2.75rem;
+  width: 2.75rem;
+  height: 2.75rem;
+  place-items: center;
+  border-radius: var(--radius-md);
+}
+
+.amber {
+  color: var(--color-status-amber);
+  background: var(--color-status-amber-soft);
+}
+
+.violet {
+  color: var(--color-status-violet);
+  background: var(--color-status-violet-soft);
+}
+
+.green {
+  color: var(--color-status-green);
+  background: var(--color-status-green-soft);
+}
+
+.copy {
+  min-width: 0;
+}
+
+.copy p {
+  margin: 0;
+  color: var(--color-text-muted);
+  font-size: 0.8125rem;
+  font-weight: 650;
+}
+
+.copy strong {
+  display: block;
+  margin-top: var(--space-1);
+  font-size: 1.625rem;
+  line-height: 1.1;
+  letter-spacing: -0.04em;
+}
+
+@media (max-width: 35rem) {
+  .card {
+    flex-direction: column;
+    gap: var(--space-2);
+    min-height: 6.75rem;
+    padding: var(--space-3) var(--space-2);
+    text-align: center;
+  }
+
+  .icon {
+    flex-basis: 2.25rem;
+    width: 2.25rem;
+    height: 2.25rem;
+  }
+
+  .copy p {
+    font-size: 0.75rem;
+  }
+
+  .copy strong {
+    font-size: 1.375rem;
+  }
+}

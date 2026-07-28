@@ -1,0 +1,95 @@
+.dialog {
+  width: min(48rem, calc(100% - var(--space-8)));
+  max-height: calc(100dvh - var(--space-8));
+  padding: 0;
+  overflow: hidden;
+  color: var(--color-text);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+}
+
+.dialog[open] {
+  display: flex;
+  flex-direction: column;
+}
+
+.dialog::backdrop {
+  background: rgba(37, 34, 30, 0.48);
+  backdrop-filter: blur(3px);
+}
+
+.header {
+  display: flex;
+  flex: 0 0 auto;
+  gap: var(--space-6);
+  align-items: flex-start;
+  justify-content: space-between;
+  padding: var(--space-6);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.copy h2 {
+  margin: 0;
+  font-size: 1.5rem;
+  line-height: 1.25;
+  letter-spacing: -0.04em;
+}
+
+.copy p {
+  max-width: 35rem;
+  margin: var(--space-2) 0 0;
+  color: var(--color-text-muted);
+  font-size: 0.875rem;
+}
+
+.closeButton {
+  display: grid;
+  flex: 0 0 2.75rem;
+  width: 2.75rem;
+  height: 2.75rem;
+  margin: calc(var(--space-2) * -1);
+  place-items: center;
+  color: var(--color-text-muted);
+  background: transparent;
+  border: 0;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition:
+    color var(--transition-fast),
+    background-color var(--transition-fast);
+}
+
+.closeButton:hover {
+  color: var(--color-text);
+  background: var(--color-surface-muted);
+}
+
+.body {
+  min-height: 0;
+  padding: var(--space-6);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+@media (max-width: 47.999rem) {
+  .dialog {
+    width: calc(100% - var(--space-4));
+    max-height: calc(100dvh - var(--space-4));
+    border-radius: var(--radius-md);
+  }
+
+  .header,
+  .body {
+    padding: var(--space-4);
+  }
+
+  .copy h2 {
+    font-size: 1.25rem;
+  }
+
+  .copy p {
+    font-size: 0.8125rem;
+  }
+}

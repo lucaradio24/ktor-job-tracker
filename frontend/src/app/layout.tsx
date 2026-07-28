@@ -1,6 +1,14 @@
 import type { Metadata } from "next";
+import { Manrope } from "next/font/google";
 import { headers } from "next/headers";
-import "./globals.css";
+import "@/styles/tokens.css";
+import "@/styles/base.css";
+
+const manrope = Manrope({
+  subsets: ["latin"],
+  display: "swap",
+  variable: "--font-manrope",
+});
 
 const title = "Job Tracker | Le tue candidature";
 const description =
@@ -44,7 +52,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="it">
+    <html lang="it" className={manrope.variable}>
       <body>{children}</body>
     </html>
   );

@@ -1,15 +1,16 @@
-import DashboardHeader from "@/components/DashboardHeader";
-import JobApplicationList from "@/components/JobApplicationList";
-import Sidebar from "@/components/Sidebar";
+import styles from "./page.module.css";
+import Sidebar from "@/components/layout/Sidebar/Sidebar";
+import ApplicationsDashboard from "@/features/applications/components/ApplicationsDashboard/ApplicationsDashboard";
+import DashboardHeader from "@/features/applications/components/DashboardHeader/DashboardHeader";
 
 export default function Home() {
   return (
-    <div className="app-frame">
+    <div className={styles.shell}>
       <Sidebar />
-      <main className="dashboard-main">
+      <main className={styles.main}>
         <DashboardHeader />
-        <JobApplicationList />
-        <span id="settings" className="sr-only">
+        <ApplicationsDashboard />
+        <span id="settings" className={styles.visuallyHidden}>
           Impostazioni
         </span>
       </main>

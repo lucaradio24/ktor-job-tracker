@@ -1,0 +1,181 @@
+.form {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-5);
+}
+
+.field {
+  display: grid;
+  gap: var(--space-2);
+  min-width: 0;
+}
+
+.field > span {
+  color: var(--color-text);
+  font-size: 0.8125rem;
+  font-weight: 700;
+}
+
+.field input,
+.field select,
+.field textarea {
+  width: 100%;
+  min-height: 2.75rem;
+  padding: 0 var(--space-3);
+  color: var(--color-text);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-sm);
+  outline: none;
+  transition:
+    border-color var(--transition-fast),
+    box-shadow var(--transition-fast);
+}
+
+.field input::placeholder,
+.field textarea::placeholder {
+  color: var(--color-text-subtle);
+  opacity: 1;
+}
+
+.field input:hover,
+.field select:hover,
+.field textarea:hover {
+  border-color: var(--color-text-subtle);
+}
+
+.field input:focus,
+.field select:focus,
+.field textarea:focus {
+  border-color: var(--color-focus);
+  box-shadow: 0 0 0 3px
+    color-mix(in srgb, var(--color-focus) 16%, transparent);
+}
+
+.field textarea {
+  min-height: 7.5rem;
+  padding-block: var(--space-3);
+  resize: vertical;
+}
+
+.wideField,
+.error,
+.actions {
+  grid-column: 1 / -1;
+}
+
+.error {
+  margin: 0;
+  padding: var(--space-3) var(--space-4);
+  color: var(--color-danger);
+  font-size: 0.8125rem;
+  background: var(--color-danger-soft);
+  border: 1px solid color-mix(in srgb, var(--color-danger) 24%, transparent);
+  border-radius: var(--radius-sm);
+}
+
+.actions {
+  display: flex;
+  gap: var(--space-3);
+  justify-content: flex-end;
+  padding-top: var(--space-5);
+  border-top: 1px solid var(--color-border);
+}
+
+.secondaryButton,
+.primaryButton {
+  display: inline-flex;
+  gap: var(--space-2);
+  align-items: center;
+  justify-content: center;
+  min-width: 8rem;
+  min-height: 2.75rem;
+  padding: 0 var(--space-4);
+  font-size: 0.875rem;
+  font-weight: 750;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition:
+    background-color var(--transition-fast),
+    border-color var(--transition-fast),
+    opacity var(--transition-fast);
+}
+
+.secondaryButton {
+  color: var(--color-text);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border-strong);
+}
+
+.secondaryButton:hover:not(:disabled) {
+  background: var(--color-surface-muted);
+  border-color: var(--color-text-subtle);
+}
+
+.primaryButton {
+  min-width: 11.5rem;
+  color: var(--color-surface);
+  background: var(--color-accent);
+  border: 1px solid var(--color-accent);
+}
+
+.primaryButton:hover:not(:disabled) {
+  background: var(--color-accent-hover);
+  border-color: var(--color-accent-hover);
+}
+
+.secondaryButton:disabled,
+.primaryButton:disabled {
+  cursor: wait;
+  opacity: 0.6;
+}
+
+.spinner {
+  animation: spin 800ms linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (max-width: 40rem) {
+  .form {
+    grid-template-columns: 1fr;
+    gap: var(--space-4);
+  }
+
+  .wideField,
+  .error,
+  .actions {
+    grid-column: auto;
+  }
+
+  .actions {
+    display: grid;
+    grid-template-columns: minmax(5.75rem, 0.8fr) minmax(0, 1.4fr);
+  }
+
+  .secondaryButton,
+  .primaryButton {
+    width: 100%;
+    min-width: 0;
+    padding-inline: var(--space-2);
+    font-size: 0.8125rem;
+  }
+
+  .primaryButton {
+    white-space: nowrap;
+  }
+}
+
+@media (max-width: 24rem) {
+  .actions {
+    grid-template-columns: 1fr;
+  }
+
+  .primaryButton {
+    grid-row: 1;
+  }
+}
