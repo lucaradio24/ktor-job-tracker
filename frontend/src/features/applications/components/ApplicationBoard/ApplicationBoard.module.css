@@ -17,3 +17,14 @@
     grid-template-columns: 1fr;
   }
 }
+
+.list {
+  grid-template-columns: 1fr;
+  overflow-y: auto;
+  scrollbar-color: var(--color-border-strong) transparent;
+  scrollbar-width: thin;
+}
+
+.list > section {
+  min-height: auto;
+}

@@ -16,6 +16,7 @@ import styles from "./ApplicationBoard.module.css";
 
 interface ApplicationBoardProps {
   applications: JobApplication[];
+  view: "board" | "list";
 }
 
 interface BoardColumn {
@@ -64,9 +65,13 @@ const columns: BoardColumn[] = [
 
 export default function ApplicationBoard({
   applications,
+  view,
 }: ApplicationBoardProps) {
   return (
-    <div className={styles.board} id="application-board">
+    <div
+      className={`${styles.board} ${view === "list" ? styles.list : ""}`}
+      id="application-board"
+    >
       {columns.map((column) => (
         <ApplicationColumn
           applications={applications.filter(

@@ -30,9 +30,9 @@ export default function Sidebar() {
   return (
     <aside className={styles.sidebar}>
       <a className={styles.brand} href="#overview" aria-label="Job Tracker">
-        <span className={styles.brandMark} aria-hidden="true">
+        {/* <span className={styles.brandMark} aria-hidden="true">
           <span className={styles.sun} />
-        </span>
+        </span> */}
         <span className={styles.brandName}>Job Tracker</span>
       </a>
 
@@ -57,9 +57,7 @@ export default function Sidebar() {
         })}
       </nav>
 
-      <p className={styles.footerCopy}>
-        Ogni candidatura è un passo avanti.
-      </p>
+      <p className={styles.footerCopy}>Ogni candidatura è un passo avanti.</p>
     </aside>
   );
 }

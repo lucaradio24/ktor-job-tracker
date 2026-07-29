@@ -1,22 +1,18 @@
 "use client";
 
-import {
-  BadgeCheck,
-  BriefcaseBusiness,
-  CircleAlert,
-  MessagesSquare,
-} from "lucide-react";
+import { CircleAlert, Columns3, List, Search } from "lucide-react";
 import { useEffect, useState } from "react";
 import { getApplications } from "../../api/jobApplicationApi";
 import type { JobApplication } from "../../model/jobApplication";
 import ApplicationBoard from "../ApplicationBoard/ApplicationBoard";
-import StatCard from "../StatCard/StatCard";
 import styles from "./ApplicationsDashboard.module.css";
 
 export default function ApplicationsDashboard() {
   const [jobApplications, setJobApplications] = useState<JobApplication[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [query, setQuery] = useState("");
+  const [view, setView] = useState<"board" | "list">("board");
 
   useEffect(() => {
     let active = true;
@@ -43,15 +39,12 @@ export default function ApplicationsDashboard() {
     };
   }, []);
 
-  const interviewCount = jobApplications.filter(
-    (application) => application.status === "INTERVIEW",
-  ).length;
-  const offerCount = jobApplications.filter(
-    (application) => application.status === "OFFER",
-  ).length;
-  const withdrawnCount = jobApplications.filter(
-    (application) => application.status === "WITHDRAWN",
-  ).length;
+  const normalizedQuery = query.trim().toLocaleLowerCase("it-IT");
+  const visibleApplications = jobApplications.filter((application) =>
+    `${application.company} ${application.title}`
+      .toLocaleLowerCase("it-IT")
+      .includes(normalizedQuery),
+  );
 
   return (
     <section className={styles.dashboard} id="overview">
@@ -65,59 +58,49 @@ export default function ApplicationsDashboard() {
         </div>
       )}
 
-      <div className={styles.statsGrid} aria-label="Riepilogo candidature">
-        <StatCard
-          icon={BriefcaseBusiness}
-          label="Totali"
-          tone="amber"
-          value={loading ? "—" : jobApplications.length}
-        />
-        <StatCard
-          icon={MessagesSquare}
-          label="Colloqui"
-          tone="violet"
-          value={loading ? "—" : interviewCount}
-        />
-        <StatCard
-          icon={BadgeCheck}
-          label="Offerte"
-          tone="green"
-          value={loading ? "—" : offerCount}
-        />
-      </div>
+      <div className={styles.toolbar}>
+        <label className={styles.search}>
+          <Search aria-hidden="true" size={20} strokeWidth={1.8} />
+          <input
+            aria-label="Cerca candidature"
+            type="search"
+            placeholder="Cerca azienda o ruolo"
+            value={query}
+            onChange={(event) => setQuery(event.target.value)}
+          />
+        </label>
 
-      <div className={styles.boardHeading}>
-        <div>
-          <p className={styles.eyebrow}>Pipeline</p>
-          <h2>Segui ogni opportunità</h2>
-        </div>
-        <div className={styles.boardStatus} aria-live="polite">
-          {loading ? (
-            <>
-              <span className={styles.loadingDot} aria-hidden="true" />
-              Aggiornamento
-            </>
-          ) : (
-            <>
-              <span className={styles.liveDot} aria-hidden="true" />
-              Dati aggiornati
-            </>
-          )}
+        <div
+          className={styles.viewToggle}
+          role="group"
+          aria-label="Vista candidature"
+        >
+          <button
+            type="button"
+            aria-pressed={view === "board"}
+            onClick={() => setView("board")}
+          >
+            <Columns3 aria-hidden="true" size={19} strokeWidth={1.8} />
+            Board
+          </button>
+          <button
+            type="button"
+            aria-pressed={view === "list"}
+            onClick={() => setView("list")}
+          >
+            <List aria-hidden="true" size={19} strokeWidth={1.8} />
+            Lista
+          </button>
         </div>
       </div>
-
-      {withdrawnCount > 0 && !loading && (
-        <p className={styles.archiveNote}>
-          {withdrawnCount}{" "}
-          {withdrawnCount === 1
-            ? "candidatura ritirata"
-            : "candidature ritirate"}{" "}
-          in archivio.
-        </p>
-      )}
 
       {loading ? (
-        <div className={styles.skeletonBoard} aria-label="Caricamento candidature">
+        <div
+          className={`${styles.skeletonBoard} ${
+            view === "list" ? styles.skeletonList : ""
+          }`}
+          aria-label="Caricamento candidature"
+        >
           {[0, 1, 2, 3].map((column) => (
             <div className={styles.skeletonColumn} key={column}>
               <span className={`${styles.skeleton} ${styles.skeletonTitle}`} />
@@ -129,7 +112,7 @@ export default function ApplicationsDashboard() {
           ))}
         </div>
       ) : (
-        <ApplicationBoard applications={jobApplications} />
+        <ApplicationBoard applications={visibleApplications} view={view} />
       )}
     </section>
   );

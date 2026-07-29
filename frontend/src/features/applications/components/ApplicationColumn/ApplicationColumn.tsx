@@ -33,7 +33,6 @@ export default function ApplicationColumn({
     <section className={`${styles.column} ${toneClasses[tone]}`} id={id}>
       <header className={styles.header}>
         <div className={styles.titleGroup}>
-          <span className={styles.dot} aria-hidden="true" />
           <h2>{title}</h2>
           <span className={styles.count} aria-label={`${applications.length}`}>
             {applications.length}

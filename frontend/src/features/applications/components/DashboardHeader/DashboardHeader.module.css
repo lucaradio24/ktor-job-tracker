@@ -10,12 +10,12 @@
 }
 
 .copy {
-  max-width: 42rem;
+  max-width: 46rem;
 }
 
 .eyebrow {
   margin: 0 0 var(--space-2);
-  color: var(--color-accent-hover);
+  color: var(--color-status-amber);
   font-size: 0.75rem;
   font-weight: 800;
   letter-spacing: 0.08em;
@@ -24,15 +24,15 @@
 
 .copy h1 {
   margin: 0;
-  font-size: clamp(2rem, 3.2vw, 2.5rem);
-  line-height: 1.12;
-  letter-spacing: -0.05em;
+  font-size: clamp(2.25rem, 3.6vw, 3rem);
+  line-height: 1.1;
+  letter-spacing: -0.055em;
 }
 
 .description {
   margin: var(--space-2) 0 0;
   color: var(--color-text-muted);
-  font-size: 0.9375rem;
+  font-size: 1rem;
 }
 
 .primaryAction {
@@ -41,10 +41,10 @@
   gap: var(--space-2);
   align-items: center;
   justify-content: center;
-  min-height: 2.75rem;
-  padding: 0 var(--space-4);
-  color: var(--color-surface);
-  font-size: 0.875rem;
+  min-height: 3.25rem;
+  padding: 0 var(--space-5);
+  color: #ffffff;
+  font-size: 0.9375rem;
   font-weight: 750;
   background: var(--color-accent);
   border: 1px solid var(--color-accent);
@@ -58,8 +58,8 @@
 }
 
 .primaryAction:hover {
-  background: var(--color-accent-hover);
-  border-color: var(--color-accent-hover);
+  background: color-mix(in srgb, var(--color-accent) 88%, white);
+  border-color: color-mix(in srgb, var(--color-accent) 88%, white);
   transform: translateY(-1px);
 }
 
@@ -75,8 +75,8 @@
   }
 
   .copy h1 {
-    max-width: 22rem;
-    font-size: 2rem;
+    max-width: 24rem;
+    font-size: 2.25rem;
   }
 
   .primaryAction {

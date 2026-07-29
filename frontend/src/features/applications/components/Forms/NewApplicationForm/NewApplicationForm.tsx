@@ -2,8 +2,8 @@
 
 import { Check, LoaderCircle } from "lucide-react";
 import { useState, type ChangeEvent, type FormEvent } from "react";
-import { createApplication } from "../../api/jobApplicationApi";
-import type { ApplicationStatus } from "../../model/jobApplication";
+import { createApplication } from "../../../api/jobApplicationApi";
+import type { ApplicationStatus } from "../../../model/jobApplication";
 import styles from "./NewApplicationForm.module.css";
 
 type ApplicationFormValues = {
@@ -41,7 +41,9 @@ export default function NewApplicationForm({
   const [submitError, setSubmitError] = useState<string | null>(null);
 
   const handleChange = (
-    event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>,
+    event: ChangeEvent<
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+    >,
   ) => {
     setFormValues((previousValues) => ({
       ...previousValues,
@@ -81,11 +83,7 @@ export default function NewApplicationForm({
   };
 
   return (
-    <form
-      className={styles.form}
-      onSubmit={handleSubmit}
-      aria-busy={isSaving}
-    >
+    <form className={styles.form} onSubmit={handleSubmit} aria-busy={isSaving}>
       <label className={styles.field} htmlFor="company">
         <span>Azienda</span>
         <input
@@ -169,7 +167,10 @@ export default function NewApplicationForm({
         />
       </label>
 
-      <label className={`${styles.field} ${styles.wideField}`} htmlFor="description">
+      <label
+        className={`${styles.field} ${styles.wideField}`}
+        htmlFor="description"
+      >
         <span>Descrizione</span>
         <textarea
           name="description"

@@ -3,7 +3,7 @@
 import { Plus } from "lucide-react";
 import { useState } from "react";
 import NewApplicationDialog from "../NewApplicationDialog/NewApplicationDialog";
-import NewApplicationForm from "../NewApplicationForm/NewApplicationForm";
+import NewApplicationForm from "../Forms/NewApplicationForm/NewApplicationForm";
 import styles from "./DashboardHeader.module.css";
 
 export default function DashboardHeader() {

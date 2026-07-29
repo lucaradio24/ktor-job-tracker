@@ -2,10 +2,7 @@ import type { JobApplication } from "../model/jobApplication";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
-async function fetcher<T>(
-  path: string,
-  options?: RequestInit,
-): Promise<T> {
+async function fetcher<T>(path: string, options?: RequestInit): Promise<T> {
   const response = await fetch(`${API_URL}${path}`, options);
 
   if (!response.ok) {
@@ -30,6 +27,25 @@ export async function createApplication(
 ): Promise<JobApplication> {
   return fetcher<JobApplication>("/applications", {
     method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(payload),
+  });
+}
+
+export async function getApplication(id: string): Promise<JobApplication> {
+  return fetcher<JobApplication>(`/applications/${id}`);
+}
+
+export type UpdateJobApplication = Omit<JobApplication, "id">;
+
+export async function updateApplication(
+  id: string,
+  payload: UpdateJobApplication,
+): Promise<JobApplication> {
+  return fetcher<JobApplication>(`/applications/${id}`, {
+    method: "PUT",
     headers: {
       "Content-Type": "application/json",
     },

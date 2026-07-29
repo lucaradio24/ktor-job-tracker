@@ -1,34 +1,67 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Frontend Job Tracker
 
-## Getting Started
+Questa cartella contiene l'interfaccia web del progetto. Serve a vedere e
+organizzare le candidature di lavoro in una dashboard semplice.
 
-First, run the development server:
+## Cosa permette di fare
+
+- mostrare le candidature divise per stato;
+- cercare per azienda o ruolo;
+- passare dalla vista a colonne alla vista a lista;
+- inserire una nuova candidatura tramite un modulo.
+
+## Tecnologie
+
+- Next.js con App Router;
+- React e TypeScript;
+- CSS Modules per gli stili dei componenti;
+- Lucide React per le icone.
+
+## Avvio locale
+
+Prima avvia il backend Ktor, poi entra nella cartella `frontend`:
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
+pnpm install
 pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+L'applicazione sarà disponibile su
+[http://localhost:3000](http://localhost:3000).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Il file `.env.local` deve indicare l'indirizzo del backend:
 
-## Learn More
+```env
+NEXT_PUBLIC_API_URL=http://localhost:8080
+```
 
-To learn more about Next.js, take a look at the following resources:
+## Struttura
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```text
+src/
+├── app/                         pagina e layout principale
+├── components/layout/          componenti generali, come la sidebar
+├── features/applications/
+│   ├── api/                     chiamate al backend
+│   ├── components/              dashboard, colonne, card e modulo
+│   └── model/                   tipi TypeScript
+└── styles/                      colori e stili globali
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+La pagina principale compone sidebar, intestazione e dashboard. La dashboard
+carica i dati con `GET /applications`; il modulo salva una candidatura con
+`POST /applications`. Le card vengono poi raggruppate in base allo stato.
 
-## Deploy on Vercel
+## Stili
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+I colori e le misure condivise sono in `src/styles/tokens.css`. Ogni componente
+ha il proprio file `.module.css`, così struttura e stile restano vicini e facili
+da trovare.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Comandi utili
+
+```bash
+pnpm dev    # avvia lo sviluppo
+pnpm lint   # controlla il codice
+pnpm build  # crea la versione di produzione
+```

@@ -1,33 +1,43 @@
 :root {
-  color-scheme: light;
+  color-scheme: dark;
 
   --font-sans:
     var(--font-manrope), "Segoe UI", system-ui, -apple-system, sans-serif;
 
-  --color-background: #f5f2ec;
-  --color-surface: #ffffff;
-  --color-surface-muted: #faf8f4;
-  --color-surface-strong: #f0ece5;
-  --color-text: #25221e;
-  --color-text-muted: #6f6a62;
-  --color-text-subtle: #8d877e;
-  --color-border: #e3ddd4;
-  --color-border-strong: #d2c9bc;
-  --color-accent: #d95f49;
-  --color-accent-hover: #be4c39;
-  --color-accent-soft: #fae8e3;
-  --color-focus: #775cce;
-  --color-danger: #a94237;
-  --color-danger-soft: #fceae6;
+  --color-background:
+    radial-gradient(
+      100% 75% at 82% 0%,
+      rgba(28, 45, 62, 0.34) 0%,
+      transparent 60%
+    ),
+    radial-gradient(
+      80% 70% at 14% 100%,
+      rgba(12, 28, 43, 0.46) 0%,
+      transparent 66%
+    ),
+    linear-gradient(135deg, #070a0f 0%, #0a0f16 52%, #080c12 100%);
+  --color-surface: #10161e;
+  --color-surface-muted: #0d131a;
+  --color-surface-strong: #17202a;
+  --color-text: #f2f4f7;
+  --color-text-muted: #a4abb4;
+  --color-text-subtle: #7d8792;
+  --color-border: #27313c;
+  --color-border-strong: #394652;
+  --color-accent: #ff5146;
+  --color-accent-soft: #30280f;
+  --color-focus: #b18cff;
+  --color-danger: #ff5b50;
+  --color-danger-soft: #391b1b;
 
-  --color-status-amber: #b7791f;
-  --color-status-amber-soft: #fbf0d8;
-  --color-status-violet: #775cce;
-  --color-status-violet-soft: #eee9fb;
-  --color-status-green: #3f7c55;
-  --color-status-green-soft: #e5f1e8;
-  --color-status-rose: #bd5264;
-  --color-status-rose-soft: #f8e8eb;
+  --color-status-amber: #ffb800;
+  --color-status-amber-soft: #382d0e;
+  --color-status-violet: #b18cff;
+  --color-status-violet-soft: #281e3e;
+  --color-status-green: #35d77d;
+  --color-status-green-soft: #123327;
+  --color-status-rose: #ff5b50;
+  --color-status-rose-soft: #391b1b;
 
   --space-1: 0.25rem;
   --space-2: 0.5rem;
@@ -37,17 +47,15 @@
   --space-6: 1.5rem;
   --space-8: 2rem;
   --space-10: 2.5rem;
-  --space-12: 3rem;
-  --space-16: 4rem;
 
   --radius-sm: 0.5rem;
   --radius-md: 0.75rem;
   --radius-lg: 1rem;
   --radius-pill: 999px;
 
-  --shadow-sm: 0 1px 2px rgba(37, 34, 30, 0.06);
-  --shadow-lg: 0 20px 50px rgba(37, 34, 30, 0.16);
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.28);
+  --shadow-hover: 0 6px 16px rgba(0, 0, 0, 0.32);
+  --shadow-lg: 0 20px 50px rgba(0, 0, 0, 0.48);
 
   --transition-fast: 120ms ease;
-  --transition-base: 180ms ease;
 }
