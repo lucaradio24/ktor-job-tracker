@@ -31,6 +31,8 @@ function getInitialValues(): ApplicationFormValues {
   };
 }
 
+const formInitialValues = getInitialValues();
+
 interface NewApplicationFormProps {
   onCancel: () => void;
   onCreated: (application: JobApplication) => void;
@@ -40,33 +42,23 @@ export default function NewApplicationForm({
   onCancel,
   onCreated,
 }: NewApplicationFormProps) {
-  const [formValues, setFormValues] =
-    useState<ApplicationFormValues>(getInitialValues);
   const [isSaving, setIsSaving] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
 
-  const handleChange = (
-    event: ChangeEvent<
-      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
-    >,
-  ) => {
-    setFormValues((previousValues) => ({
-      ...previousValues,
-      [event.target.name]: event.target.value,
-    }));
-  };
-
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    const form = event.currentTarget;
+    const data = new FormData(event.currentTarget);
+    const value = (name: string) => String(data.get(name) ?? "").trim();
 
     const payload = {
-      company: formValues.company.trim(),
-      title: formValues.title.trim(),
-      status: formValues.status,
-      appliedAt: formValues.appliedAt,
-      city: formValues.city.trim() || null,
-      link: formValues.link.trim() || null,
-      description: formValues.description.trim() || null,
+      company: value("company"),
+      title: value("title"),
+      status: value("status") as ApplicationStatus,
+      appliedAt: value("appliedAt"),
+      city: value("city") || null,
+      link: value("link") || null,
+      description: value("description") || null,
     };
 
     setSubmitError(null);
@@ -75,8 +67,8 @@ export default function NewApplicationForm({
       setIsSaving(true);
 
       const created = await createApplication(payload);
+      form.reset();
       onCreated(created);
-      setFormValues(getInitialValues());
       onCancel();
     } catch (error) {
       setSubmitError(
@@ -97,12 +89,11 @@ export default function NewApplicationForm({
           type="text"
           name="company"
           id="company"
-          value={formValues.company}
-          onChange={handleChange}
           placeholder="es. Lumen Studio"
           autoComplete="organization"
           autoFocus
           required
+          defaultValue={formInitialValues.company}
         />
       </label>
 
@@ -112,11 +103,10 @@ export default function NewApplicationForm({
           type="text"
           name="title"
           id="title"
-          value={formValues.title}
-          onChange={handleChange}
           placeholder="es. Product Designer"
           autoComplete="organization-title"
           required
+          defaultValue={formInitialValues.title}
         />
       </label>
 
@@ -125,8 +115,7 @@ export default function NewApplicationForm({
         <select
           name="status"
           id="status"
-          value={formValues.status}
-          onChange={handleChange}
+          defaultValue={formInitialValues.status}
         >
           <option value="APPLIED">Candidatura inviata</option>
           <option value="INTERVIEW">Colloquio</option>
@@ -142,8 +131,7 @@ export default function NewApplicationForm({
           type="date"
           name="appliedAt"
           id="appliedAt"
-          value={formValues.appliedAt}
-          onChange={handleChange}
+          defaultValue={formInitialValues.appliedAt}
           required
         />
       </label>
@@ -154,10 +142,9 @@ export default function NewApplicationForm({
           type="text"
           name="city"
           id="city"
-          value={formValues.city}
-          onChange={handleChange}
           placeholder="es. Milano"
           autoComplete="address-level2"
+          defaultValue={formInitialValues.city}
         />
       </label>
 
@@ -167,10 +154,9 @@ export default function NewApplicationForm({
           type="url"
           name="link"
           id="link"
-          value={formValues.link}
-          onChange={handleChange}
           placeholder="https://"
           inputMode="url"
+          defaultValue={formInitialValues.link}
         />
       </label>
 
@@ -182,9 +168,8 @@ export default function NewApplicationForm({
         <textarea
           name="description"
           id="description"
-          value={formValues.description}
-          onChange={handleChange}
           placeholder="Aggiungi una nota o i requisiti principali…"
+          defaultValue={formInitialValues.description}
         />
       </label>
 
