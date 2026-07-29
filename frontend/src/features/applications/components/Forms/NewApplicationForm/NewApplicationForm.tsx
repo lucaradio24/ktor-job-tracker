@@ -3,7 +3,10 @@
 import { Check, LoaderCircle } from "lucide-react";
 import { useState, type ChangeEvent, type FormEvent } from "react";
 import { createApplication } from "../../../api/jobApplicationApi";
-import type { ApplicationStatus } from "../../../model/jobApplication";
+import type {
+  ApplicationStatus,
+  JobApplication,
+} from "../../../model/jobApplication";
 import styles from "./NewApplicationForm.module.css";
 
 type ApplicationFormValues = {
@@ -30,10 +33,12 @@ function getInitialValues(): ApplicationFormValues {
 
 interface NewApplicationFormProps {
   onCancel: () => void;
+  onCreated: (application: JobApplication) => void;
 }
 
 export default function NewApplicationForm({
   onCancel,
+  onCreated,
 }: NewApplicationFormProps) {
   const [formValues, setFormValues] =
     useState<ApplicationFormValues>(getInitialValues);
@@ -68,7 +73,9 @@ export default function NewApplicationForm({
 
     try {
       setIsSaving(true);
-      await createApplication(payload);
+
+      const created = await createApplication(payload);
+      onCreated(created);
       setFormValues(getInitialValues());
       onCancel();
     } catch (error) {

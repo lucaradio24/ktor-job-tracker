@@ -101,7 +101,7 @@ export default function ApplicationCard({ application }: ApplicationCardProps) {
           {label}
         </span>
 
-        {application.link ? (
+        {application.link && (
           <a
             className={styles.linkIcon}
             href={getApplicationLink(application.link)}
@@ -111,10 +111,6 @@ export default function ApplicationCard({ application }: ApplicationCardProps) {
           >
             {linkIcon}
           </a>
-        ) : (
-          <span className={styles.chevron} aria-hidden="true">
-            {chevron}
-          </span>
         )}
       </footer>
     </article>

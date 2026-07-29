@@ -5,8 +5,13 @@ import { useState } from "react";
 import NewApplicationDialog from "../NewApplicationDialog/NewApplicationDialog";
 import NewApplicationForm from "../Forms/NewApplicationForm/NewApplicationForm";
 import styles from "./DashboardHeader.module.css";
+import { JobApplication } from "../../model/jobApplication";
 
-export default function DashboardHeader() {
+export default function DashboardHeader({
+  onCreateApplication,
+}: {
+  onCreateApplication: (application: JobApplication) => void;
+}) {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   return (
@@ -32,7 +37,10 @@ export default function DashboardHeader() {
         open={isDialogOpen}
         onClose={() => setIsDialogOpen(false)}
       >
-        <NewApplicationForm onCancel={() => setIsDialogOpen(false)} />
+        <NewApplicationForm
+          onCreated={onCreateApplication}
+          onCancel={() => setIsDialogOpen(false)}
+        />
       </NewApplicationDialog>
     </header>
   );

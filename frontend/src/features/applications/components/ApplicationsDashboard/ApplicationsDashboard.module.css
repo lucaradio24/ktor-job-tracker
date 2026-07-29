@@ -71,8 +71,7 @@
 }
 
 .search:focus-within {
-  box-shadow: 0 0 0 3px
-    color-mix(in srgb, var(--color-focus) 14%, transparent);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-focus) 14%, transparent);
 }
 
 .search svg {
