@@ -2,18 +2,60 @@ import type { JobApplication } from "../model/jobApplication";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
+export interface ApiErrorBody {
+  errorCode: ErrorCode;
+  message: string;
+  fieldErrors?: FieldError[];
+}
+
+export interface FieldError {
+  field: string;
+  message: string;
+}
+
+type ErrorCode =
+  | "INVALID_REQUEST"
+  | "ALREADY_EXISTS"
+  | "NOT_FOUND"
+  | "VALIDATION_FAILED"
+  | "INTERNAL_ERROR"
+  | "NETWORK_ERROR";
+
+export class ApiError extends Error {
+  constructor(
+    message: string,
+    readonly status: number,
+    readonly code: ErrorCode,
+    readonly fieldErrors?: FieldError[],
+  ) {
+    super(message);
+    this.name = "ApiError";
+  }
+}
+
 async function fetcher<T>(path: string, options?: RequestInit): Promise<T> {
-  const response = await fetch(`${API_URL}${path}`, options);
+  let response: Response;
 
-  if (!response.ok) {
-    const error = (await response.json().catch(() => null)) as {
-      error?: string;
-    } | null;
-
-    throw new Error(error?.error ?? `Errore HTTP ${response.status}`);
+  try {
+    response = await fetch(`${API_URL}${path}`, options);
+  } catch {
+    throw new ApiError("Impossibile connettersi al server", 0, "NETWORK_ERROR");
   }
 
-  return response.json() as Promise<T>;
+  const body = await response.json().catch(() => null);
+
+  if (!response.ok) {
+    const errorBody = body as ApiErrorBody | null;
+
+    throw new ApiError(
+      errorBody?.message ?? `Errore HTTP ${response.status}`,
+      response.status,
+      errorBody?.errorCode ?? "INTERNAL_ERROR",
+      errorBody?.fieldErrors,
+    );
+  }
+
+  return body as T;
 }
 
 export type CreateJobApplication = Omit<JobApplication, "id">;

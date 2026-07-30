@@ -33,15 +33,17 @@ export default function DashboardHeader({
         Nuova candidatura
       </button>
 
-      <NewApplicationDialog
-        open={isDialogOpen}
-        onClose={() => setIsDialogOpen(false)}
-      >
-        <NewApplicationForm
-          onCreated={onCreateApplication}
-          onCancel={() => setIsDialogOpen(false)}
-        />
-      </NewApplicationDialog>
+      {isDialogOpen && (
+        <NewApplicationDialog
+          open={isDialogOpen}
+          onClose={() => setIsDialogOpen(false)}
+        >
+          <NewApplicationForm
+            onCreated={onCreateApplication}
+            onCancel={() => setIsDialogOpen(false)}
+          />
+        </NewApplicationDialog>
+      )}
     </header>
   );
 }

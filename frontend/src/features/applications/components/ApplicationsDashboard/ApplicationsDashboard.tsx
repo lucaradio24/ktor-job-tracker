@@ -8,9 +8,14 @@ import ApplicationBoard from "../ApplicationBoard/ApplicationBoard";
 import styles from "./ApplicationsDashboard.module.css";
 import DashboardHeader from "../DashboardHeader/DashboardHeader";
 
-export default function ApplicationsDashboard() {
-  const [jobApplications, setJobApplications] = useState<JobApplication[]>([]);
-  const [loading, setLoading] = useState(true);
+export default function ApplicationsDashboard({
+  initialApplications,
+}: {
+  initialApplications: JobApplication[];
+}) {
+  const [jobApplications, setJobApplications] =
+    useState<JobApplication[]>(initialApplications);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [query, setQuery] = useState("");
   const [view, setView] = useState<"board" | "list">("board");
@@ -19,30 +24,22 @@ export default function ApplicationsDashboard() {
     setJobApplications((applications) => [...applications, createdApplication]);
   }
 
-  useEffect(() => {
-    let active = true;
+  async function loadApplications() {
+    setLoading(true);
+    setError(null);
 
-    getApplications()
-      .then((data) => {
-        if (active) setJobApplications(data);
-      })
-      .catch((requestError: unknown) => {
-        if (active) {
-          setError(
-            requestError instanceof Error
-              ? requestError.message
-              : "Errore durante il caricamento delle candidature.",
-          );
-        }
-      })
-      .finally(() => {
-        if (active) setLoading(false);
-      });
-
-    return () => {
-      active = false;
-    };
-  }, []);
+    try {
+      setJobApplications(await getApplications());
+    } catch (requestError: unknown) {
+      setError(
+        requestError instanceof Error
+          ? requestError.message
+          : "Errore durante il caricamento delle candidature.",
+      );
+    } finally {
+      setLoading(false);
+    }
+  }
 
   const normalizedQuery = query.trim().toLocaleLowerCase("it-IT");
   const visibleApplications = jobApplications.filter((application) =>
@@ -62,6 +59,9 @@ export default function ApplicationsDashboard() {
             <div>
               <strong>Non riesco a caricare le candidature.</strong>
               <p>{error}</p>
+              <button type="button" onClick={loadApplications}>
+                Riprova
+              </button>
             </div>
           </div>
         )}

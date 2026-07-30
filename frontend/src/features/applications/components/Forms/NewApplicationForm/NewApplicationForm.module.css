@@ -48,8 +48,7 @@
 .field select:focus,
 .field textarea:focus {
   border-color: var(--color-focus);
-  box-shadow: 0 0 0 3px
-    color-mix(in srgb, var(--color-focus) 16%, transparent);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-focus) 16%, transparent);
 }
 
 .field textarea {
@@ -72,6 +71,19 @@
   background: var(--color-danger-soft);
   border: 1px solid color-mix(in srgb, var(--color-danger) 24%, transparent);
   border-radius: var(--radius-sm);
+}
+
+.fieldHeading {
+  display: flex;
+  gap: var(--space-2);
+  align-items: center;
+  justify-content: space-between;
+}
+
+.fieldHeading > .fieldError {
+  color: var(--color-danger);
+  font-size: 0.8125rem;
+  font-weight: 500;
 }
 
 .actions {

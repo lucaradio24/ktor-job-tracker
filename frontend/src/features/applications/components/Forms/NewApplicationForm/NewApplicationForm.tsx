@@ -1,8 +1,12 @@
 "use client";
 
 import { Check, LoaderCircle } from "lucide-react";
-import { useState, type ChangeEvent, type FormEvent } from "react";
-import { createApplication } from "../../../api/jobApplicationApi";
+import { useState, type FormEvent } from "react";
+import {
+  ApiError,
+  createApplication,
+  type FieldError,
+} from "../../../api/jobApplicationApi";
 import type {
   ApplicationStatus,
   JobApplication,
@@ -44,10 +48,18 @@ export default function NewApplicationForm({
 }: NewApplicationFormProps) {
   const [isSaving, setIsSaving] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
+  const [fieldErrors, setFieldErrors] = useState<FieldError[]>([]);
+
+  const getFieldError = (field: string) =>
+    fieldErrors.find((error) => error.field === field)?.message;
+
+  const companyError = getFieldError("company");
+  const titleError = getFieldError("title");
+  const appliedAtError = getFieldError("appliedAt");
+  const linkError = getFieldError("link");
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const form = event.currentTarget;
     const data = new FormData(event.currentTarget);
     const value = (name: string) => String(data.get(name) ?? "").trim();
 
@@ -62,20 +74,22 @@ export default function NewApplicationForm({
     };
 
     setSubmitError(null);
+    setFieldErrors([]);
 
     try {
       setIsSaving(true);
 
       const created = await createApplication(payload);
-      form.reset();
       onCreated(created);
       onCancel();
-    } catch (error) {
-      setSubmitError(
-        error instanceof Error
-          ? error.message
-          : "Non è stato possibile salvare la candidatura.",
-      );
+    } catch (error: unknown) {
+      if (error instanceof ApiError) {
+        const fieldErrors = error.fieldErrors ?? [];
+        setFieldErrors(fieldErrors);
+        setSubmitError(fieldErrors.length > 0 ? null : error.message);
+        return;
+      }
+      setSubmitError("Si è verificato un errore imprevisto.");
     } finally {
       setIsSaving(false);
     }
@@ -84,7 +98,14 @@ export default function NewApplicationForm({
   return (
     <form className={styles.form} onSubmit={handleSubmit} aria-busy={isSaving}>
       <label className={styles.field} htmlFor="company">
-        <span>Azienda</span>
+        <span className={styles.fieldHeading}>
+          <span>Azienda</span>
+          {companyError && (
+            <span id="company-error" className={styles.fieldError} role="alert">
+              {companyError}
+            </span>
+          )}
+        </span>
         <input
           type="text"
           name="company"
@@ -94,11 +115,20 @@ export default function NewApplicationForm({
           autoFocus
           required
           defaultValue={formInitialValues.company}
+          aria-invalid={Boolean(companyError)}
+          aria-describedby={companyError ? `company-error` : undefined}
         />
       </label>
 
       <label className={styles.field} htmlFor="title">
-        <span>Posizione</span>
+        <span className={styles.fieldHeading}>
+          <span>Posizione</span>
+          {titleError && (
+            <span id="title-error" className={styles.fieldError} role="alert">
+              {titleError}
+            </span>
+          )}
+        </span>
         <input
           type="text"
           name="title"
@@ -107,6 +137,8 @@ export default function NewApplicationForm({
           autoComplete="organization-title"
           required
           defaultValue={formInitialValues.title}
+          aria-invalid={Boolean(titleError)}
+          aria-describedby={titleError ? `title-error` : undefined}
         />
       </label>
 
@@ -126,13 +158,26 @@ export default function NewApplicationForm({
       </label>
 
       <label className={styles.field} htmlFor="appliedAt">
-        <span>Data candidatura</span>
+        <span className={styles.fieldHeading}>
+          <span>Data candidatura</span>
+          {appliedAtError && (
+            <span
+              id="appliedAt-error"
+              className={styles.fieldError}
+              role="alert"
+            >
+              {appliedAtError}
+            </span>
+          )}
+        </span>
         <input
           type="date"
           name="appliedAt"
           id="appliedAt"
           defaultValue={formInitialValues.appliedAt}
           required
+          aria-invalid={Boolean(appliedAtError)}
+          aria-describedby={appliedAtError ? `appliedAt-error` : undefined}
         />
       </label>
 
@@ -149,7 +194,14 @@ export default function NewApplicationForm({
       </label>
 
       <label className={styles.field} htmlFor="link">
-        <span>Link annuncio</span>
+        <span className={styles.fieldHeading}>
+          <span>Link annuncio</span>
+          {linkError && (
+            <span id="link-error" className={styles.fieldError} role="alert">
+              {linkError}
+            </span>
+          )}
+        </span>
         <input
           type="url"
           name="link"
@@ -157,6 +209,8 @@ export default function NewApplicationForm({
           placeholder="https://"
           inputMode="url"
           defaultValue={formInitialValues.link}
+          aria-invalid={Boolean(linkError)}
+          aria-describedby={linkError ? `link-error` : undefined}
         />
       </label>
 

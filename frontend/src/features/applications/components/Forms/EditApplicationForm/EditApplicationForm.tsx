@@ -4,7 +4,9 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState, type FormEvent } from "react";
 import {
+  ApiError,
   updateApplication,
+  type FieldError,
   type UpdateJobApplication,
 } from "../../../api/jobApplicationApi";
 import type {
@@ -20,7 +22,16 @@ export default function EditApplicationForm({
 }) {
   const router = useRouter();
   const [isSaving, setIsSaving] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [submitError, setSubmitError] = useState<string | null>(null);
+  const [fieldErrors, setFieldErrors] = useState<FieldError[]>([]);
+
+  const getFieldError = (field: string) =>
+    fieldErrors.find((error) => error.field === field)?.message;
+
+  const companyError = getFieldError("company");
+  const titleError = getFieldError("title");
+  const appliedAtError = getFieldError("appliedAt");
+  const linkError = getFieldError("link");
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -40,11 +51,19 @@ export default function EditApplicationForm({
 
     try {
       setIsSaving(true);
-      setError(null);
+      setSubmitError(null);
+      setFieldErrors([]);
       await updateApplication(application.id, payload);
       router.push("/");
     } catch (requestError) {
-      setError(
+      if (requestError instanceof ApiError) {
+        const fieldErrors = requestError.fieldErrors ?? [];
+        setFieldErrors(fieldErrors);
+        setSubmitError(fieldErrors.length > 0 ? null : requestError.message);
+        return;
+      }
+
+      setSubmitError(
         requestError instanceof Error
           ? requestError.message
           : "Non è stato possibile salvare la candidatura.",
@@ -55,20 +74,48 @@ export default function EditApplicationForm({
   }
 
   return (
-    <form className={styles.form} onSubmit={handleSubmit}>
-      <label className={styles.field}>
-        <span>Azienda</span>
-        <input name="company" defaultValue={application.company} required />
+    <form className={styles.form} onSubmit={handleSubmit} aria-busy={isSaving}>
+      <label className={styles.field} htmlFor="company">
+        <span className={styles.fieldHeading}>
+          <span>Azienda</span>
+          {companyError && (
+            <span id="company-error" className={styles.fieldError} role="alert">
+              {companyError}
+            </span>
+          )}
+        </span>
+        <input
+          id="company"
+          name="company"
+          defaultValue={application.company}
+          required
+          aria-invalid={Boolean(companyError)}
+          aria-describedby={companyError ? "company-error" : undefined}
+        />
       </label>
 
-      <label className={styles.field}>
-        <span>Posizione</span>
-        <input name="title" defaultValue={application.title} required />
+      <label className={styles.field} htmlFor="title">
+        <span className={styles.fieldHeading}>
+          <span>Posizione</span>
+          {titleError && (
+            <span id="title-error" className={styles.fieldError} role="alert">
+              {titleError}
+            </span>
+          )}
+        </span>
+        <input
+          id="title"
+          name="title"
+          defaultValue={application.title}
+          required
+          aria-invalid={Boolean(titleError)}
+          aria-describedby={titleError ? "title-error" : undefined}
+        />
       </label>
 
-      <label className={styles.field}>
+      <label className={styles.field} htmlFor="status">
         <span>Stato</span>
-        <select name="status" defaultValue={application.status}>
+        <select id="status" name="status" defaultValue={application.status}>
           <option value="APPLIED">Candidatura inviata</option>
           <option value="INTERVIEW">Colloquio</option>
           <option value="OFFER">Offerta ricevuta</option>
@@ -77,37 +124,68 @@ export default function EditApplicationForm({
         </select>
       </label>
 
-      <label className={styles.field}>
-        <span>Data candidatura</span>
+      <label className={styles.field} htmlFor="appliedAt">
+        <span className={styles.fieldHeading}>
+          <span>Data candidatura</span>
+          {appliedAtError && (
+            <span
+              id="appliedAt-error"
+              className={styles.fieldError}
+              role="alert"
+            >
+              {appliedAtError}
+            </span>
+          )}
+        </span>
         <input
+          id="appliedAt"
           type="date"
           name="appliedAt"
           defaultValue={application.appliedAt}
           required
+          aria-invalid={Boolean(appliedAtError)}
+          aria-describedby={appliedAtError ? "appliedAt-error" : undefined}
         />
       </label>
 
-      <label className={styles.field}>
+      <label className={styles.field} htmlFor="city">
         <span>Città</span>
-        <input name="city" defaultValue={application.city ?? ""} />
+        <input id="city" name="city" defaultValue={application.city ?? ""} />
       </label>
 
-      <label className={styles.field}>
-        <span>Link annuncio</span>
-        <input type="url" name="link" defaultValue={application.link ?? ""} />
+      <label className={styles.field} htmlFor="link">
+        <span className={styles.fieldHeading}>
+          <span>Link annuncio</span>
+          {linkError && (
+            <span id="link-error" className={styles.fieldError} role="alert">
+              {linkError}
+            </span>
+          )}
+        </span>
+        <input
+          id="link"
+          type="url"
+          name="link"
+          defaultValue={application.link ?? ""}
+          aria-invalid={Boolean(linkError)}
+          aria-describedby={linkError ? "link-error" : undefined}
+        />
       </label>
 
-      <label className={`${styles.field} ${styles.wideField}`}>
+      <label
+        className={`${styles.field} ${styles.wideField}`}
+        htmlFor="description"
+      >
         <span>Descrizione</span>
-        <textarea
+        <textarea id="description"
           name="description"
           defaultValue={application.description ?? ""}
         />
       </label>
 
-      {error && (
+      {submitError && (
         <p className={styles.error} role="alert">
-          {error}
+          {submitError}
         </p>
       )}
 
