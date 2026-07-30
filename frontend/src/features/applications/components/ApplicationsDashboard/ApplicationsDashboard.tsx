@@ -15,30 +15,12 @@ export default function ApplicationsDashboard({
 }) {
   const [jobApplications, setJobApplications] =
     useState<JobApplication[]>(initialApplications);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+
   const [query, setQuery] = useState("");
   const [view, setView] = useState<"board" | "list">("board");
 
   function handleCreated(createdApplication: JobApplication) {
     setJobApplications((applications) => [...applications, createdApplication]);
-  }
-
-  async function loadApplications() {
-    setLoading(true);
-    setError(null);
-
-    try {
-      setJobApplications(await getApplications());
-    } catch (requestError: unknown) {
-      setError(
-        requestError instanceof Error
-          ? requestError.message
-          : "Errore durante il caricamento delle candidature.",
-      );
-    } finally {
-      setLoading(false);
-    }
   }
 
   const normalizedQuery = query.trim().toLocaleLowerCase("it-IT");
@@ -53,19 +35,6 @@ export default function ApplicationsDashboard({
       <DashboardHeader onCreateApplication={handleCreated} />
 
       <section className={styles.dashboard} id="overview">
-        {error && (
-          <div className={styles.alert} role="alert">
-            <CircleAlert aria-hidden="true" size={20} />
-            <div>
-              <strong>Non riesco a caricare le candidature.</strong>
-              <p>{error}</p>
-              <button type="button" onClick={loadApplications}>
-                Riprova
-              </button>
-            </div>
-          </div>
-        )}
-
         <div className={styles.toolbar}>
           <label className={styles.search}>
             <Search aria-hidden="true" size={20} strokeWidth={1.8} />
@@ -102,28 +71,7 @@ export default function ApplicationsDashboard({
           </div>
         </div>
 
-        {loading ? (
-          <div
-            className={`${styles.skeletonBoard} ${
-              view === "list" ? styles.skeletonList : ""
-            }`}
-            aria-label="Caricamento candidature"
-          >
-            {[0, 1, 2, 3].map((column) => (
-              <div className={styles.skeletonColumn} key={column}>
-                <span
-                  className={`${styles.skeleton} ${styles.skeletonTitle}`}
-                />
-                <span className={`${styles.skeleton} ${styles.skeletonCard}`} />
-                <span
-                  className={`${styles.skeleton} ${styles.skeletonCard} ${styles.skeletonCardShort}`}
-                />
-              </div>
-            ))}
-          </div>
-        ) : (
-          <ApplicationBoard applications={visibleApplications} view={view} />
-        )}
+        <ApplicationBoard applications={visibleApplications} view={view} />
       </section>
     </>
   );

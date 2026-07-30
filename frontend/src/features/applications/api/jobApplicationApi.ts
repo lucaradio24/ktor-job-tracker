@@ -37,7 +37,10 @@ async function fetcher<T>(path: string, options?: RequestInit): Promise<T> {
   let response: Response;
 
   try {
-    response = await fetch(`${API_URL}${path}`, options);
+    response = await fetch(`${API_URL}${path}`, {
+      ...options,
+      signal: AbortSignal.timeout(8_000),
+    });
   } catch {
     throw new ApiError("Impossibile connettersi al server", 0, "NETWORK_ERROR");
   }
@@ -64,6 +67,10 @@ export async function getApplications(): Promise<JobApplication[]> {
   return fetcher<JobApplication[]>("/applications");
 }
 
+export async function getApplication(id: string): Promise<JobApplication> {
+  return fetcher<JobApplication>(`/applications/${id}`);
+}
+
 export async function createApplication(
   payload: CreateJobApplication,
 ): Promise<JobApplication> {
@@ -74,10 +81,6 @@ export async function createApplication(
     },
     body: JSON.stringify(payload),
   });
-}
-
-export async function getApplication(id: string): Promise<JobApplication> {
-  return fetcher<JobApplication>(`/applications/${id}`);
 }
 
 export type UpdateJobApplication = Omit<JobApplication, "id">;
