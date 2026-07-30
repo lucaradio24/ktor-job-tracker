@@ -1,52 +1,29 @@
 package com.example
 
 import com.example.error.ApiErrorResponse
+import com.example.error.ErrorCodes
 import io.ktor.http.HttpStatusCode
 import io.ktor.server.application.Application
 import io.ktor.server.application.install
 import io.ktor.server.plugins.ContentTransformationException
 import io.ktor.server.plugins.statuspages.StatusPages
 import io.ktor.server.response.respond
-import io.ktor.serialization.ContentConvertException
-import io.ktor.server.plugins.BadRequestException
-import kotlinx.serialization.SerializationException
+import io.ktor.server.application.log
 
 fun Application.configureStatusPages() {
     install(StatusPages) {
 
-
-        exception<BadRequestException> { call, _ ->
-            call.respond(
-                HttpStatusCode.BadRequest,
-                ApiErrorResponse("Invalid request body")
-            )
-        }
-
-
         exception<ContentTransformationException> { call, _ ->
             call.respond(HttpStatusCode.BadRequest,
-                ApiErrorResponse("Invalid request body"))
+                ApiErrorResponse(ErrorCodes.INVALID_REQUEST, "Invalid request body"))
         }
 
-        exception<ContentConvertException> { call, _ ->
-            call.respond(
-                HttpStatusCode.BadRequest,
-                ApiErrorResponse("Invalid request body")
-            )
-        }
+        exception<Throwable> { call, cause ->
 
-        exception<SerializationException> { call, _ ->
-            call.respond(
-                HttpStatusCode.BadRequest,
-                ApiErrorResponse("Invalid request body")
-            )
-        }
-
-
-        exception<Throwable> { call, _ ->
+            call.application.log.error("Unhandled server error", cause)
 
             call.respond(HttpStatusCode.InternalServerError,
-                ApiErrorResponse("Internal Server Error"))
+                ApiErrorResponse(ErrorCodes.INTERNAL_ERROR, "Internal Server Error"))
         }
     }
 }

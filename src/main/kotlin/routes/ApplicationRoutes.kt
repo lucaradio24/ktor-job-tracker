@@ -4,6 +4,7 @@ import com.example.dto.CreateJobApplicationRequest
 import com.example.dto.PatchJobApplicationRequest
 import com.example.dto.UpdateJobApplicationRequest
 import com.example.error.ApiErrorResponse
+import com.example.error.ErrorCodes
 import com.example.model.JobApplication
 import com.example.model.JobApplicationChanges
 import io.ktor.server.response.respond
@@ -12,15 +13,14 @@ import io.ktor.server.routing.get
 import io.ktor.server.routing.route
 import com.example.service.JobApplicationService
 import com.example.validation.JobApplicationRequestValidator
-import com.example.validation.ValidationResponse
 import io.ktor.http.HttpStatusCode
 import io.ktor.server.request.receive
-
 import io.ktor.server.routing.delete
 import io.ktor.server.routing.patch
 import io.ktor.server.routing.post
 import io.ktor.server.routing.put
 import java.util.UUID
+
 
 fun Route.applicationRoutes(service: JobApplicationService) {
     route("/applications"){
@@ -35,10 +35,12 @@ fun Route.applicationRoutes(service: JobApplicationService) {
                 if (application != null){
                     call.respond(application)
                 } else {
-                    call.respond(HttpStatusCode.NotFound)
+                    call.respond(HttpStatusCode.NotFound, ApiErrorResponse(ErrorCodes.NOT_FOUND,
+                        "Application not found"))
                 }
             } else {
-                call.respond(HttpStatusCode.BadRequest)
+                call.respond(HttpStatusCode.BadRequest, ApiErrorResponse(ErrorCodes.INVALID_REQUEST,
+                    "Invalid ID"))
             }
 
         }
@@ -49,7 +51,8 @@ fun Route.applicationRoutes(service: JobApplicationService) {
             val errors = JobApplicationRequestValidator.validateCreate(request)
 
             if (errors.isNotEmpty()){
-                return@post call.respond(HttpStatusCode.BadRequest, ValidationResponse(errors))
+                return@post call.respond(HttpStatusCode.BadRequest, ApiErrorResponse(ErrorCodes.VALIDATION_FAILED,
+                    "Validation error", errors))
             }
 
             val application = JobApplication(
@@ -64,7 +67,8 @@ fun Route.applicationRoutes(service: JobApplicationService) {
             )
             val created = service.create(application)
             if (!created){
-                return@post call.respond(HttpStatusCode.Conflict, ApiErrorResponse("Job application already exists"))
+                return@post call.respond(HttpStatusCode.Conflict, ApiErrorResponse(ErrorCodes.ALREADY_EXISTS,
+                    "Application already exists"))
             }
             call.respond(HttpStatusCode.Created, application)
         }
@@ -73,13 +77,13 @@ fun Route.applicationRoutes(service: JobApplicationService) {
             val id = call.parameters["id"]
                 ?: return@put call.respond(
                     HttpStatusCode.BadRequest,
-                    ApiErrorResponse("Missing or malformed id")
+                    ApiErrorResponse(ErrorCodes.INVALID_REQUEST, "Invalid ID")
                 )
 
             val request = call.receive<UpdateJobApplicationRequest>()
             val errors = JobApplicationRequestValidator.validateUpdate(request)
             if (errors.isNotEmpty()){
-                return@put call.respond(HttpStatusCode.BadRequest, ValidationResponse(errors))
+                return@put call.respond(HttpStatusCode.BadRequest, ApiErrorResponse(ErrorCodes.VALIDATION_FAILED, "Invalid request", errors))
             }
 
             val receivedApplication = JobApplication(
@@ -97,7 +101,7 @@ fun Route.applicationRoutes(service: JobApplicationService) {
             if (updatedApplication != null){
                 call.respond(HttpStatusCode.OK, updatedApplication)
             } else {
-                call.respond(HttpStatusCode.NotFound, ApiErrorResponse("Application not found"))
+                call.respond(HttpStatusCode.NotFound, ApiErrorResponse(ErrorCodes.NOT_FOUND, "Application not found"))
             }
 
 
@@ -105,14 +109,14 @@ fun Route.applicationRoutes(service: JobApplicationService) {
 
         patch("/{id}") {
             val id = call.parameters["id"]
-                ?: return@patch call.respond(HttpStatusCode.BadRequest, ApiErrorResponse("Missing or malformed id"))
+                ?: return@patch call.respond(HttpStatusCode.BadRequest, ApiErrorResponse(ErrorCodes.INVALID_REQUEST, "Invalid ID"))
             val request = call.receive< PatchJobApplicationRequest>()
 
             val errors = JobApplicationRequestValidator.validatePatch(request)
 
 
             if (errors.isNotEmpty()){
-                return@patch call.respond(HttpStatusCode.BadRequest, ValidationResponse(errors))
+                return@patch call.respond(HttpStatusCode.BadRequest, ApiErrorResponse(ErrorCodes.VALIDATION_FAILED, "Validation error", errors))
             }
 
             val changes = JobApplicationChanges(
@@ -126,22 +130,23 @@ fun Route.applicationRoutes(service: JobApplicationService) {
             )
 
             val updatedApplication = service.patch(id, changes)
-                ?: return@patch call.respond(HttpStatusCode.NotFound, ApiErrorResponse("Application not found"))
+                ?: return@patch call.respond(HttpStatusCode.NotFound, ApiErrorResponse(ErrorCodes.NOT_FOUND, "Application not found"))
 
             call.respond(HttpStatusCode.OK,updatedApplication)
         }
 
         delete( "/{id}" ){
             val id = call.parameters["id"]
-            ?: return@delete call.respond(HttpStatusCode.BadRequest)
+            ?: return@delete call.respond(HttpStatusCode.BadRequest, ApiErrorResponse(ErrorCodes.INVALID_REQUEST, "Invalid ID"))
 
             val applicationToRemove = service.delete(id) ?: return@delete call.respond(HttpStatusCode.NotFound,
-                ApiErrorResponse("Application not found"))
+                ApiErrorResponse(ErrorCodes.NOT_FOUND, "Application not found"))
 
 
             call.respond(HttpStatusCode.OK, applicationToRemove )
         }
     }
+
 
 
 }
