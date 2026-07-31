@@ -13,10 +13,12 @@ import ApplicationColumn, {
   type ColumnTone,
 } from "../ApplicationColumn/ApplicationColumn";
 import styles from "./ApplicationBoard.module.css";
+import { DragDropProvider } from "@dnd-kit/react";
 
 interface ApplicationBoardProps {
   applications: JobApplication[];
   view: "board" | "list";
+  onStatusChange: (id: string, status: ApplicationStatus) => void;
 }
 
 interface BoardColumn {
@@ -66,25 +68,44 @@ const columns: BoardColumn[] = [
 export default function ApplicationBoard({
   applications,
   view,
+  onStatusChange,
 }: ApplicationBoardProps) {
   return (
-    <div
-      className={`${styles.board} ${view === "list" ? styles.list : ""}`}
-      id="application-board"
+    <DragDropProvider
+      onDragEnd={({ canceled, operation }) => {
+        if (canceled || !operation.target) return;
+
+        const id = String(operation.source?.id);
+        const status = operation.target.id as ApplicationStatus;
+        const application = applications.find(
+          (application) => application.id === id,
+        );
+
+        if (!application || application.status === status) return;
+
+        onStatusChange(id, status);
+      }}
     >
-      {columns.map((column) => (
-        <ApplicationColumn
-          applications={applications.filter(
-            (application) => application.status === column.status,
-          )}
-          emptyIcon={column.emptyIcon}
-          emptyMessage={column.emptyMessage}
-          id={column.id}
-          key={column.status}
-          title={column.title}
-          tone={column.tone}
-        />
-      ))}
-    </div>
+      <div
+        className={`${styles.board} ${view === "list" ? styles.list : ""}`}
+        id="application-board"
+      >
+        {columns.map((column) => (
+          <ApplicationColumn
+            onStatusChange={onStatusChange}
+            applications={applications.filter(
+              (application) => application.status === column.status,
+            )}
+            emptyIcon={column.emptyIcon}
+            emptyMessage={column.emptyMessage}
+            id={column.id}
+            key={column.status}
+            title={column.title}
+            tone={column.tone}
+            status={column.status}
+          />
+        ))}
+      </div>
+    </DragDropProvider>
   );
 }

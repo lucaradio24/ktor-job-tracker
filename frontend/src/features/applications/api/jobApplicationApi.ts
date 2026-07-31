@@ -98,6 +98,19 @@ export async function updateApplication(
   });
 }
 
+export async function patchApplication(
+  id: string,
+  payload: Partial<UpdateJobApplication>,
+): Promise<JobApplication> {
+  return fetcher<JobApplication>(`/applications/${id}`, {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(payload),
+  });
+}
+
 export async function deleteApplication(id: string): Promise<void> {
   return fetcher<void>(`/applications/${id}`, {
     method: "DELETE",

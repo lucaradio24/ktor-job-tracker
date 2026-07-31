@@ -1,6 +1,5 @@
 import {
   CalendarDays,
-  ChevronRight,
   ExternalLink,
   Circle,
   CircleCheck,
@@ -15,9 +14,11 @@ import type {
 } from "../../model/jobApplication";
 import Link from "next/link";
 import styles from "./ApplicationCard.module.css";
+import { useDraggable } from "@dnd-kit/react";
 
 interface ApplicationCardProps {
   application: JobApplication;
+  onStatusChange: (id: string, status: ApplicationStatus) => void;
 }
 
 interface StatusDetails {
@@ -62,15 +63,16 @@ function getApplicationLink(link: string) {
 export default function ApplicationCard({ application }: ApplicationCardProps) {
   const { icon: StatusIcon, label, className } = statuses[application.status];
   const city = application.city || "Da definire";
-  const chevron = (
-    <ChevronRight aria-hidden="true" size={18} strokeWidth={1.9} />
-  );
+  const { ref, isDragging } = useDraggable({ id: application.id });
   const linkIcon = (
     <ExternalLink aria-hidden="true" size={18} strokeWidth={1.9} />
   );
 
   return (
-    <article className={styles.card}>
+    <article
+      className={`${styles.card} ${isDragging ? styles.dragging : ""}`}
+      ref={ref}
+    >
       <h3 title={application.company}>
         <Link href={`/applications/${application.id}`}>
           {application.company}
@@ -99,6 +101,22 @@ export default function ApplicationCard({ application }: ApplicationCardProps) {
         <span className={`${styles.status} ${className}`}>
           <StatusIcon aria-hidden="true" size={16} strokeWidth={1.9} />
           {label}
+          {/* <select
+            onChange={(event) => {
+              onStatusChange(
+                application.id,
+                event.target.value as ApplicationStatus,
+              );
+            }}
+          >
+            {Object.keys(statuses).map((status, i) => {
+              return (
+                <option value={status} key={i}>
+                  {statuses[status as ApplicationStatus].label}
+                </option>
+              );
+            })}
+          </select> */}
         </span>
 
         {application.link && (
