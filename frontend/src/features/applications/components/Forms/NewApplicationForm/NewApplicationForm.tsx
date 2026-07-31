@@ -99,7 +99,7 @@ export default function NewApplicationForm({
     <form className={styles.form} onSubmit={handleSubmit} aria-busy={isSaving}>
       <label className={styles.field} htmlFor="company">
         <span className={styles.fieldHeading}>
-          <span>Azienda</span>
+          <span>Azienda *</span>
           {companyError && (
             <span id="company-error" className={styles.fieldError} role="alert">
               {companyError}
@@ -122,7 +122,7 @@ export default function NewApplicationForm({
 
       <label className={styles.field} htmlFor="title">
         <span className={styles.fieldHeading}>
-          <span>Posizione</span>
+          <span>Posizione *</span>
           {titleError && (
             <span id="title-error" className={styles.fieldError} role="alert">
               {titleError}

@@ -13,8 +13,11 @@
   flex-direction: column;
   min-width: 0;
   min-height: 0;
+  max-height: 100dvh;
   padding: 2.25rem;
-  overflow: hidden;
+  overflow-y: scroll;
+  scrollbar-color: var(--color-border-strong) transparent;
+  scrollbar-width: thin;
 }
 
 .visuallyHidden {

@@ -85,22 +85,16 @@ export default function EditApplicationForm({
       setSubmitError(null);
       setFieldErrors([]);
       await deleteApplication(application.id);
+      setIsConfirmDialogOpen(false);
       router.replace("/");
-      router.refresh();
     } catch (requestError) {
-      if (requestError instanceof ApiError) {
-        const fieldErrors = requestError.fieldErrors ?? [];
-        setFieldErrors(fieldErrors);
-        setSubmitError(fieldErrors.length > 0 ? null : requestError.message);
-        return;
-      }
+      setIsDeleting(false);
+      setIsConfirmDialogOpen(false);
       setSubmitError(
         requestError instanceof Error
           ? requestError.message
           : "Non è stato possibile eliminare la candidatura.",
       );
-    } finally {
-      setIsDeleting(false);
     }
   }
 

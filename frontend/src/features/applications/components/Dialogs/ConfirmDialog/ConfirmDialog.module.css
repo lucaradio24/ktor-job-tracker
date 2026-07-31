@@ -3,7 +3,7 @@
   inset: 0;
   box-sizing: border-box;
   width: min(36rem, calc(100% - 2rem));
-  max-width: none;
+  max-width: min(100%, 32rem);
   margin: auto;
   padding: var(--space-6);
   color: var(--color-text);
