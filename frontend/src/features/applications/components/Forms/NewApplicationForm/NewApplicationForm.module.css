@@ -95,6 +95,7 @@
 }
 
 .secondaryButton,
+.dangerButton,
 .primaryButton {
   display: inline-flex;
   gap: var(--space-2);
@@ -137,9 +138,74 @@
 }
 
 .secondaryButton:disabled,
-.primaryButton:disabled {
+.primaryButton:disabled,
+.dangerButton:disabled {
   cursor: wait;
   opacity: 0.6;
+}
+
+.dangerButton {
+  flex-shrink: 0;
+  min-width: 12rem;
+  color: var(--color-danger);
+  background: transparent;
+  border: 1px solid color-mix(in srgb, var(--color-danger) 65%, transparent);
+}
+
+.dangerButton:hover:not(:disabled) {
+  background: var(--color-danger-soft);
+  border-color: var(--color-danger);
+}
+
+.deleteActions {
+  grid-column: 1 / -1;
+  display: flex;
+  gap: var(--space-5);
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-4) var(--space-5);
+  background: color-mix(in srgb, var(--color-danger-soft) 24%, transparent);
+  border: 1px solid color-mix(in srgb, var(--color-danger) 52%, transparent);
+  border-radius: var(--radius-md);
+}
+
+.deleteMessage {
+  display: flex;
+  gap: var(--space-4);
+  align-items: center;
+  min-width: 0;
+}
+
+.deleteIcon {
+  display: grid;
+  flex: 0 0 2.75rem;
+  width: 2.75rem;
+  height: 2.75rem;
+  color: var(--color-danger);
+  place-items: center;
+  border: 1px solid color-mix(in srgb, var(--color-danger) 45%, transparent);
+  border-radius: var(--radius-sm);
+}
+
+.deleteCopy {
+  display: grid;
+  gap: var(--space-1);
+}
+
+.deleteTitle,
+.deleteHint {
+  margin: 0;
+}
+
+.deleteTitle {
+  color: var(--color-danger);
+  font-size: 0.875rem;
+  font-weight: 750;
+}
+
+.deleteHint {
+  color: var(--color-text-muted);
+  font-size: 0.8125rem;
 }
 
 .spinner {
@@ -160,7 +226,8 @@
 
   .wideField,
   .error,
-  .actions {
+  .actions,
+  .deleteActions {
     grid-column: auto;
   }
 
@@ -170,11 +237,17 @@
   }
 
   .secondaryButton,
-  .primaryButton {
+  .primaryButton,
+  .dangerButton {
     width: 100%;
     min-width: 0;
     padding-inline: var(--space-2);
     font-size: 0.8125rem;
+  }
+
+  .deleteActions {
+    align-items: stretch;
+    flex-direction: column;
   }
 
   .primaryButton {

@@ -97,3 +97,9 @@ export async function updateApplication(
     body: JSON.stringify(payload),
   });
 }
+
+export async function deleteApplication(id: string): Promise<void> {
+  return fetcher<void>(`/applications/${id}`, {
+    method: "DELETE",
+  });
+}

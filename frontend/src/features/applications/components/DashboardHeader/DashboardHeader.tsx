@@ -2,7 +2,7 @@
 
 import { Plus } from "lucide-react";
 import { useState } from "react";
-import NewApplicationDialog from "../NewApplicationDialog/NewApplicationDialog";
+import NewApplicationDialog from "../Dialogs/NewApplicationDialog/NewApplicationDialog";
 import NewApplicationForm from "../Forms/NewApplicationForm/NewApplicationForm";
 import styles from "./DashboardHeader.module.css";
 import { JobApplication } from "../../model/jobApplication";
