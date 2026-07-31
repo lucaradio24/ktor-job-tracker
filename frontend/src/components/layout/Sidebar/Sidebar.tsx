@@ -7,6 +7,7 @@ import {
 } from "lucide-react";
 import Image from "next/image";
 import styles from "./Sidebar.module.css";
+import Link from "next/link";
 
 interface NavigationItem {
   label: string;
@@ -30,7 +31,7 @@ const navigation: NavigationItem[] = [
 export default function Sidebar() {
   return (
     <aside className={styles.sidebar}>
-      <a className={styles.brand} href="#overview" aria-label="Job Tracker">
+      <Link className={styles.brand} href="/" aria-label="Job Tracker">
         <Image
           src="/jobtracker-logo.png"
           alt=""
@@ -39,7 +40,7 @@ export default function Sidebar() {
           loading="eager"
         />
         <span className={styles.brandName}>Job Tracker</span>
-      </a>
+      </Link>
 
       <nav className={styles.navigation} aria-label="Navigazione principale">
         {navigation.map((item) => {
