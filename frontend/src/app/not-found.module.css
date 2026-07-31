@@ -1,0 +1,166 @@
+.notFound {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 36rem) minmax(16rem, 1fr);
+  grid-template-rows: auto 1fr;
+  gap: var(--space-8);
+  min-height: 100dvh;
+  overflow: hidden;
+  padding: clamp(var(--space-6), 5vw, 4rem);
+  color: var(--color-text);
+  background:
+    radial-gradient(circle at 73% 43%, rgba(53, 67, 68, 0.16), transparent 29%),
+    var(--color-background);
+}
+
+.brand {
+  z-index: 1;
+  display: inline-flex;
+  grid-column: 1 / -1;
+  align-items: center;
+  gap: var(--space-3);
+  width: fit-content;
+  color: var(--color-text);
+  font-size: 1.125rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+}
+
+.brandLogo {
+  width: 2.5rem;
+  height: 2.5rem;
+  object-fit: contain;
+}
+
+.content {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+}
+
+.copy {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  max-width: 34rem;
+}
+
+.code {
+  margin: 0;
+  color: var(--color-text);
+  font-size: clamp(7rem, 14vw, 11rem);
+  font-weight: 800;
+  letter-spacing: -0.09em;
+  line-height: 0.8;
+}
+
+.copy h1 {
+  max-width: 12ch;
+  margin: var(--space-6) 0 0;
+  color: var(--color-text);
+  font-size: clamp(2rem, 4vw, 3.25rem);
+  font-weight: 700;
+  letter-spacing: -0.045em;
+  line-height: 1.12;
+}
+
+.description {
+  max-width: 34rem;
+  margin: var(--space-5) 0 0;
+  color: var(--color-text-muted);
+  font-size: clamp(1rem, 1.5vw, 1.125rem);
+  line-height: 1.6;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  width: 100%;
+  margin-top: var(--space-8);
+}
+
+.primaryButton,
+.secondaryButton {
+  display: inline-flex;
+  align-items: center;
+  flex: 1 1 14rem;
+  justify-content: center;
+  min-height: 3.25rem;
+  padding: 0 var(--space-5);
+  border-radius: var(--radius-md);
+  font-size: 0.875rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  text-align: center;
+  text-transform: uppercase;
+  transition:
+    transform var(--transition-fast),
+    background-color var(--transition-fast),
+    border-color var(--transition-fast);
+}
+
+.primaryButton {
+  color: #ffffff;
+  background: var(--color-accent);
+  border: 1px solid var(--color-accent);
+}
+
+.secondaryButton {
+  color: var(--color-text-muted);
+  background: var(--color-surface-muted);
+  border: 1px solid var(--color-border-strong);
+}
+
+.primaryButton:hover {
+  background: color-mix(in srgb, var(--color-accent) 88%, white);
+}
+
+.secondaryButton:hover {
+  color: var(--color-text);
+  border-color: var(--color-text-muted);
+}
+
+.robot {
+  position: relative;
+  align-self: end;
+  justify-self: end;
+  width: min(100%, 32rem, 45vh);
+  aspect-ratio: 2 / 3;
+}
+
+.robot img {
+  object-fit: contain;
+  object-position: center bottom;
+}
+
+@media (max-width: 47.999rem) {
+  .notFound {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-6);
+    padding: var(--space-5);
+  }
+
+  .content {
+    flex: 1;
+  }
+
+  .actions {
+  }
+
+  .code {
+    font-size: clamp(6rem, 28vw, 8rem);
+  }
+
+  .copy h1 {
+    font-size: clamp(1.9rem, 9vw, 2.5rem);
+  }
+
+  .robot {
+    /* position: absolute;
+    width: min(100%, 32rem, 20vh); */
+    display: none;
+  }
+}

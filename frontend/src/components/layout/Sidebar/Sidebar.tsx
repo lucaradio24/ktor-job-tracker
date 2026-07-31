@@ -5,6 +5,7 @@ import {
   Settings,
   type LucideIcon,
 } from "lucide-react";
+import Image from "next/image";
 import styles from "./Sidebar.module.css";
 
 interface NavigationItem {
@@ -30,9 +31,13 @@ export default function Sidebar() {
   return (
     <aside className={styles.sidebar}>
       <a className={styles.brand} href="#overview" aria-label="Job Tracker">
-        {/* <span className={styles.brandMark} aria-hidden="true">
-          <span className={styles.sun} />
-        </span> */}
+        <Image
+          src="/jobtracker-logo.png"
+          alt=""
+          width={40}
+          height={40}
+          loading="eager"
+        />
         <span className={styles.brandName}>Job Tracker</span>
       </a>
 

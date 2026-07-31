@@ -21,6 +21,10 @@
   letter-spacing: -0.035em;
 }
 
+.brand > img {
+  margin-bottom: 0.2rem;
+}
+
 .navigation {
   display: flex;
   flex-direction: column;
