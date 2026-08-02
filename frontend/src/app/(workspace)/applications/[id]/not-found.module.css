@@ -2,14 +2,10 @@
   position: relative;
   display: grid;
   grid-template-columns: minmax(0, 30rem) minmax(16rem, 1fr);
-  gap: var(--space-8);
-  max-height: 90%;
-  overflow: hidden;
+  gap: var(--space-4);
   padding: clamp(var(--space-6), 5vw, 4rem);
   color: var(--color-text);
-  background:
-    radial-gradient(circle at 73% 43%, rgba(53, 67, 68, 0.16), transparent 29%),
-    var(--color-background);
+  flex: 1;
 }
 
 .content {
@@ -106,9 +102,8 @@
   position: relative;
   align-self: end;
   justify-self: end;
-  width: 100%;
-  aspect-ratio: 4 / 3;
-  overflow: visible;
+  width: min(100%, 32rem, 45vh);
+  aspect-ratio: 2 / 3;
 }
 
 .robot img {
