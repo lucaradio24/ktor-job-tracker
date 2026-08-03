@@ -1,6 +1,6 @@
 import type { JobApplication } from "../model/jobApplication";
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL;
+const APPLICATIONS_URL = "/api/applications";
 
 export interface ApiErrorBody {
   errorCode: ErrorCode;
@@ -19,7 +19,8 @@ type ErrorCode =
   | "NOT_FOUND"
   | "VALIDATION_FAILED"
   | "INTERNAL_ERROR"
-  | "NETWORK_ERROR";
+  | "NETWORK_ERROR"
+  | "UNAUTHORIZED";
 
 export class ApiError extends Error {
   constructor(
@@ -33,11 +34,14 @@ export class ApiError extends Error {
   }
 }
 
-async function fetcher<T>(path: string, options?: RequestInit): Promise<T> {
+export async function fetcher<T>(
+  url: string,
+  options: RequestInit = {},
+): Promise<T> {
   let response: Response;
 
   try {
-    response = await fetch(`${API_URL}${path}`, {
+    response = await fetch(url, {
       ...options,
       signal: AbortSignal.timeout(8_000),
     });
@@ -64,17 +68,17 @@ async function fetcher<T>(path: string, options?: RequestInit): Promise<T> {
 export type CreateJobApplication = Omit<JobApplication, "id">;
 
 export async function getApplications(): Promise<JobApplication[]> {
-  return fetcher<JobApplication[]>("/applications");
+  return fetcher<JobApplication[]>(APPLICATIONS_URL);
 }
 
 export async function getApplication(id: string): Promise<JobApplication> {
-  return fetcher<JobApplication>(`/applications/${id}`);
+  return fetcher<JobApplication>(`${APPLICATIONS_URL}/${id}`);
 }
 
 export async function createApplication(
   payload: CreateJobApplication,
 ): Promise<JobApplication> {
-  return fetcher<JobApplication>("/applications", {
+  return fetcher<JobApplication>(APPLICATIONS_URL, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -89,7 +93,7 @@ export async function updateApplication(
   id: string,
   payload: UpdateJobApplication,
 ): Promise<JobApplication> {
-  return fetcher<JobApplication>(`/applications/${id}`, {
+  return fetcher<JobApplication>(`${APPLICATIONS_URL}/${id}`, {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
@@ -102,7 +106,7 @@ export async function patchApplication(
   id: string,
   payload: Partial<UpdateJobApplication>,
 ): Promise<JobApplication> {
-  return fetcher<JobApplication>(`/applications/${id}`, {
+  return fetcher<JobApplication>(`${APPLICATIONS_URL}/${id}`, {
     method: "PATCH",
     headers: {
       "Content-Type": "application/json",
@@ -112,7 +116,7 @@ export async function patchApplication(
 }
 
 export async function deleteApplication(id: string): Promise<void> {
-  return fetcher<void>(`/applications/${id}`, {
+  return fetcher<void>(`${APPLICATIONS_URL}/${id}`, {
     method: "DELETE",
   });
 }

@@ -1,9 +1,7 @@
-import {
-  ApiError,
-  getApplication,
-} from "@/features/applications/api/jobApplicationApi";
+import { ApiError } from "@/features/applications/api/jobApplicationApi";
+import { getApplication } from "@/features/applications/api/jobApplicationServerApi";
 import EditApplicationForm from "@/features/applications/components/Forms/EditApplicationForm/EditApplicationForm";
-import { JobApplication } from "@/features/applications/model/jobApplication";
+import type { JobApplication } from "@/features/applications/model/jobApplication";
 import { notFound } from "next/navigation";
 
 export default async function EditApplicationPage({

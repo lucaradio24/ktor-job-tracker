@@ -8,6 +8,8 @@ import {
 import Image from "next/image";
 import styles from "./Sidebar.module.css";
 import Link from "next/link";
+import UserSidebarDisplay from "@/features/login/UserSidebarDisplay";
+import { UserData } from "@/app/(workspace)/layout";
 
 interface NavigationItem {
   label: string;
@@ -28,7 +30,7 @@ const navigation: NavigationItem[] = [
   { label: "Impostazioni", href: "#settings", icon: Settings },
 ];
 
-export default function Sidebar() {
+export default function Sidebar({ userData }: { userData: UserData }) {
   return (
     <aside className={styles.sidebar}>
       <Link className={styles.brand} href="/" aria-label="Job Tracker">
@@ -63,7 +65,9 @@ export default function Sidebar() {
         })}
       </nav>
 
-      <p className={styles.footerCopy}>Ogni candidatura è un passo avanti.</p>
+      <div className={styles.footerCopy}>
+        <UserSidebarDisplay userData={userData} />
+      </div>
     </aside>
   );
 }
