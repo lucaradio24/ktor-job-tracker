@@ -88,5 +88,27 @@ class ServerTest {
             companyError?.get("message")?.jsonPrimitive?.content,
         )
     }
+
+    @Test
+    fun `POST application without required field returns bad request`() = testApplication {
+        application {
+            configureSerialization()
+            configureStatusPages()
+            routing {
+                applicationRoutes(JobApplicationService(InMemoryApplicationRepository(mutableListOf())))
+            }
+        }
+
+        val response = client.post("/applications") {
+            contentType(ContentType.Application.Json)
+            setBody("""{"company":"Acme","status":"APPLIED"}""")
+        }
+
+        assertEquals(HttpStatusCode.BadRequest, response.status)
+        assertEquals(
+            "INVALID_REQUEST",
+            Json.parseToJsonElement(response.bodyAsText()).jsonObject["errorCode"]?.jsonPrimitive?.content,
+        )
+    }
 }
 

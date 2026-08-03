@@ -2,6 +2,7 @@ package com.example
 
 import com.example.error.ApiErrorResponse
 import com.example.error.ErrorCodes
+import io.ktor.server.plugins.BadRequestException
 import io.ktor.http.HttpStatusCode
 import io.ktor.server.application.Application
 import io.ktor.server.application.install
@@ -12,6 +13,11 @@ import io.ktor.server.application.log
 
 fun Application.configureStatusPages() {
     install(StatusPages) {
+
+        exception<BadRequestException> { call, _ ->
+            call.respond(HttpStatusCode.BadRequest,
+                ApiErrorResponse(ErrorCodes.INVALID_REQUEST, "Invalid request body"))
+        }
 
         exception<ContentTransformationException> { call, _ ->
             call.respond(HttpStatusCode.BadRequest,
