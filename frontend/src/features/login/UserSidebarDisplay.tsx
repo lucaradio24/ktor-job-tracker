@@ -8,7 +8,10 @@ export default function UserSidebarDisplay({
 }: {
   userData: UserData;
 }) {
-  const displayName = userData.name || userData.nickname || "Utente";
+  const displayName =
+    userData.name === userData.email
+      ? userData.nickname
+      : userData.name || "Utente";
 
   return (
     <div className={styles.userSidebarDisplay}>
@@ -22,7 +25,7 @@ export default function UserSidebarDisplay({
         />
       ) : (
         <span className={styles.avatarFallback} aria-hidden="true">
-          {displayName.charAt(0).toUpperCase()}
+          {displayName?.charAt(0)}
         </span>
       )}
 
