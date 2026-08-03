@@ -15,6 +15,7 @@ enum class ApplicationStatus{
 
 @Serializable
 data class JobApplication(
+    val ownerId: String,
     val id : String,
     val company: String,
     val status: ApplicationStatus,

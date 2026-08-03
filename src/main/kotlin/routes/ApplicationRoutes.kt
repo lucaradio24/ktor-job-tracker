@@ -14,6 +14,9 @@ import io.ktor.server.routing.route
 import com.example.service.JobApplicationService
 import com.example.validation.JobApplicationRequestValidator
 import io.ktor.http.HttpStatusCode
+import io.ktor.server.application.ApplicationCall
+import io.ktor.server.auth.jwt.JWTPrincipal
+import io.ktor.server.auth.principal
 import io.ktor.server.request.receive
 import io.ktor.server.routing.delete
 import io.ktor.server.routing.patch
@@ -21,17 +24,24 @@ import io.ktor.server.routing.post
 import io.ktor.server.routing.put
 import java.util.UUID
 
+private val ApplicationCall.ownerId: String
+    get () = requireNotNull(
+        principal<JWTPrincipal>()?.payload?.subject
+    )
 
 fun Route.applicationRoutes(service: JobApplicationService) {
+
+
     route("/applications"){
         get {
-            call.respond(HttpStatusCode.OK, service.findAll())
+            call.respond(HttpStatusCode.OK, service.findAll(call.ownerId))
         }
 
         get("/{id}"){
+
             val id = call.parameters["id"]
             if (id != null){
-                val application = service.findById(id)
+                val application = service.findById(id, call.ownerId)
                 if (application != null){
                     call.respond(application)
                 } else {
@@ -56,6 +66,7 @@ fun Route.applicationRoutes(service: JobApplicationService) {
             }
 
             val application = JobApplication(
+                ownerId = call.ownerId,
                 id = UUID.randomUUID().toString(),
                 company = request.company,
                 status = request.status,
@@ -87,6 +98,7 @@ fun Route.applicationRoutes(service: JobApplicationService) {
             }
 
             val receivedApplication = JobApplication(
+                ownerId = call.ownerId,
                 id = id,
                 company = request.company,
                 status = request.status,
@@ -97,7 +109,7 @@ fun Route.applicationRoutes(service: JobApplicationService) {
                 city = request.city,
             )
 
-            val updatedApplication = service.update(id,receivedApplication)
+            val updatedApplication = service.update(id, call.ownerId,receivedApplication)
             if (updatedApplication != null){
                 call.respond(HttpStatusCode.OK, updatedApplication)
             } else {
@@ -108,6 +120,7 @@ fun Route.applicationRoutes(service: JobApplicationService) {
         }
 
         patch("/{id}") {
+
             val id = call.parameters["id"]
                 ?: return@patch call.respond(HttpStatusCode.BadRequest, ApiErrorResponse(ErrorCodes.INVALID_REQUEST, "Invalid ID"))
             val request = call.receive< PatchJobApplicationRequest>()
@@ -129,7 +142,7 @@ fun Route.applicationRoutes(service: JobApplicationService) {
                 city = request.city,
             )
 
-            val updatedApplication = service.patch(id, changes)
+            val updatedApplication = service.patch(id, call.ownerId, changes)
                 ?: return@patch call.respond(HttpStatusCode.NotFound, ApiErrorResponse(ErrorCodes.NOT_FOUND, "Application not found"))
 
             call.respond(HttpStatusCode.OK,updatedApplication)
@@ -139,7 +152,7 @@ fun Route.applicationRoutes(service: JobApplicationService) {
             val id = call.parameters["id"]
             ?: return@delete call.respond(HttpStatusCode.BadRequest, ApiErrorResponse(ErrorCodes.INVALID_REQUEST, "Invalid ID"))
 
-            val applicationToRemove = service.delete(id) ?: return@delete call.respond(HttpStatusCode.NotFound,
+            val applicationToRemove = service.delete(id, call.ownerId) ?: return@delete call.respond(HttpStatusCode.NotFound,
                 ApiErrorResponse(ErrorCodes.NOT_FOUND, "Application not found"))
 
 

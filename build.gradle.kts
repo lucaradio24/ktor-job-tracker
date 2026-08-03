@@ -27,6 +27,8 @@ dependencies {
     implementation("io.github.cdimascio:dotenv-kotlin:6.5.1")
     implementation("org.mongodb:mongodb-driver-kotlin-coroutine:5.5.0")
     implementation("org.mongodb:bson-kotlinx:5.5.0")
+    implementation(ktorLibs.server.auth)
+    implementation(ktorLibs.server.auth.jwt)
 
     testImplementation(kotlin("test"))
     testImplementation(ktorLibs.server.testHost)

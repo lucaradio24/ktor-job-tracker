@@ -8,6 +8,7 @@ import java.time.LocalDateTime
 class InMemoryApplicationRepository (
     private val applications: MutableList<JobApplication> = mutableListOf(
         JobApplication(
+            ownerId = "demo",
             id = "1",
             company = "JetBrains",
             status = ApplicationStatus.APPLIED,
@@ -19,12 +20,12 @@ class InMemoryApplicationRepository (
 ) : ApplicationRepository {
 
 
-    override suspend fun findAll(): List<JobApplication> {
-        return applications.toList()
+    override suspend fun findAll(ownerId: String): List<JobApplication> {
+        return applications.filter { it.ownerId == ownerId }.toList()
     }
 
-    override suspend fun findById(id: String): JobApplication? {
-        return applications.find { it.id == id }
+    override suspend fun findById(id: String, ownerId: String): JobApplication? {
+        return applications.find { it.id == id && it.ownerId == ownerId }
     }
 
     override suspend fun create(jobApplication: JobApplication): Boolean {
@@ -37,25 +38,26 @@ class InMemoryApplicationRepository (
 
     override suspend fun update(
         id: String,
+        ownerId: String,
         jobApplication: JobApplication
     ): JobApplication? {
-        val index = applications.indexOfFirst { it.id == id }
+        val index = applications.indexOfFirst { it.id == id && it.ownerId == ownerId}
         if (index == -1) return null
-        val updatedApplication = jobApplication.copy(id = id)
+        val updatedApplication = jobApplication.copy(id = id, ownerId = ownerId)
         applications[index] = updatedApplication
         return updatedApplication
     }
 
 
 
-    override suspend fun delete(id: String): JobApplication? {
-        val applicationToRemove = applications.find { it.id == id } ?: return null
+    override suspend fun delete(id: String, ownerId: String): JobApplication? {
+        val applicationToRemove = applications.find { it.id == id && it.ownerId == ownerId } ?: return null
         applications.remove(applicationToRemove)
         return applicationToRemove
     }
 
-    override suspend fun patch(id: String, changes: JobApplicationChanges): JobApplication? {
-        val index = applications.indexOfFirst { it.id == id }
+    override suspend fun patch(id: String, ownerId: String, changes: JobApplicationChanges): JobApplication? {
+        val index = applications.indexOfFirst { it.id == id && it.ownerId == ownerId}
 
         if (index == -1) return null
 

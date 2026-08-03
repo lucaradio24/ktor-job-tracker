@@ -6,7 +6,11 @@ import com.example.repository.ApplicationRepository
 import com.example.repository.MongoApplicationRepository
 import com.example.routes.applicationRoutes
 import com.example.service.JobApplicationService
+import io.ktor.http.HttpStatusCode
 import io.ktor.server.application.*
+import io.ktor.server.auth.authenticate
+import io.ktor.server.auth.jwt.JWTPrincipal
+import io.ktor.server.auth.principal
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 
@@ -34,6 +38,18 @@ fun Application.configureRouting() {
                 "mongo" to result.toJson()))
         }
 
-        applicationRoutes(service)
+        authenticate ("auth0") {
+            get("/auth/check") {
+                val principal = call.principal<JWTPrincipal>()
+                    ?: return@get call.respond(HttpStatusCode.Unauthorized)
+
+                call.respond(mapOf("sub" to principal.payload.subject))
+            }
+        }
+
+        authenticate("auth0") {
+            applicationRoutes(service)
+
+        }
     }
 }

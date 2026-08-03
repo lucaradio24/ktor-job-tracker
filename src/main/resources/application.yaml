@@ -6,4 +6,5 @@ ktor:
       - com.example.SerializationKt.configureSerialization
       - com.example.StatusPagesKt.configureStatusPages
       - com.example.CorsKt.configureCors
+      - com.example.config.AuthenticationConfigKt.configureAuthentication
       - com.example.RoutingKt.configureRouting

@@ -9,7 +9,8 @@ enum class ErrorCodes{
     ALREADY_EXISTS,
     NOT_FOUND,
     VALIDATION_FAILED,
-    INTERNAL_ERROR
+    INTERNAL_ERROR,
+    UNAUTHORIZED,
 }
 
 @Serializable

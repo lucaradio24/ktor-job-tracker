@@ -2,6 +2,7 @@ package com.example.repository
 
 import com.example.model.JobApplication
 import com.example.model.JobApplicationChanges
+import com.mongodb.client.model.Filters.and
 import com.mongodb.client.model.Updates.set
 import com.mongodb.client.model.Updates.combine
 import com.mongodb.client.model.Filters.eq
@@ -13,18 +14,20 @@ import org.bson.conversions.Bson
 class MongoApplicationRepository(
     private val collection: MongoCollection<JobApplication>
 ): ApplicationRepository {
-    override suspend fun findAll(): List<JobApplication> {
-        return collection.find().toList()
+    override suspend fun findAll(ownerId: String): List<JobApplication> {
+        return collection.find(eq("ownerId", ownerId)).toList()
     }
 
-    override suspend fun findById(id: String): JobApplication? {
+    override suspend fun findById(id: String, ownerId: String): JobApplication? {
         return collection
-            .find(eq("id", id))
+            .find(
+                and(eq("id", id),
+                    eq("ownerId", ownerId)))
             .firstOrNull()
     }
 
     override suspend fun create(jobApplication: JobApplication): Boolean {
-        val alreadyExists = findById(jobApplication.id) != null
+        val alreadyExists = findById(jobApplication.id, jobApplication.ownerId) != null
 
         if (alreadyExists) return false
 
@@ -35,11 +38,13 @@ class MongoApplicationRepository(
 
     override suspend fun update(
         id: String,
+        ownerId: String,
         jobApplication: JobApplication
     ): JobApplication? {
-        val updatedApplication = jobApplication.copy(id = id)
+        val updatedApplication = jobApplication.copy(id = id, ownerId = ownerId)
 
-        val result = collection.replaceOne(eq("id", id),
+        val result = collection.replaceOne(and(eq("id", id),
+            eq("ownerId", ownerId)),
             updatedApplication)
 
         if (result.matchedCount == 0L) return null
@@ -47,15 +52,16 @@ class MongoApplicationRepository(
         return updatedApplication
     }
 
-    override suspend fun delete(id: String): JobApplication? {
-        val application = findById(id)
+    override suspend fun delete(id: String, ownerId: String): JobApplication? {
+        val application = findById(id, ownerId)
             ?: return null
 
-        collection.deleteOne(eq("id", id))
+        collection.deleteOne(and(eq("id", id),
+            eq("ownerId", ownerId)))
         return application
     }
 
-    override suspend fun patch(id: String, changes: JobApplicationChanges): JobApplication? {
+    override suspend fun patch(id: String, ownerId: String, changes: JobApplicationChanges): JobApplication? {
         val updatedFields = mutableListOf<Bson>()
 
         changes.company?.let {
@@ -86,13 +92,14 @@ class MongoApplicationRepository(
             updatedFields.add(set("city", it))
         }
 
-        if(updatedFields.isEmpty()) return findById(id)
+        if(updatedFields.isEmpty()) return findById(id, ownerId)
 
-        val result = collection.updateOne(eq("id", id), combine(updatedFields))
+        val result = collection.updateOne(and(eq("id", id), eq("ownerId", ownerId) ),
+            combine(updatedFields))
 
         if (result.matchedCount == 0L) return null
 
-        return findById(id)
+        return findById(id, ownerId)
     }
 
 }
