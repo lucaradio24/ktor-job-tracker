@@ -160,6 +160,48 @@
   animation: shimmer 1.5s linear infinite;
 }
 
+.skeletonEyebrow {
+  width: 6rem;
+  height: 1.125rem;
+  margin-bottom: var(--space-2);
+  border-radius: var(--radius-pill);
+}
+
+.skeletonHeading {
+  width: min(32rem, 70vw);
+  height: 3.3rem;
+  border-radius: var(--radius-sm);
+}
+
+.skeletonDescription {
+  width: min(21rem, 60vw);
+  height: 1.5rem;
+  margin-top: var(--space-2);
+  border-radius: var(--radius-pill);
+}
+
+.skeletonAction {
+  flex: 0 0 auto;
+  width: 12rem;
+  height: 3.25rem;
+  border-radius: var(--radius-md);
+}
+
+.skeletonSearch,
+.skeletonToggle {
+  height: 3.25rem;
+  border-radius: var(--radius-md);
+}
+
+.skeletonSearch {
+  width: min(27rem, 100%);
+}
+
+.skeletonToggle {
+  flex: 0 0 15rem;
+  margin-left: auto;
+}
+
 .skeletonTitle {
   width: 52%;
   height: 0.875rem;
@@ -196,6 +238,10 @@
     flex: 1;
   }
 
+  .skeletonSearch {
+    flex: 1;
+  }
+
   .skeletonBoard {
     grid-template-columns: repeat(2, minmax(15rem, 1fr));
   }
@@ -212,13 +258,24 @@
   }
 
   .search,
-  .viewToggle {
+  .viewToggle,
+  .skeletonSearch,
+  .skeletonToggle {
     width: 100%;
   }
 
-  .viewToggle {
+  .viewToggle,
+  .skeletonToggle {
     flex-basis: auto;
     margin-left: 0;
+  }
+
+  .skeletonAction {
+    width: 100%;
+  }
+
+  .skeletonHeading {
+    height: 2.475rem;
   }
 
   .skeletonBoard {
