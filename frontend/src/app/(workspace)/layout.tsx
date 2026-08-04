@@ -18,7 +18,7 @@ export default async function WorkspaceLayout({
   const session = await auth0.getSession();
 
   if (!session) {
-    redirect("/auth/login");
+    redirect("/login");
   }
 
   return (
