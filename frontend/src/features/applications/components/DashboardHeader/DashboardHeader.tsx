@@ -19,9 +19,9 @@ export default function DashboardHeader({
       <div className={styles.copy}>
         <p className={styles.eyebrow}>Candidature</p>
         <h1>Le tue opportunità, in ordine.</h1>
-        <p className={styles.description}>
+        {/* <p className={styles.description}>
           Tieni sotto controllo ogni fase della tua ricerca.
-        </p>
+        </p> */}
       </div>
 
       <button

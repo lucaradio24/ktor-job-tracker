@@ -18,6 +18,7 @@ import { useDraggable } from "@dnd-kit/react";
 
 interface ApplicationCardProps {
   application: JobApplication;
+  draggable?: boolean;
   onStatusChange: (id: string, status: ApplicationStatus) => void;
 }
 
@@ -60,10 +61,16 @@ function getApplicationLink(link: string) {
   return /^https?:\/\//i.test(link) ? link : `https://${link}`;
 }
 
-export default function ApplicationCard({ application }: ApplicationCardProps) {
+export default function ApplicationCard({
+  application,
+  draggable = true,
+}: ApplicationCardProps) {
   const { icon: StatusIcon, label, className } = statuses[application.status];
   const city = application.city || "Da definire";
-  const { ref, isDragging } = useDraggable({ id: application.id });
+  const { ref, isDragging } = useDraggable({
+    id: application.id,
+    disabled: !draggable,
+  });
   const linkIcon = (
     <ExternalLink aria-hidden="true" size={18} strokeWidth={1.9} />
   );

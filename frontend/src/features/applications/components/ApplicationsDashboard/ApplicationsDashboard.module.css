@@ -46,8 +46,7 @@
   margin-bottom: var(--space-5);
 }
 
-.search,
-.viewToggle {
+.search {
   min-height: 3.25rem;
   color: var(--color-text-muted);
   background: color-mix(in srgb, var(--color-surface-muted) 88%, transparent);
@@ -92,43 +91,6 @@
 .search input::placeholder {
   color: var(--color-text-muted);
   opacity: 1;
-}
-
-.viewToggle {
-  display: grid;
-  flex: 0 0 15rem;
-  grid-template-columns: repeat(2, 1fr);
-  gap: var(--space-1);
-  margin-left: auto;
-  padding: var(--space-1);
-}
-
-.viewToggle button {
-  display: inline-flex;
-  gap: var(--space-2);
-  align-items: center;
-  justify-content: center;
-  min-width: 0;
-  color: var(--color-text-muted);
-  font-size: 0.875rem;
-  font-weight: 700;
-  background: transparent;
-  border: 0;
-  border-radius: calc(var(--radius-md) - var(--space-1));
-  cursor: pointer;
-  transition:
-    color var(--transition-fast),
-    background-color var(--transition-fast);
-}
-
-.viewToggle button:hover {
-  color: var(--color-text);
-}
-
-.viewToggle button[aria-pressed="true"] {
-  color: var(--color-status-amber);
-  background: color-mix(in srgb, var(--color-surface-muted) 45%, black);
-  box-shadow: var(--shadow-sm);
 }
 
 .skeletonBoard {
@@ -258,13 +220,11 @@
   }
 
   .search,
-  .viewToggle,
   .skeletonSearch,
   .skeletonToggle {
     width: 100%;
   }
 
-  .viewToggle,
   .skeletonToggle {
     flex-basis: auto;
     margin-left: 0;
@@ -285,8 +245,63 @@
   .skeletonColumn {
     min-height: 16rem;
   }
+
+  .archiveToggle {
+    width: 100%;
+    margin-left: 0;
+  }
 }
 
 .skeletonList {
   grid-template-columns: 1fr;
+}
+
+.archiveToggle {
+  display: inline-flex;
+  min-height: 3.25rem;
+  gap: var(--space-2);
+  align-items: center;
+  justify-content: center;
+  margin-left: auto;
+  padding: 0 var(--space-4);
+  color: var(--color-text-muted);
+  font-weight: 700;
+  background: var(--color-surface-muted);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+}
+
+.archiveToggle[aria-pressed="true"] {
+  color: var(--color-status-rose);
+  background: var(--color-status-rose-soft);
+  border-color: color-mix(
+    in srgb,
+    var(--color-status-rose) 35%,
+    var(--color-border)
+  );
+}
+
+.archiveCount {
+  display: grid;
+  min-width: 1.625rem;
+  height: 1.625rem;
+  padding: 0 var(--space-1);
+  place-items: center;
+  font-size: 0.75rem;
+  font-weight: 800;
+  background: var(--color-surface-strong);
+  border-radius: var(--radius-pill);
+}
+
+.archiveToggle:focus-visible {
+  outline: 2px solid var(--color-focus);
+  outline-offset: 2px;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .archiveToggle:hover {
+    color: var(--color-text);
+    border-color: var(--color-border-strong);
+  }
 }

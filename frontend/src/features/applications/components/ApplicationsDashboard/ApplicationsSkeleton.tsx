@@ -1,18 +1,12 @@
 import styles from "./ApplicationsDashboard.module.css";
 import headerStyles from "../DashboardHeader/DashboardHeader.module.css";
 
-export default function ApplicationsSkeleton({
-  view,
-}: {
-  view: "board" | "list";
-}) {
+export default function ApplicationsSkeleton() {
   return (
     <>
       <header className={headerStyles.header} aria-hidden="true">
         <div className={headerStyles.copy}>
-          <span
-            className={`${styles.skeleton} ${styles.skeletonEyebrow}`}
-          />
+          <span className={`${styles.skeleton} ${styles.skeletonEyebrow}`} />
           <span className={`${styles.skeleton} ${styles.skeletonHeading}`} />
           <span
             className={`${styles.skeleton} ${styles.skeletonDescription}`}
@@ -31,12 +25,7 @@ export default function ApplicationsSkeleton({
           <span className={`${styles.skeleton} ${styles.skeletonToggle}`} />
         </div>
 
-        <div
-          className={`${styles.skeletonBoard} ${
-            view === "list" ? styles.skeletonList : ""
-          }`}
-          aria-hidden="true"
-        >
+        <div className={styles.skeletonBoard} aria-hidden="true">
           {[0, 1, 2, 3].map((column) => (
             <div className={styles.skeletonColumn} key={column}>
               <span className={`${styles.skeleton} ${styles.skeletonTitle}`} />

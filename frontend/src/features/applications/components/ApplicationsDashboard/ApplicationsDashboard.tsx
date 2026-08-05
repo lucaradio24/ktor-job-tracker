@@ -1,6 +1,6 @@
 "use client";
 
-import { CircleAlert, Columns3, List, Search } from "lucide-react";
+import { CircleAlert, Search, Archive } from "lucide-react";
 import { useState } from "react";
 import type {
   ApplicationStatus,
@@ -10,6 +10,7 @@ import ApplicationBoard from "../ApplicationBoard/ApplicationBoard";
 import styles from "./ApplicationsDashboard.module.css";
 import DashboardHeader from "../DashboardHeader/DashboardHeader";
 import { patchApplication } from "../../api/jobApplicationApi";
+import ApplicationsList from "../ApplicationsList/ApplicationsList";
 
 export default function ApplicationsDashboard({
   initialApplications,
@@ -20,7 +21,7 @@ export default function ApplicationsDashboard({
     useState<JobApplication[]>(initialApplications);
 
   const [query, setQuery] = useState("");
-  const [view, setView] = useState<"board" | "list">("board");
+  const [showWithdrawn, setShowWithdrawn] = useState(false);
   const [updateError, setUpdateError] = useState<string | null>(null);
 
   function handleCreated(createdApplication: JobApplication) {
@@ -69,10 +70,18 @@ export default function ApplicationsDashboard({
   }
 
   const normalizedQuery = query.trim().toLocaleLowerCase("it-IT");
-  const visibleApplications = jobApplications.filter((application) =>
+  const matchingApplications = jobApplications.filter((application) =>
     `${application.company} ${application.title}`
       .toLocaleLowerCase("it-IT")
       .includes(normalizedQuery),
+  );
+
+  const activeApplications = matchingApplications.filter(
+    (application) => application.status !== "WITHDRAWN",
+  );
+
+  const withdrawnApplications = matchingApplications.filter(
+    (application) => application.status === "WITHDRAWN",
   );
 
   return (
@@ -100,35 +109,37 @@ export default function ApplicationsDashboard({
             />
           </label>
 
-          {/* <div
-            className={styles.viewToggle}
-            role="group"
-            aria-label="Vista candidature"
+          <button
+            type="button"
+            className={styles.archiveToggle}
+            aria-pressed={showWithdrawn}
+            onClick={() => setShowWithdrawn((current) => !current)}
+            aria-controls="applications-view"
+            aria-label={
+              showWithdrawn
+                ? "Torna alle candidature attive"
+                : "Mostra le candidature ritirate"
+            }
           >
-            <button
-              type="button"
-              aria-pressed={view === "board"}
-              onClick={() => setView("board")}
-            >
-              <Columns3 aria-hidden="true" size={19} strokeWidth={1.8} />
-              Board
-            </button>
-            <button
-              type="button"
-              aria-pressed={view === "list"}
-              onClick={() => setView("list")}
-            >
-              <List aria-hidden="true" size={19} strokeWidth={1.8} />
-              Lista
-            </button>
-          </div> */}
+            <Archive aria-hidden="true" size={19} strokeWidth={1.8} />
+            <span>Ritirate</span>
+            <span className={styles.archiveCount} aria-hidden="true">
+              {withdrawnApplications.length}
+            </span>
+          </button>
         </div>
 
-        <ApplicationBoard
-          applications={visibleApplications}
-          view={view}
-          onStatusChange={handleStatusChange}
-        />
+        {showWithdrawn ? (
+          <ApplicationsList
+            applications={withdrawnApplications}
+            onStatusChange={handleStatusChange}
+          />
+        ) : (
+          <ApplicationBoard
+            applications={activeApplications}
+            onStatusChange={handleStatusChange}
+          />
+        )}
       </section>
     </>
   );

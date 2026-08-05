@@ -17,7 +17,6 @@ import { DragDropProvider } from "@dnd-kit/react";
 
 interface ApplicationBoardProps {
   applications: JobApplication[];
-  view: "board" | "list";
   onStatusChange: (id: string, status: ApplicationStatus) => void;
 }
 
@@ -67,7 +66,6 @@ const columns: BoardColumn[] = [
 
 export default function ApplicationBoard({
   applications,
-  view,
   onStatusChange,
 }: ApplicationBoardProps) {
   return (
@@ -86,10 +84,7 @@ export default function ApplicationBoard({
         onStatusChange(id, status);
       }}
     >
-      <div
-        className={`${styles.board} ${view === "list" ? styles.list : ""}`}
-        id="application-board"
-      >
+      <div className={styles.board} id="application-board">
         {columns.map((column) => (
           <ApplicationColumn
             onStatusChange={onStatusChange}

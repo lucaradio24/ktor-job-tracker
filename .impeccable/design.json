@@ -1,0 +1,137 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-08-05T11:03:22.6683370+02:00",
+  "title": "Design System: JobTracker",
+  "extensions": {
+    "colorMeta": {
+      "night-surface": { "role": "neutral", "displayName": "Notte operativa", "canonical": "#10161e", "tonalRamp": ["oklch(15% 0.02 245)", "oklch(25% 0.02 245)", "oklch(35% 0.02 245)", "oklch(47% 0.02 245)", "oklch(59% 0.02 245)", "oklch(71% 0.018 245)", "oklch(83% 0.012 245)", "oklch(95% 0.006 245)"] },
+      "night-surface-muted": { "role": "neutral", "displayName": "Notte operativa profonda", "canonical": "#0d131a", "tonalRamp": ["oklch(15% 0.018 245)", "oklch(25% 0.018 245)", "oklch(35% 0.018 245)", "oklch(47% 0.018 245)", "oklch(59% 0.016 245)", "oklch(71% 0.014 245)", "oklch(83% 0.01 245)", "oklch(95% 0.004 245)"] },
+      "night-surface-strong": { "role": "neutral", "displayName": "Notte operativa sollevata", "canonical": "#17202a", "tonalRamp": ["oklch(15% 0.025 245)", "oklch(25% 0.025 245)", "oklch(35% 0.025 245)", "oklch(47% 0.024 245)", "oklch(59% 0.022 245)", "oklch(71% 0.018 245)", "oklch(83% 0.012 245)", "oklch(95% 0.006 245)"] },
+      "text-primary": { "role": "neutral", "displayName": "Testo lunare", "canonical": "#f2f4f7", "tonalRamp": ["oklch(15% 0.006 245)", "oklch(25% 0.006 245)", "oklch(35% 0.006 245)", "oklch(47% 0.006 245)", "oklch(59% 0.006 245)", "oklch(71% 0.006 245)", "oklch(83% 0.006 245)", "oklch(95% 0.006 245)"] },
+      "text-muted": { "role": "neutral", "displayName": "Testo quieto", "canonical": "#a4abb4", "tonalRamp": ["oklch(15% 0.012 245)", "oklch(25% 0.012 245)", "oklch(35% 0.012 245)", "oklch(47% 0.012 245)", "oklch(59% 0.012 245)", "oklch(71% 0.01 245)", "oklch(83% 0.008 245)", "oklch(95% 0.004 245)"] },
+      "text-subtle": { "role": "neutral", "displayName": "Testo ausiliario", "canonical": "#7d8792", "tonalRamp": ["oklch(15% 0.015 245)", "oklch(25% 0.015 245)", "oklch(35% 0.015 245)", "oklch(47% 0.015 245)", "oklch(59% 0.014 245)", "oklch(71% 0.012 245)", "oklch(83% 0.008 245)", "oklch(95% 0.004 245)"] },
+      "border": { "role": "neutral", "displayName": "Bordo freddo", "canonical": "#27313c", "tonalRamp": ["oklch(15% 0.02 245)", "oklch(25% 0.02 245)", "oklch(35% 0.02 245)", "oklch(47% 0.02 245)", "oklch(59% 0.018 245)", "oklch(71% 0.015 245)", "oklch(83% 0.01 245)", "oklch(95% 0.005 245)"] },
+      "border-strong": { "role": "neutral", "displayName": "Bordo freddo forte", "canonical": "#394652", "tonalRamp": ["oklch(15% 0.025 245)", "oklch(25% 0.025 245)", "oklch(35% 0.025 245)", "oklch(47% 0.024 245)", "oklch(59% 0.02 245)", "oklch(71% 0.016 245)", "oklch(83% 0.01 245)", "oklch(95% 0.005 245)"] },
+      "action-coral": { "role": "primary", "displayName": "Corallo d'azione", "canonical": "#ff5146", "tonalRamp": ["oklch(15% 0.1 25)", "oklch(25% 0.15 25)", "oklch(35% 0.19 25)", "oklch(47% 0.22 25)", "oklch(59% 0.22 25)", "oklch(71% 0.18 25)", "oklch(83% 0.1 25)", "oklch(95% 0.03 25)"] },
+      "action-coral-soft": { "role": "primary", "displayName": "Corallo d'azione sommesso", "canonical": "#30280f", "tonalRamp": ["oklch(15% 0.04 85)", "oklch(25% 0.06 85)", "oklch(35% 0.08 85)", "oklch(47% 0.1 85)", "oklch(59% 0.1 85)", "oklch(71% 0.08 85)", "oklch(83% 0.05 85)", "oklch(95% 0.02 85)"] },
+      "focus-violet": { "role": "secondary", "displayName": "Violetto focus", "canonical": "#b18cff", "tonalRamp": ["oklch(15% 0.09 300)", "oklch(25% 0.13 300)", "oklch(35% 0.17 300)", "oklch(47% 0.2 300)", "oklch(59% 0.21 300)", "oklch(71% 0.18 300)", "oklch(83% 0.1 300)", "oklch(95% 0.03 300)"] },
+      "danger": { "role": "secondary", "displayName": "Rosa pericolo", "canonical": "#ff5b50", "tonalRamp": ["oklch(15% 0.1 25)", "oklch(25% 0.15 25)", "oklch(35% 0.19 25)", "oklch(47% 0.22 25)", "oklch(59% 0.22 25)", "oklch(71% 0.18 25)", "oklch(83% 0.1 25)", "oklch(95% 0.03 25)"] },
+      "danger-soft": { "role": "secondary", "displayName": "Rosa pericolo sommesso", "canonical": "#391b1b", "tonalRamp": ["oklch(15% 0.06 25)", "oklch(25% 0.09 25)", "oklch(35% 0.12 25)", "oklch(47% 0.14 25)", "oklch(59% 0.13 25)", "oklch(71% 0.1 25)", "oklch(83% 0.06 25)", "oklch(95% 0.02 25)"] },
+      "status-amber": { "role": "secondary", "displayName": "Ambra candidatura", "canonical": "#ffb800", "tonalRamp": ["oklch(15% 0.07 85)", "oklch(25% 0.11 85)", "oklch(35% 0.15 85)", "oklch(47% 0.18 85)", "oklch(59% 0.19 85)", "oklch(71% 0.17 85)", "oklch(83% 0.1 85)", "oklch(95% 0.03 85)"] },
+      "status-amber-soft": { "role": "secondary", "displayName": "Ambra candidatura sommessa", "canonical": "#382d0e", "tonalRamp": ["oklch(15% 0.04 85)", "oklch(25% 0.07 85)", "oklch(35% 0.1 85)", "oklch(47% 0.12 85)", "oklch(59% 0.11 85)", "oklch(71% 0.08 85)", "oklch(83% 0.05 85)", "oklch(95% 0.02 85)"] },
+      "status-violet": { "role": "secondary", "displayName": "Violetto colloquio", "canonical": "#b18cff", "tonalRamp": ["oklch(15% 0.09 300)", "oklch(25% 0.13 300)", "oklch(35% 0.17 300)", "oklch(47% 0.2 300)", "oklch(59% 0.21 300)", "oklch(71% 0.18 300)", "oklch(83% 0.1 300)", "oklch(95% 0.03 300)"] },
+      "status-violet-soft": { "role": "secondary", "displayName": "Violetto colloquio sommesso", "canonical": "#281e3e", "tonalRamp": ["oklch(15% 0.05 300)", "oklch(25% 0.08 300)", "oklch(35% 0.11 300)", "oklch(47% 0.13 300)", "oklch(59% 0.12 300)", "oklch(71% 0.09 300)", "oklch(83% 0.05 300)", "oklch(95% 0.02 300)"] },
+      "status-green": { "role": "secondary", "displayName": "Verde offerta", "canonical": "#35d77d", "tonalRamp": ["oklch(15% 0.07 150)", "oklch(25% 0.11 150)", "oklch(35% 0.15 150)", "oklch(47% 0.18 150)", "oklch(59% 0.19 150)", "oklch(71% 0.16 150)", "oklch(83% 0.09 150)", "oklch(95% 0.03 150)"] },
+      "status-green-soft": { "role": "secondary", "displayName": "Verde offerta sommesso", "canonical": "#123327", "tonalRamp": ["oklch(15% 0.04 150)", "oklch(25% 0.07 150)", "oklch(35% 0.1 150)", "oklch(47% 0.12 150)", "oklch(59% 0.11 150)", "oklch(71% 0.08 150)", "oklch(83% 0.05 150)", "oklch(95% 0.02 150)"] },
+      "status-rose": { "role": "secondary", "displayName": "Rosa rifiuto", "canonical": "#ff5b50", "tonalRamp": ["oklch(15% 0.1 25)", "oklch(25% 0.15 25)", "oklch(35% 0.19 25)", "oklch(47% 0.22 25)", "oklch(59% 0.22 25)", "oklch(71% 0.18 25)", "oklch(83% 0.1 25)", "oklch(95% 0.03 25)"] },
+      "status-rose-soft": { "role": "secondary", "displayName": "Rosa rifiuto sommesso", "canonical": "#391b1b", "tonalRamp": ["oklch(15% 0.06 25)", "oklch(25% 0.09 25)", "oklch(35% 0.12 25)", "oklch(47% 0.14 25)", "oklch(59% 0.13 25)", "oklch(71% 0.1 25)", "oklch(83% 0.06 25)", "oklch(95% 0.02 25)"] }
+    },
+    "typographyMeta": {
+      "display": { "displayName": "Display", "purpose": "Titoli principali brevi." },
+      "headline": { "displayName": "Headline", "purpose": "Titoli di dialoghi e superfici secondarie." },
+      "title": { "displayName": "Title", "purpose": "Colonne, card e navigazione." },
+      "body": { "displayName": "Body", "purpose": "Istruzioni, descrizioni e dati." },
+      "label": { "displayName": "Label", "purpose": "Eyebrow e categorie operative." }
+    },
+    "shadows": [
+      { "name": "contatto", "value": "0 1px 2px rgba(0, 0, 0, 0.28)", "purpose": "Separazione minima per card e azioni." },
+      { "name": "sollevamento", "value": "0 6px 16px rgba(0, 0, 0, 0.32)", "purpose": "Hover, drag e menu aperti." },
+      { "name": "modalita", "value": "0 20px 50px rgba(0, 0, 0, 0.48)", "purpose": "Dialoghi e shell isolate." }
+    ],
+    "motion": [
+      { "name": "fast", "value": "120ms ease", "purpose": "Feedback immediato di hover, focus e pressione." }
+    ],
+    "breakpoints": [
+      { "name": "mobile", "value": "48rem" },
+      { "name": "compact-form", "value": "40rem" },
+      { "name": "narrow", "value": "24rem" },
+      { "name": "nav-rail", "value": "64rem" }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "Fa avanzare il flusso; una sola azione primaria per regione.",
+      "html": "<button class=\"ds-btn-primary\">Nuova candidatura</button>",
+      "css": ".ds-btn-primary { min-height: 3.25rem; padding: 0 1.25rem; color: #fff; font: 750 0.9375rem/1.2 var(--font-sans, sans-serif); background: var(--color-accent, #ff5146); border: 1px solid var(--color-accent, #ff5146); border-radius: var(--radius-md, .75rem); cursor: pointer; transition: background-color 120ms ease, transform 120ms ease; } .ds-btn-primary:hover { background: color-mix(in srgb, var(--color-accent, #ff5146) 88%, white); transform: translateY(-1px); } .ds-btn-primary:active { transform: none; } .ds-btn-primary:focus-visible { outline: 3px solid color-mix(in srgb, var(--color-focus, #b18cff) 32%, transparent); outline-offset: 2px; }"
+    },
+    {
+      "name": "Secondary Button",
+      "kind": "button",
+      "refersTo": "button-secondary",
+      "description": "Azione alternativa su superficie quasi piatta.",
+      "html": "<button class=\"ds-btn-secondary\">Annulla</button>",
+      "css": ".ds-btn-secondary { min-height: 2.75rem; padding: 0 1rem; color: var(--color-text, #f2f4f7); font: 750 .875rem/1.2 var(--font-sans, sans-serif); background: var(--color-surface, #10161e); border: 1px solid var(--color-border-strong, #394652); border-radius: var(--radius-md, .75rem); cursor: pointer; transition: background-color 120ms ease, border-color 120ms ease; } .ds-btn-secondary:hover { background: var(--color-surface-muted, #0d131a); border-color: var(--color-text-subtle, #7d8792); } .ds-btn-secondary:focus-visible { outline: 3px solid color-mix(in srgb, var(--color-focus, #b18cff) 32%, transparent); outline-offset: 2px; }"
+    },
+    {
+      "name": "Search Input",
+      "kind": "input",
+      "refersTo": "input",
+      "description": "Ricerca compatta con focus ben visibile.",
+      "html": "<label class=\"ds-search\"><span aria-hidden=\"true\">⌕</span><input type=\"search\" placeholder=\"Cerca azienda o ruolo\"></label>",
+      "css": ".ds-search { display: flex; gap: .75rem; align-items: center; min-height: 3.25rem; padding: 0 1rem; color: var(--color-text-muted, #a4abb4); background: var(--color-surface-muted, #0d131a); border: 1px solid var(--color-border, #27313c); border-radius: var(--radius-md, .75rem); } .ds-search input { width: 100%; height: 3rem; color: var(--color-text, #f2f4f7); font: 400 1rem/1.5 var(--font-sans, sans-serif); background: transparent; border: 0; outline: 0; } .ds-search:hover { border-color: var(--color-border-strong, #394652); } .ds-search:focus-within { border-color: var(--color-focus, #b18cff); box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-focus, #b18cff) 14%, transparent); }"
+    },
+    {
+      "name": "Application Card",
+      "kind": "card",
+      "refersTo": "application-card",
+      "description": "Unità operativa compatta per azienda, ruolo e stato.",
+      "html": "<article class=\"ds-application-card\"><h3>Studio Nord</h3><p>Product Designer</p><span>Colloquio</span></article>",
+      "css": ".ds-application-card { min-height: 7.75rem; padding: .75rem 1rem .5rem; color: var(--color-text, #f2f4f7); background: linear-gradient(145deg, var(--color-surface-strong, #17202a), var(--color-surface, #10161e)); border: 1px solid var(--color-border, #27313c); border-radius: var(--radius-md, .75rem); box-shadow: 0 1px 2px rgba(0,0,0,.28); transition: border-color 120ms ease, box-shadow 120ms ease, transform 120ms ease; } .ds-application-card h3 { margin: 0; font: 700 .9375rem/1.35 var(--font-sans, sans-serif); } .ds-application-card p { margin: .125rem 0 .5rem; color: var(--color-text-muted, #a4abb4); font: 400 .8125rem/1.4 var(--font-sans, sans-serif); } .ds-application-card span { color: var(--color-status-violet, #b18cff); font: 650 .75rem/1.3 var(--font-sans, sans-serif); } .ds-application-card:hover { border-color: var(--color-border-strong, #394652); box-shadow: 0 6px 16px rgba(0,0,0,.32); transform: translateY(-1px); } .ds-application-card:focus-within { outline: 3px solid color-mix(in srgb, var(--color-focus, #b18cff) 32%, transparent); outline-offset: 2px; }"
+    },
+    {
+      "name": "Status Chip",
+      "kind": "chip",
+      "description": "Segnale semantico compatto e sempre accompagnato da testo.",
+      "html": "<span class=\"ds-status-chip\">Colloquio</span>",
+      "css": ".ds-status-chip { display: inline-flex; align-items: center; min-height: 1.625rem; padding: 0 .5rem; color: var(--color-status-violet, #b18cff); font: 800 .75rem/1 var(--font-sans, sans-serif); background: var(--color-status-violet-soft, #281e3e); border-radius: var(--radius-pill, 999px); } .ds-status-chip:hover { filter: brightness(1.08); } .ds-status-chip:focus-visible { outline: 3px solid color-mix(in srgb, var(--color-focus, #b18cff) 32%, transparent); outline-offset: 2px; }"
+    },
+    {
+      "name": "Active Navigation Item",
+      "kind": "nav",
+      "refersTo": "navigation-active",
+      "description": "Voce attiva con segnale ambra e superficie tonale.",
+      "html": "<a class=\"ds-nav-active\" href=\"#\" aria-current=\"page\">Candidature</a>",
+      "css": ".ds-nav-active { position: relative; display: flex; align-items: center; min-height: 3.5rem; padding: 0 1.25rem; color: var(--color-text, #f2f4f7); font: 650 .9375rem/1.2 var(--font-sans, sans-serif); background: var(--color-surface-strong, #17202a); border: 1px solid var(--color-border, #27313c); border-radius: var(--radius-md, .75rem); text-decoration: none; } .ds-nav-active::before { position: absolute; inset: .5rem auto .5rem -.25rem; width: .25rem; content: ''; background: var(--color-status-amber, #ffb800); border-radius: 999px; } .ds-nav-active:hover { border-color: var(--color-border-strong, #394652); } .ds-nav-active:focus-visible { outline: 3px solid color-mix(in srgb, var(--color-focus, #b18cff) 32%, transparent); outline-offset: 2px; }"
+    },
+    {
+      "name": "Dialog Surface",
+      "kind": "custom",
+      "description": "Superficie elevata riservata ai flussi modali.",
+      "html": "<section class=\"ds-dialog\" role=\"dialog\" aria-labelledby=\"ds-dialog-title\"><h2 id=\"ds-dialog-title\">Nuova candidatura</h2><p>Aggiungi i dettagli essenziali.</p></section>",
+      "css": ".ds-dialog { max-width: 30rem; padding: 1.5rem; color: var(--color-text, #f2f4f7); background: var(--color-surface, #10161e); border: 1px solid var(--color-border, #27313c); border-radius: var(--radius-lg, 1rem); box-shadow: 0 20px 50px rgba(0,0,0,.48); } .ds-dialog h2 { margin: 0; font: 700 1.5rem/1.25 var(--font-sans, sans-serif); letter-spacing: -.04em; } .ds-dialog p { margin: .5rem 0 0; color: var(--color-text-muted, #a4abb4); font: 400 .875rem/1.5 var(--font-sans, sans-serif); } .ds-dialog:hover { border-color: var(--color-border-strong, #394652); } .ds-dialog:focus-within { outline: 3px solid color-mix(in srgb, var(--color-focus, #b18cff) 32%, transparent); outline-offset: 2px; }"
+    }
+  ],
+  "narrative": {
+    "northStar": "Il Compagno di Ricerca",
+    "overview": "JobTracker deve sembrare un compagno calmo, competente e umano durante un percorso che può essere stressante. La sua precisione nasce da griglie leggibili, gerarchie nette e contenuti compatti; il calore arriva dal Corallo d'azione, dai Segnali di percorso e dalla mascotte, mai da decorazioni gratuite.\n\nIl sistema combina superfici quasi piatte con una stratificazione sobria. Spaziatura e bordi separano la maggior parte dei livelli; le ombre entrano soltanto quando un elemento si solleva davvero, reagisce o richiede attenzione. La mascotte accompagna login, onboarding, stati vuoti, errori e successi; nella board piena può comparire soltanto come firma minima e non urgente.",
+    "keyCharacteristics": [
+      "Notte operativa scura, leggibile e priva di estetica gaming.",
+      "Corallo d'azione raro e inequivocabile sulle azioni primarie.",
+      "Segnali di percorso usati semanticamente per lo stato delle candidature.",
+      "Superfici quasi piatte, bordi fini e profondità riservata agli stati reali.",
+      "Mascotte utile e rassicurante, mai protagonista durante il lavoro intenso."
+    ],
+    "rules": [
+      { "name": "The One Action Rule", "body": "Il Corallo d'azione identifica l'azione primaria; non va usato come riempimento decorativo.", "section": "colors" },
+      { "name": "The Semantic Signal Rule", "body": "I Segnali di percorso non cambiano significato tra board, card, filtri, statistiche o messaggi.", "section": "colors" },
+      { "name": "The One Family Rule", "body": "Manrope è l'unica voce tipografica; la gerarchia nasce dal contenuto, non dal cambio di carattere.", "section": "typography" },
+      { "name": "The Scan Before Scroll Rule", "body": "La gerarchia deve chiarire titolo, azione primaria, ricerca e stati prima che l'utente inizi a scorrere.", "section": "layout" },
+      { "name": "The Earned Elevation Rule", "body": "Un elemento riceve un'ombra soltanto quando il suo comportamento giustifica un piano superiore.", "section": "elevation" }
+    ],
+    "dos": [
+      "Do usare spaziatura e bordi come primo strumento di struttura.",
+      "Do mantenere invariati i significati dei quattro Segnali di percorso.",
+      "Do garantire focus visibile, target tattili e alternative esplicite al drag-and-drop.",
+      "Do usare la mascotte per stati con un bisogno emotivo o orientativo reale."
+    ],
+    "donts": [
+      "Don't trasformare il fondo scuro in neon, glassmorphism o estetica gaming.",
+      "Don't aggiungere ombre a ogni contenitore.",
+      "Don't usare il Corallo d'azione per più azioni concorrenti nella stessa regione.",
+      "Don't usare la mascotte come decorazione ripetuta nella board piena."
+    ]
+  }
+}
