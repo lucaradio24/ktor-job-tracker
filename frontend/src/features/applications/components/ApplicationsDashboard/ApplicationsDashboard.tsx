@@ -70,6 +70,8 @@ export default function ApplicationsDashboard({
   }
 
   const normalizedQuery = query.trim().toLocaleLowerCase("it-IT");
+  const hasQuery = normalizedQuery.length > 0;
+
   const matchingApplications = jobApplications.filter((application) =>
     `${application.company} ${application.title}`
       .toLocaleLowerCase("it-IT")
@@ -83,6 +85,10 @@ export default function ApplicationsDashboard({
   const withdrawnApplications = matchingApplications.filter(
     (application) => application.status === "WITHDRAWN",
   );
+
+  const withdrawnApplicationsCount = jobApplications.filter(
+    (application) => application.status === "WITHDRAWN",
+  ).length;
 
   return (
     <>
@@ -124,22 +130,82 @@ export default function ApplicationsDashboard({
             <Archive aria-hidden="true" size={19} strokeWidth={1.8} />
             <span>Ritirate</span>
             <span className={styles.archiveCount} aria-hidden="true">
-              {withdrawnApplications.length}
+              {withdrawnApplicationsCount}
             </span>
           </button>
         </div>
+        <div id="applications-view" className={styles.applicationsView}>
+          {showWithdrawn ? (
+            <section
+              className={styles.archiveView}
+              aria-labelledby="archive-title"
+            >
+              <header className={styles.archiveHeader}>
+                <div>
+                  <p className={styles.viewEyebrow}>Archivio</p>
+                  <h2 id="archive-title" className={styles.viewTitle}>
+                    Ritirate
+                  </h2>
+                  <p className={styles.archiveDescription}>
+                    Qui trovi le candidature che hai archiviato.
+                  </p>
+                </div>
 
-        {showWithdrawn ? (
-          <ApplicationsList
-            applications={withdrawnApplications}
-            onStatusChange={handleStatusChange}
-          />
-        ) : (
-          <ApplicationBoard
-            applications={activeApplications}
-            onStatusChange={handleStatusChange}
-          />
-        )}
+                <span
+                  className={styles.archiveResultsCount}
+                  aria-label={`${withdrawnApplications.length} candidature da mostrare`}
+                >
+                  {withdrawnApplications.length}
+                </span>
+              </header>
+
+              {withdrawnApplications.length > 0 ? (
+                <ApplicationsList
+                  applications={withdrawnApplications}
+                  onStatusChange={handleStatusChange}
+                />
+              ) : (
+                <p className={`${styles.emptyResults} ${styles.emptyArchive}`}>
+                  Nessuna candidatura ritirata da mostrare.
+                </p>
+              )}
+            </section>
+          ) : hasQuery ? (
+            <section
+              className={styles.searchView}
+              aria-labelledby="search-results-title"
+            >
+              <header className={styles.searchHeader}>
+                <div>
+                  <p className={styles.viewEyebrow}>Ricerca</p>
+                  <h2 className={styles.viewTitle} id="search-results-title">
+                    Risultati per “{query.trim()}”
+                  </h2>
+                </div>
+                <p className={styles.resultsCount}>
+                  {activeApplications.length}{" "}
+                  {activeApplications.length === 1 ? "risultato" : "risultati"}
+                </p>
+              </header>
+
+              {activeApplications.length > 0 ? (
+                <ApplicationsList
+                  applications={activeApplications}
+                  onStatusChange={handleStatusChange}
+                />
+              ) : (
+                <p className={styles.emptyResults}>
+                  Nessuna candidatura corrisponde alla ricerca.
+                </p>
+              )}
+            </section>
+          ) : (
+            <ApplicationBoard
+              applications={activeApplications}
+              onStatusChange={handleStatusChange}
+            />
+          )}
+        </div>
       </section>
     </>
   );
