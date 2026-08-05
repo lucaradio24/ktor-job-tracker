@@ -7,18 +7,25 @@
 }
 
 @media (max-width: 79.999rem) {
-  .board {
+  /* .board {
     grid-template-columns: repeat(2, minmax(15rem, 1fr));
-  }
+  } */
 }
 
 @media (max-width: 47.999rem) {
   .board {
     grid-template-columns: 1fr;
+    grid-auto-rows: max-content;
+    align-content: start;
+    overflow-y: auto;
+  }
+
+  .board > section {
+    min-height: auto;
   }
 }
 
-.list {
+/* .list {
   grid-template-columns: 1fr;
   grid-auto-rows: max-content;
   align-content: start;
@@ -27,4 +34,4 @@
 
 .list > section {
   min-height: auto;
-}
+} */

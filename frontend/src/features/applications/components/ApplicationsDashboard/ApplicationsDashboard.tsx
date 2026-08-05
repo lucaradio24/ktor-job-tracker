@@ -100,7 +100,7 @@ export default function ApplicationsDashboard({
             />
           </label>
 
-          <div
+          {/* <div
             className={styles.viewToggle}
             role="group"
             aria-label="Vista candidature"
@@ -121,7 +121,7 @@ export default function ApplicationsDashboard({
               <List aria-hidden="true" size={19} strokeWidth={1.8} />
               Lista
             </button>
-          </div>
+          </div> */}
         </div>
 
         <ApplicationBoard
