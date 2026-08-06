@@ -1,7 +1,6 @@
 import { UserData } from "@/app/(workspace)/layout";
 import Image from "next/image";
 import styles from "./UserSidebarDisplay.module.css";
-import { ChevronDown, User } from "lucide-react";
 import UserDropdown from "./UserDropdown";
 
 export default function UserSidebarDisplay({

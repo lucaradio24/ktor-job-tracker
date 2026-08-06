@@ -1,25 +1,170 @@
+.desktopView {
+  min-width: 0;
+}
+
+.mobileView {
+  display: none;
+}
+
 .board {
   display: grid;
   flex: 1;
   grid-template-columns: repeat(4, minmax(14rem, 1fr));
-  gap: var(--space-3);
+  gap: var(--space-4);
   min-height: 0;
 }
 
 @media (max-width: 79.999rem) {
-  /* .board {
+  .board {
     grid-template-columns: repeat(2, minmax(15rem, 1fr));
-  } */
+  }
 }
 
 @media (max-width: 47.999rem) {
-  .board {
-    grid-template-columns: 1fr;
-    grid-auto-rows: max-content;
-    align-content: start;
+  .desktopView {
+    display: none;
   }
 
-  .board > section {
-    min-height: auto;
+  .mobileView {
+    display: grid;
+    gap: var(--space-4);
+  }
+
+  .statusFilters {
+    display: flex;
+    gap: var(--space-2);
+    padding: 0 var(--space-4) var(--space-1);
+    margin-inline: calc(var(--space-4) * -1);
+    overflow-x: auto;
+    overscroll-behavior-inline: contain;
+    scroll-padding-inline: var(--space-4);
+    scrollbar-width: none;
+  }
+
+  .statusFilters::-webkit-scrollbar {
+    display: none;
+  }
+
+  .statusFilter {
+    --mobile-tone: var(--color-status-amber);
+    --mobile-tone-soft: var(--color-status-amber-soft);
+
+    display: inline-flex;
+    flex: 0 0 auto;
+    min-height: 2.75rem;
+    gap: var(--space-2);
+    align-items: center;
+    padding: 0 var(--space-3);
+    color: var(--color-text-muted);
+    font-size: 0.8125rem;
+    font-weight: 750;
+    white-space: nowrap;
+    background: var(--color-surface-muted);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-pill);
+  }
+
+  .statusFilter[data-tone="violet"],
+  .mobileListHeader[data-tone="violet"],
+  .mobileEmpty[data-tone="violet"] {
+    --mobile-tone: var(--color-status-violet);
+    --mobile-tone-soft: var(--color-status-violet-soft);
+  }
+
+  .statusFilter[data-tone="green"],
+  .mobileListHeader[data-tone="green"],
+  .mobileEmpty[data-tone="green"] {
+    --mobile-tone: var(--color-status-green);
+    --mobile-tone-soft: var(--color-status-green-soft);
+  }
+
+  .statusFilter[data-tone="rose"],
+  .mobileListHeader[data-tone="rose"],
+  .mobileEmpty[data-tone="rose"] {
+    --mobile-tone: var(--color-status-rose);
+    --mobile-tone-soft: var(--color-status-rose-soft);
+  }
+
+  .statusFilter[aria-pressed="true"] {
+    color: var(--mobile-tone);
+    background: var(--mobile-tone-soft);
+    border-color: color-mix(in srgb, var(--mobile-tone) 42%, var(--color-border));
+  }
+
+  .filterCount {
+    display: grid;
+    min-width: 1.5rem;
+    height: 1.5rem;
+    padding-inline: var(--space-1);
+    place-items: center;
+    color: inherit;
+    font-size: 0.75rem;
+    background: var(--color-surface-strong);
+    border-radius: var(--radius-pill);
+  }
+
+  .mobileListHeader {
+    --mobile-tone: var(--color-status-amber);
+    --mobile-tone-soft: var(--color-status-amber-soft);
+
+    display: flex;
+    min-height: 2.75rem;
+    align-items: center;
+    justify-content: space-between;
+    padding-bottom: var(--space-3);
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .mobileListHeader h2 {
+    margin: 0;
+    font-size: 1rem;
+    letter-spacing: -0.025em;
+  }
+
+  .mobileListHeader > span {
+    display: grid;
+    min-width: 1.625rem;
+    height: 1.625rem;
+    padding-inline: var(--space-1);
+    place-items: center;
+    color: var(--mobile-tone);
+    font-size: 0.75rem;
+    font-weight: 800;
+    background: var(--mobile-tone-soft);
+    border-radius: var(--radius-pill);
+  }
+
+  .mobileList > div {
+    grid-template-columns: 1fr;
+  }
+
+  .mobileEmpty {
+    --mobile-tone: var(--color-status-amber);
+    --mobile-tone-soft: var(--color-status-amber-soft);
+
+    display: grid;
+    min-height: 12rem;
+    gap: var(--space-3);
+    place-items: center;
+    align-content: center;
+    padding: var(--space-6);
+    color: var(--color-text-muted);
+    text-align: center;
+    border: 1px dashed var(--color-border-strong);
+    border-radius: var(--radius-md);
+  }
+
+  .mobileEmpty svg {
+    box-sizing: content-box;
+    padding: var(--space-3);
+    color: var(--mobile-tone);
+    background: var(--mobile-tone-soft);
+    border-radius: var(--radius-md);
+  }
+
+  .mobileEmpty p {
+    max-width: 18rem;
+    margin: 0;
+    font-size: 0.875rem;
   }
 }

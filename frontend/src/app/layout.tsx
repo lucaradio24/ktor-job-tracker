@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Manrope } from "next/font/google";
 import { headers } from "next/headers";
 import "@/styles/tokens.css";
@@ -13,6 +13,12 @@ const manrope = Manrope({
 const title = "Job Tracker | Le tue candidature";
 const description =
   "Organizza candidature, colloqui e offerte in un'unica dashboard.";
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  viewportFit: "cover",
+};
 
 export async function generateMetadata(): Promise<Metadata> {
   const requestHeaders = await headers();

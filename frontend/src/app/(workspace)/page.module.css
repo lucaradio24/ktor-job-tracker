@@ -30,7 +30,7 @@
 
   .main {
     min-height: 100dvh;
-    padding: var(--space-8);
+    padding: var(--space-6);
     overflow: visible;
   }
 }
@@ -42,6 +42,9 @@
 
   .main {
     min-height: auto;
-    padding: var(--space-6) var(--space-5) var(--space-10);
+    padding:
+      var(--space-5) max(var(--space-4), env(safe-area-inset-right))
+      max(var(--space-10), env(safe-area-inset-bottom))
+      max(var(--space-4), env(safe-area-inset-left));
   }
 }

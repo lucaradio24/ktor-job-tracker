@@ -144,6 +144,11 @@ export default function ApplicationCard({
 
           <details
             className={styles.statusMenu}
+            onKeyDown={(event) => {
+              if (event.key === "Escape") {
+                event.currentTarget.removeAttribute("open");
+              }
+            }}
             onToggle={(e) => {
               const details = e.currentTarget;
 

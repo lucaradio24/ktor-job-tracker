@@ -148,6 +148,15 @@ export default function ApplicationsDashboard({
       )}
       <section className={styles.dashboard} id="overview">
         <div className={styles.toolbar}>
+          <button
+            className={headerStyles.primaryAction}
+            type="button"
+            onClick={() => setIsDialogOpen(true)}
+          >
+            <Plus aria-hidden="true" size={19} strokeWidth={2.2} />
+            Nuova candidatura
+          </button>
+
           <label className={styles.search}>
             <Search aria-hidden="true" size={20} strokeWidth={1.8} />
             <input
@@ -158,15 +167,6 @@ export default function ApplicationsDashboard({
               onChange={(event) => setQuery(event.target.value)}
             />
           </label>
-
-          <button
-            className={headerStyles.primaryAction}
-            type="button"
-            onClick={() => setIsDialogOpen(true)}
-          >
-            <Plus aria-hidden="true" size={19} strokeWidth={2.2} />
-            Nuova candidatura
-          </button>
 
           <button
             type="button"

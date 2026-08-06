@@ -239,3 +239,50 @@
     background: var(--color-status-rose-soft);
   }
 }
+
+@media (max-width: 47.999rem) {
+  .statusMenu[open] {
+    z-index: 60;
+  }
+
+  .statusMenu[open]::before {
+    position: fixed;
+    z-index: 59;
+    inset: 0;
+    content: "";
+    pointer-events: none;
+    background: rgb(0 0 0 / 58%);
+  }
+
+  .statusOptions,
+  .statusMenu.openUpwards .statusOptions {
+    position: fixed;
+    z-index: 60;
+    top: auto;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    width: auto;
+    min-width: 0;
+    max-width: none;
+    padding: var(--space-3) var(--space-4)
+      max(var(--space-4), env(safe-area-inset-bottom));
+    border-right: 0;
+    border-bottom: 0;
+    border-left: 0;
+    border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+  }
+
+  .statusOptions button {
+    min-height: 3rem;
+    font-size: 0.875rem;
+  }
+}
+
+@media (pointer: coarse) {
+  .card h3 a {
+    display: flex;
+    min-height: 2.75rem;
+    align-items: center;
+  }
+}
