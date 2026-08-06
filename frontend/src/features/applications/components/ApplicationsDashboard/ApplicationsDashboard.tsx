@@ -1,6 +1,6 @@
 "use client";
 
-import { CircleAlert, Search, Archive } from "lucide-react";
+import { CircleAlert, Search, Archive, Plus } from "lucide-react";
 import { useState } from "react";
 import type {
   ApplicationStatus,
@@ -8,21 +8,33 @@ import type {
 } from "../../model/jobApplication";
 import ApplicationBoard from "../ApplicationBoard/ApplicationBoard";
 import styles from "./ApplicationsDashboard.module.css";
+import headerStyles from "../DashboardHeader/DashboardHeader.module.css";
 import DashboardHeader from "../DashboardHeader/DashboardHeader";
-import { patchApplication } from "../../api/jobApplicationApi";
+import {
+  patchApplication,
+  deleteApplication,
+} from "../../api/jobApplicationApi";
 import ApplicationsList from "../ApplicationsList/ApplicationsList";
+import ConfirmDialog from "../Dialogs/ConfirmDialog/ConfirmDialog";
+
+type ApplicationDashboardProps = {
+  initialApplications: JobApplication[];
+};
 
 export default function ApplicationsDashboard({
   initialApplications,
-}: {
-  initialApplications: JobApplication[];
-}) {
+}: ApplicationDashboardProps) {
   const [jobApplications, setJobApplications] =
     useState<JobApplication[]>(initialApplications);
 
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [query, setQuery] = useState("");
   const [showWithdrawn, setShowWithdrawn] = useState(false);
   const [updateError, setUpdateError] = useState<string | null>(null);
+  const [applicationToDelete, setApplicationToDelete] =
+    useState<JobApplication | null>(null);
+
+  const [isDeleting, setIsDeleting] = useState(false);
 
   function handleCreated(createdApplication: JobApplication) {
     setJobApplications((applications) => [...applications, createdApplication]);
@@ -69,6 +81,34 @@ export default function ApplicationsDashboard({
     }
   }
 
+  async function handleDeleteApplication() {
+    if (!applicationToDelete) return;
+
+    const applicationId = applicationToDelete.id;
+
+    try {
+      setIsDeleting(true);
+      setUpdateError(null);
+      await deleteApplication(applicationId);
+
+      setJobApplications((applications) =>
+        applications.filter((application) => application.id !== applicationId),
+      );
+
+      setApplicationToDelete(null);
+    } catch (requestError) {
+      setApplicationToDelete(null);
+
+      setUpdateError(
+        requestError instanceof Error
+          ? requestError.message
+          : "Non è stato possibile eliminare la candidatura.",
+      );
+    } finally {
+      setIsDeleting(false);
+    }
+  }
+
   const normalizedQuery = query.trim().toLocaleLowerCase("it-IT");
   const hasQuery = normalizedQuery.length > 0;
 
@@ -92,12 +132,16 @@ export default function ApplicationsDashboard({
 
   return (
     <>
-      <DashboardHeader onCreateApplication={handleCreated} />
+      <DashboardHeader
+        isDialogOpen={isDialogOpen}
+        setIsDialogOpen={setIsDialogOpen}
+        onCreateApplication={handleCreated}
+      />
       {updateError && (
         <div className={styles.alert} role="alert">
           <CircleAlert aria-hidden="true" size={20} />
           <div>
-            <strong>Aggiornamento non riuscito</strong>
+            <strong>Operazione non riuscita</strong>
             <p>{updateError}</p>
           </div>
         </div>
@@ -114,6 +158,15 @@ export default function ApplicationsDashboard({
               onChange={(event) => setQuery(event.target.value)}
             />
           </label>
+
+          <button
+            className={headerStyles.primaryAction}
+            type="button"
+            onClick={() => setIsDialogOpen(true)}
+          >
+            <Plus aria-hidden="true" size={19} strokeWidth={2.2} />
+            Nuova candidatura
+          </button>
 
           <button
             type="button"
@@ -163,6 +216,7 @@ export default function ApplicationsDashboard({
                 <ApplicationsList
                   applications={withdrawnApplications}
                   onStatusChange={handleStatusChange}
+                  onDeleteRequest={setApplicationToDelete}
                 />
               ) : (
                 <p className={`${styles.emptyResults} ${styles.emptyArchive}`}>
@@ -207,6 +261,26 @@ export default function ApplicationsDashboard({
           )}
         </div>
       </section>
+
+      <ConfirmDialog
+        open={applicationToDelete !== null}
+        title="Eliminare definitivamente?"
+        description={
+          applicationToDelete ? (
+            <>
+              Stai per eliminare{" "}
+              <strong>
+                {applicationToDelete.company} - {applicationToDelete.title}.
+              </strong>
+              <br />
+              Questa azione non può essere annullata.
+            </>
+          ) : null
+        }
+        onCancel={() => setApplicationToDelete(null)}
+        onConfirm={handleDeleteApplication}
+        isPending={isDeleting}
+      />
     </>
   );
 }

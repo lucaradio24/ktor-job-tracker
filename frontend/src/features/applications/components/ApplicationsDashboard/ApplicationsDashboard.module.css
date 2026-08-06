@@ -213,45 +213,6 @@
   }
 }
 
-@media (max-width: 47.999rem) {
-  .toolbar {
-    flex-direction: column;
-    align-items: stretch;
-  }
-
-  .search,
-  .skeletonSearch,
-  .skeletonToggle {
-    width: 100%;
-  }
-
-  .skeletonToggle {
-    flex-basis: auto;
-    margin-left: 0;
-  }
-
-  .skeletonAction {
-    width: 100%;
-  }
-
-  .skeletonHeading {
-    height: 2.475rem;
-  }
-
-  .skeletonBoard {
-    grid-template-columns: 1fr;
-  }
-
-  .skeletonColumn {
-    min-height: 16rem;
-  }
-
-  .archiveToggle {
-    width: 100%;
-    margin-left: 0;
-  }
-}
-
 .archiveToggle {
   display: flex;
   min-height: 3.25rem;
@@ -419,12 +380,44 @@
 }
 
 @media (max-width: 47.999rem) {
-  .archiveView {
-    padding: var(--space-4);
+  .toolbar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .search,
+  .skeletonSearch,
+  .skeletonToggle {
+    width: 100%;
+  }
+
+  .skeletonToggle {
+    flex-basis: auto;
+    margin-left: 0;
+  }
+
+  .skeletonAction {
+    width: 100%;
+  }
+
+  .skeletonHeading {
+    height: 2.475rem;
+  }
+
+  .skeletonBoard {
+    grid-template-columns: 1fr;
+  }
+
+  .skeletonColumn {
+    min-height: 16rem;
   }
 
   .archiveToggle {
     width: 100%;
     margin-left: 0;
+  }
+
+  .archiveView {
+    padding: var(--space-4);
   }
 }

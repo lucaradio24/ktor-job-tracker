@@ -13,7 +13,7 @@ import ApplicationColumn, {
   type ColumnTone,
 } from "../ApplicationColumn/ApplicationColumn";
 import styles from "./ApplicationBoard.module.css";
-import { DragDropProvider } from "@dnd-kit/react";
+import { DragDropProvider, PointerSensor } from "@dnd-kit/react";
 
 interface ApplicationBoardProps {
   applications: JobApplication[];
@@ -70,6 +70,22 @@ export default function ApplicationBoard({
 }: ApplicationBoardProps) {
   return (
     <DragDropProvider
+      sensors={(defaults) => [
+        ...defaults.filter((sensor) => sensor !== PointerSensor),
+        PointerSensor.configure({
+          preventActivation: (event) => {
+            const target = event.target as Element;
+
+            const blocked = Boolean(
+              target.closest(
+                'a, button, input, select, textarea, summary, [contenteditable="true"]',
+              ),
+            );
+
+            return blocked;
+          },
+        }),
+      ]}
       onDragEnd={({ canceled, operation }) => {
         if (canceled || !operation.target) return;
 

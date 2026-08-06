@@ -8,11 +8,13 @@ import styles from "./ApplicationList.module.css";
 interface ApplicationListProps {
   applications: JobApplication[];
   onStatusChange: (id: string, status: ApplicationStatus) => void;
+  onDeleteRequest?: (application: JobApplication) => void;
 }
 
 export default function ApplicationList({
   applications,
   onStatusChange,
+  onDeleteRequest,
 }: ApplicationListProps) {
   return (
     <div className={styles.list}>
@@ -22,6 +24,7 @@ export default function ApplicationList({
           draggable={false}
           key={application.id}
           onStatusChange={onStatusChange}
+          onDeleteRequest={onDeleteRequest}
         />
       ))}
     </div>
