@@ -1,7 +1,8 @@
 import { UserData } from "@/app/(workspace)/layout";
 import Image from "next/image";
 import styles from "./UserSidebarDisplay.module.css";
-import { ChevronDown } from "lucide-react";
+import { ChevronDown, User } from "lucide-react";
+import UserDropdown from "./UserDropdown";
 
 export default function UserSidebarDisplay({
   userData,
@@ -39,20 +40,7 @@ export default function UserSidebarDisplay({
           </p>
         )}
       </div>
-      <details className={styles.userMenu}>
-        <summary className={styles.userMenuSummary}>
-          <span className={styles.summaryLabel}>Apri menu utente</span>
-          <ChevronDown
-            className={styles.chevron}
-            aria-hidden="true"
-            size={18}
-            strokeWidth={1.8}
-          />
-        </summary>
-        <a href="/auth/logout" className={styles.logout}>
-          Logout
-        </a>
-      </details>
+      <UserDropdown />
     </div>
   );
 }
