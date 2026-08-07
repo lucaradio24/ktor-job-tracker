@@ -2,6 +2,7 @@ import Topbar from "@/components/layout/Topbar/Topbar";
 import styles from "./page.module.css";
 import { auth0 } from "@/lib/auth0";
 import { redirect } from "next/navigation";
+import { ToastProvider } from "@/components/feedback/ToastViewport/ToastProvider";
 
 export type UserData = {
   name?: string;
@@ -22,9 +23,11 @@ export default async function WorkspaceLayout({
   }
 
   return (
-    <div className={styles.shell}>
-      <Topbar userData={session.user} />
-      <main className={styles.main}>{children}</main>
-    </div>
+    <ToastProvider>
+      <div className={styles.shell}>
+        <Topbar userData={session.user} />
+        <main className={styles.main}>{children}</main>
+      </div>
+    </ToastProvider>
   );
 }

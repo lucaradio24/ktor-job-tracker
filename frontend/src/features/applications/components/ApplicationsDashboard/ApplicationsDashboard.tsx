@@ -1,7 +1,8 @@
 "use client";
 
-import { CircleAlert, Search, Archive, Plus } from "lucide-react";
-import { useState } from "react";
+import { CircleAlert, Search, Archive, Plus, X } from "lucide-react";
+import { useState, useRef } from "react";
+import { useToast } from "@/components/feedback/ToastViewport/ToastProvider";
 import type {
   ApplicationStatus,
   JobApplication,
@@ -17,6 +18,14 @@ import {
 import ApplicationsList from "../ApplicationsList/ApplicationsList";
 import ConfirmDialog from "../Dialogs/ConfirmDialog/ConfirmDialog";
 
+const statusLabels: Record<ApplicationStatus, string> = {
+  APPLIED: "Candidature",
+  INTERVIEW: "Colloqui",
+  OFFER: "Offerte",
+  REJECTED: "Non selezionate",
+  WITHDRAWN: "Ritirate",
+};
+
 type ApplicationDashboardProps = {
   initialApplications: JobApplication[];
 };
@@ -24,6 +33,9 @@ type ApplicationDashboardProps = {
 export default function ApplicationsDashboard({
   initialApplications,
 }: ApplicationDashboardProps) {
+  const { showToast } = useToast();
+
+  const pendingStatusChanges = useRef(new Set<string>());
   const [jobApplications, setJobApplications] =
     useState<JobApplication[]>(initialApplications);
 
@@ -40,13 +52,50 @@ export default function ApplicationsDashboard({
     setJobApplications((applications) => [...applications, createdApplication]);
   }
 
+  async function handleUndo(id: string, previousStatus: ApplicationStatus) {
+    if (pendingStatusChanges.current.has(id)) return;
+
+    pendingStatusChanges.current.add(id);
+    setUpdateError(null);
+
+    try {
+      const restoredApplication = await patchApplication(id, {
+        status: previousStatus,
+      });
+
+      setJobApplications((applications) =>
+        applications.map((application) =>
+          application.id === id ? restoredApplication : application,
+        ),
+      );
+    } catch (requestError) {
+      setUpdateError(
+        requestError instanceof Error
+          ? requestError.message
+          : "Non è stato possibile annullare lo spostamento.",
+      );
+    } finally {
+      pendingStatusChanges.current.delete(id);
+    }
+  }
+
   async function handleStatusChange(id: string, status: ApplicationStatus) {
     setUpdateError(null);
 
-    const prevApplication = jobApplications.find(
+    const previousApplication = jobApplications.find(
       (application) => application.id === id,
     );
-    if (!prevApplication || prevApplication.status === status) return;
+
+    if (
+      !previousApplication ||
+      previousApplication.status === status ||
+      pendingStatusChanges.current.has(id)
+    ) {
+      return;
+    }
+
+    pendingStatusChanges.current.add(id);
+
     setJobApplications((applications) =>
       applications.map((application) =>
         application.id === id ? { ...application, status } : application,
@@ -56,19 +105,27 @@ export default function ApplicationsDashboard({
     try {
       const updatedApplication = await patchApplication(id, { status });
 
-      setJobApplications((prevApplications) =>
-        prevApplications.map((application) =>
-          application.id === updatedApplication.id
-            ? updatedApplication
-            : application,
+      setJobApplications((applications) =>
+        applications.map((application) =>
+          application.id === id ? updatedApplication : application,
         ),
       );
+
+      showToast({
+        title: `Spostata in ${statusLabels[updatedApplication.status]}`,
+        description: `${updatedApplication.company} · ${updatedApplication.title}`,
+        action: {
+          label: "Annulla",
+          onClick: () => {
+            void handleUndo(updatedApplication.id, previousApplication.status);
+          },
+        },
+      });
     } catch (requestError) {
-      // rollback
       setJobApplications((applications) =>
         applications.map((application) =>
           application.id === id && application.status === status
-            ? prevApplication
+            ? previousApplication
             : application,
         ),
       );
@@ -78,6 +135,8 @@ export default function ApplicationsDashboard({
           ? requestError.message
           : "Non è stato possibile spostare la candidatura.",
       );
+    } finally {
+      pendingStatusChanges.current.delete(id);
     }
   }
 
@@ -166,6 +225,15 @@ export default function ApplicationsDashboard({
               value={query}
               onChange={(event) => setQuery(event.target.value)}
             />
+            {query && (
+              <X
+                aria-hidden="true"
+                style={{ cursor: "pointer" }}
+                size={20}
+                strokeWidth={1.8}
+                onClick={() => setQuery("")}
+              />
+            )}
           </label>
 
           <button

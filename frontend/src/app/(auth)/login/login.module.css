@@ -9,12 +9,12 @@
   grid-template-rows: auto 1fr;
   gap: clamp(1.5rem, 4vh, 2.5rem);
   padding: clamp(1.25rem, 3vw, 2.5rem);
-  background:
+  /* background:
     radial-gradient(circle at 75% 50%, rgba(35, 52, 67, 0.22), transparent 38%),
-    rgba(7, 12, 18, 0.58);
-  border: 1px solid var(--color-border-strong);
-  border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-lg);
+    rgba(7, 12, 18, 0.58); */
+  /* border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-lg); */
+  /* box-shadow: var(--shadow-lg); */
 }
 
 .brand {

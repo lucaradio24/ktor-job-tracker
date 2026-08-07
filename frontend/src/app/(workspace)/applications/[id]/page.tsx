@@ -1,3 +1,4 @@
+import { BackButton } from "@/components/shared/BackButton";
 import { ApiError } from "@/features/applications/api/jobApplicationApi";
 import { getApplication } from "@/features/applications/api/jobApplicationServerApi";
 import EditApplicationForm from "@/features/applications/components/Forms/EditApplicationForm/EditApplicationForm";
@@ -24,6 +25,7 @@ export default async function EditApplicationPage({
   return (
     <section>
       <header>
+        <BackButton />
         <p>MODIFICA CANDIDATURA</p>
         <h1>{application.company}</h1>
         <p>{application.title}</p>
