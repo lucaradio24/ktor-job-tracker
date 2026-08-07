@@ -15,7 +15,7 @@ export default async function EditApplicationPage({
   let application: JobApplication;
 
   try {
-    application = setTimeout(() => getApplication(id), 10000);
+    application = await getApplication(id);
   } catch (error) {
     if (error instanceof ApiError && error.status === 404) {
       notFound();
