@@ -1,0 +1,48 @@
+{
+  "title": "Night Route: scegli la struttura",
+  "question": "Quale composizione tiene pipeline, uscite e controllo più leggibili?",
+  "options": [
+    {
+      "id": "topbar",
+      "label": "Topbar + outcomes tray",
+      "kicker": "MASSIMO SPAZIO",
+      "lineage": "navigazione orizzontale + pipeline a tre corsie",
+      "thesis": "Board larga, destinazioni essenziali sopra, uscite raccolte sotto.",
+      "case": "Migliore uso dello spazio; le uscite restano visibili senza sembrare una quarta fase.",
+      "palette": ["#0B0D10", "#12161B", "#28303A", "#FF6B61", "#FFB84A", "#9B7AE8", "#82C965"],
+      "materials": ["graphite opaco", "linee contestuali", "bordi freddi"],
+      "viewport": "Topbar compatta, tre colonne attive, tray orizzontale per Non selezionate e Ritirate.",
+      "risk": "Il tray inferiore può finire sotto la piega con board molto lunghe.",
+      "sketch": ".impeccable/mocks/jobtracker-night-route-topbar.png"
+    },
+    {
+      "id": "rail",
+      "label": "Rail + outcomes lane",
+      "kicker": "WORKSPACE",
+      "lineage": "rail operativo + uscite laterali",
+      "thesis": "Navigazione stabile a sinistra, pipeline al centro, uscite sempre presenti a destra.",
+      "case": "Ottima mappa mentale quando Statistiche e Impostazioni diventano vere sezioni.",
+      "palette": ["#0B0D10", "#12161B", "#28303A", "#FF6B61", "#FFB84A", "#9B7AE8", "#82C965"],
+      "materials": ["graphite opaco", "rail compatto", "rami di uscita"],
+      "viewport": "Rail da 72px, tre colonne attive e lane verticale per Non selezionate e Ritirate.",
+      "risk": "Consuma larghezza prima che esistano abbastanza destinazioni per giustificarlo.",
+      "sketch": ".impeccable/mocks/jobtracker-night-route-rail.png"
+    },
+    {
+      "id": "inspector",
+      "label": "Topbar + inspector",
+      "kicker": "FOCUS",
+      "lineage": "board essenziale + pannello contestuale",
+      "thesis": "La pipeline resta pulita; percorso e uscite compaiono quando selezioni una candidatura.",
+      "case": "Migliore chiarezza per la singola opportunità e nessuna colonna passiva permanente.",
+      "palette": ["#0B0D10", "#12161B", "#28303A", "#FF6B61", "#FFB84A", "#9B7AE8", "#82C965"],
+      "materials": ["graphite opaco", "inspector contestuale", "traccia selettiva"],
+      "viewport": "Topbar, tre colonne attive e inspector destro aperto soltanto sulla candidatura selezionata.",
+      "risk": "Aggiunge un passaggio per vedere Non selezionate e Ritirate come insiemi.",
+      "sketch": ".impeccable/mocks/jobtracker-night-route-inspector.png"
+    }
+  ],
+  "reroll": false,
+  "canon": false,
+  "steer": true
+}

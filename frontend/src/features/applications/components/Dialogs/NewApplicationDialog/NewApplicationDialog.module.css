@@ -13,11 +13,25 @@
 .dialog[open] {
   display: flex;
   flex-direction: column;
+  animation: dialog-enter 220ms var(--ease-out) both;
 }
 
 .dialog::backdrop {
-  background: rgba(0, 0, 0, 0.72);
-  backdrop-filter: blur(3px);
+  background: var(--color-overlay);
+}
+
+@keyframes dialog-enter {
+  from {
+    opacity: 0;
+    clip-path: inset(0.75rem round var(--radius-lg));
+    transform: translateY(0.75rem) scale(0.985);
+  }
+
+  to {
+    opacity: 1;
+    clip-path: inset(0 round var(--radius-lg));
+    transform: translateY(0) scale(1);
+  }
 }
 
 .header {
@@ -85,15 +99,13 @@
   }
 
   .header {
-    padding:
-      max(var(--space-4), env(safe-area-inset-top))
+    padding: max(var(--space-4), env(safe-area-inset-top))
       max(var(--space-4), env(safe-area-inset-right)) var(--space-4)
       max(var(--space-4), env(safe-area-inset-left));
   }
 
   .body {
-    padding:
-      var(--space-4) max(var(--space-4), env(safe-area-inset-right))
+    padding: var(--space-4) max(var(--space-4), env(safe-area-inset-right))
       max(var(--space-6), env(safe-area-inset-bottom))
       max(var(--space-4), env(safe-area-inset-left));
   }
@@ -105,4 +117,14 @@
   .copy p {
     font-size: 0.8125rem;
   }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dialog[open] {
+    animation: none;
+  }
+}
+
+html[data-motion="reduced"] .dialog[open] {
+  animation: none;
 }

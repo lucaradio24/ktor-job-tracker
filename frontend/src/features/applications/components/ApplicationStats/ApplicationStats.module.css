@@ -1,0 +1,202 @@
+.content {
+  display: grid;
+  gap: var(--space-6);
+}
+
+.metrics {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: var(--space-3);
+}
+
+.metric,
+.panel {
+  background: var(--color-surface-muted);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+}
+
+.metric {
+  display: grid;
+  min-height: 11rem;
+  padding: var(--space-5);
+  align-content: start;
+}
+
+.metric svg {
+  color: var(--color-text-subtle);
+}
+
+.metric p,
+.metric span {
+  margin: 0;
+  color: var(--color-text-muted);
+}
+
+.metric p {
+  margin-top: var(--space-4);
+  font-size: 0.8125rem;
+  font-weight: 700;
+}
+
+.metric > strong {
+  margin-top: var(--space-1);
+  font-size: clamp(1.75rem, 3vw, 2.5rem);
+  line-height: 1.1;
+  letter-spacing: -0.045em;
+}
+
+.metric span {
+  margin-top: var(--space-2);
+  font-size: 0.75rem;
+}
+
+.details {
+  display: grid;
+  grid-template-columns: minmax(0, 1.45fr) minmax(18rem, 0.8fr);
+  gap: var(--space-4);
+  align-items: start;
+}
+
+.panel {
+  padding: var(--space-5);
+}
+
+.panelHeader {
+  display: flex;
+  gap: var(--space-4);
+  align-items: flex-start;
+  justify-content: space-between;
+  padding-bottom: var(--space-5);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.panelHeader h2,
+.eyebrow {
+  margin: 0;
+}
+
+.panelHeader h2 {
+  margin-top: var(--space-1);
+  font-size: 1.125rem;
+  line-height: 1.25;
+  letter-spacing: -0.025em;
+}
+
+.panelHeader > strong {
+  font-size: 1.25rem;
+}
+
+.panelHeader > svg {
+  color: var(--color-text-subtle);
+}
+
+.eyebrow {
+  color: var(--color-text-subtle);
+  font-size: 0.6875rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.barList {
+  display: grid;
+  gap: var(--space-4);
+  padding: 0;
+  margin: var(--space-5) 0 0;
+  list-style: none;
+}
+
+.barLabel {
+  display: flex;
+  gap: var(--space-3);
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: var(--space-2);
+  color: var(--color-text-muted);
+  font-size: 0.8125rem;
+}
+
+.barLabel > span:first-child {
+  color: var(--color-text);
+  font-weight: 700;
+}
+
+.track {
+  height: 0.5rem;
+  overflow: hidden;
+  background: var(--color-surface-strong);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-pill);
+}
+
+.fill {
+  display: block;
+  min-width: 0;
+  height: 100%;
+  background: var(--color-text-subtle);
+  border-radius: inherit;
+}
+
+.fill[data-status="APPLIED"] {
+  background: var(--color-status-amber);
+}
+
+.fill[data-status="INTERVIEW"] {
+  background: var(--color-status-violet);
+}
+
+.fill[data-status="OFFER"] {
+  background: var(--color-status-green);
+}
+
+.fill[data-status="REJECTED"],
+.fill[data-status="WITHDRAWN"] {
+  background: var(--color-status-rose);
+}
+
+.cityFill {
+  background: var(--color-accent);
+}
+
+.missingData {
+  min-height: 8rem;
+  margin: 0;
+  padding: var(--space-6) var(--space-3);
+  color: var(--color-text-muted);
+  font-size: 0.875rem;
+  text-align: center;
+}
+
+.coverage {
+  margin: 0;
+  padding: var(--space-3) var(--space-4);
+  color: var(--color-text-muted);
+  font-size: 0.8125rem;
+  background: var(--color-surface-muted);
+  border-left: 2px solid var(--color-warning);
+}
+
+@media (max-width: 64rem) {
+  .metrics {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .details {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 35rem) {
+  .metrics {
+    grid-template-columns: 1fr;
+  }
+
+  .metric {
+    min-height: 0;
+  }
+
+  .panel {
+    padding: var(--space-4);
+  }
+}

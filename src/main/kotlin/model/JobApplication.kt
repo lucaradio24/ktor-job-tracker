@@ -11,6 +11,11 @@ enum class ApplicationStatus{
     OFFER
 }
 
+@Serializable
+data class StatusTransition(
+    val status: ApplicationStatus,
+    val changedAt: String,
+)
 
 
 @Serializable
@@ -24,4 +29,5 @@ data class JobApplication(
     val description: String? = null,
     val link: String? = null,
     val city: String? = null,
+    val statusHistory: List<StatusTransition> = emptyList(),
 )

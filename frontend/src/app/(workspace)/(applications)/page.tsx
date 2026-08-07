@@ -1,6 +1,6 @@
 import { getApplications } from "@/features/applications/api/jobApplicationServerApi";
-import styles from "./page.module.css";
 import ApplicationsDashboard from "@/features/applications/components/ApplicationsDashboard/ApplicationsDashboard";
+import styles from "../page.module.css";
 
 export default async function Home() {
   const applications = await getApplications();

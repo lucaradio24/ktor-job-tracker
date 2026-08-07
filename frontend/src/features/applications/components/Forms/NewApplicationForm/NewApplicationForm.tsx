@@ -5,6 +5,7 @@ import { useState, type FormEvent } from "react";
 import {
   ApiError,
   createApplication,
+  type CreateJobApplication,
   type FieldError,
 } from "../../../api/jobApplicationApi";
 import type {
@@ -23,28 +24,41 @@ type ApplicationFormValues = {
   description: string;
 };
 
-function getInitialValues(): ApplicationFormValues {
+const formInitialValues: ApplicationFormValues = {
+  company: "",
+  title: "",
+  status: "APPLIED",
+  appliedAt: new Date().toISOString().slice(0, 10),
+  city: "",
+  link: "",
+  description: "",
+};
+
+function readForm(form: HTMLFormElement): ApplicationFormValues {
+  const data = new FormData(form);
+  const value = (name: string) => String(data.get(name) ?? "").trim();
+
   return {
-    company: "",
-    title: "",
-    status: "APPLIED",
-    appliedAt: new Date().toISOString().slice(0, 10),
-    city: "",
-    link: "",
-    description: "",
+    company: value("company"),
+    title: value("title"),
+    status: value("status") as ApplicationStatus,
+    appliedAt: value("appliedAt"),
+    city: value("city"),
+    link: value("link"),
+    description: value("description"),
   };
 }
-
-const formInitialValues = getInitialValues();
 
 interface NewApplicationFormProps {
   onCancel: () => void;
   onCreated: (application: JobApplication) => void;
+  onDirtyChange: (dirty: boolean) => void;
 }
 
 export default function NewApplicationForm({
   onCancel,
   onCreated,
+  onDirtyChange,
 }: NewApplicationFormProps) {
   const [isSaving, setIsSaving] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
@@ -58,19 +72,15 @@ export default function NewApplicationForm({
   const appliedAtError = getFieldError("appliedAt");
   const linkError = getFieldError("link");
 
-  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
+  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    const value = (name: string) => String(data.get(name) ?? "").trim();
-
-    const payload = {
-      company: value("company"),
-      title: value("title"),
-      status: value("status") as ApplicationStatus,
-      appliedAt: value("appliedAt"),
-      city: value("city") || null,
-      link: value("link") || null,
-      description: value("description") || null,
+    const form = event.currentTarget;
+    const values = readForm(form);
+    const payload: CreateJobApplication = {
+      ...values,
+      city: values.city || null,
+      link: values.link || null,
+      description: values.description || null,
     };
 
     setSubmitError(null);
@@ -78,25 +88,38 @@ export default function NewApplicationForm({
 
     try {
       setIsSaving(true);
-
-      const created = await createApplication(payload);
-      onCreated(created);
-      onCancel();
+      onCreated(await createApplication(payload));
     } catch (error: unknown) {
       if (error instanceof ApiError) {
-        const fieldErrors = error.fieldErrors ?? [];
-        setFieldErrors(fieldErrors);
-        setSubmitError(fieldErrors.length > 0 ? null : error.message);
+        const errors = error.fieldErrors ?? [];
+        setFieldErrors(errors);
+        setSubmitError(errors.length > 0 ? null : error.message);
+        requestAnimationFrame(() => {
+          const field = errors[0]?.field;
+          if (field) {
+            (form.elements.namedItem(field) as HTMLElement | null)?.focus();
+          }
+        });
         return;
       }
       setSubmitError("Si è verificato un errore imprevisto.");
     } finally {
       setIsSaving(false);
     }
-  };
+  }
 
   return (
-    <form className={styles.form} onSubmit={handleSubmit} aria-busy={isSaving}>
+    <form
+      className={styles.form}
+      onSubmit={handleSubmit}
+      onChange={(event) =>
+        onDirtyChange(
+          JSON.stringify(readForm(event.currentTarget)) !==
+            JSON.stringify(formInitialValues),
+        )
+      }
+      aria-busy={isSaving}
+    >
       <label className={styles.field} htmlFor="company">
         <span className={styles.fieldHeading}>
           <span>Azienda *</span>
@@ -116,7 +139,7 @@ export default function NewApplicationForm({
           required
           defaultValue={formInitialValues.company}
           aria-invalid={Boolean(companyError)}
-          aria-describedby={companyError ? `company-error` : undefined}
+          aria-describedby={companyError ? "company-error" : undefined}
         />
       </label>
 
@@ -138,34 +161,15 @@ export default function NewApplicationForm({
           required
           defaultValue={formInitialValues.title}
           aria-invalid={Boolean(titleError)}
-          aria-describedby={titleError ? `title-error` : undefined}
+          aria-describedby={titleError ? "title-error" : undefined}
         />
-      </label>
-
-      <label className={styles.field} htmlFor="status">
-        <span>Stato</span>
-        <select
-          name="status"
-          id="status"
-          defaultValue={formInitialValues.status}
-        >
-          <option value="APPLIED">Candidatura inviata</option>
-          <option value="INTERVIEW">Colloquio</option>
-          <option value="OFFER">Offerta ricevuta</option>
-          <option value="REJECTED">Non selezionata</option>
-          <option value="WITHDRAWN">Ritirata</option>
-        </select>
       </label>
 
       <label className={styles.field} htmlFor="appliedAt">
         <span className={styles.fieldHeading}>
           <span>Data candidatura</span>
           {appliedAtError && (
-            <span
-              id="appliedAt-error"
-              className={styles.fieldError}
-              role="alert"
-            >
+            <span id="appliedAt-error" className={styles.fieldError} role="alert">
               {appliedAtError}
             </span>
           )}
@@ -177,55 +181,67 @@ export default function NewApplicationForm({
           defaultValue={formInitialValues.appliedAt}
           required
           aria-invalid={Boolean(appliedAtError)}
-          aria-describedby={appliedAtError ? `appliedAt-error` : undefined}
+          aria-describedby={appliedAtError ? "appliedAt-error" : undefined}
         />
       </label>
 
-      <label className={styles.field} htmlFor="city">
-        <span>Città</span>
-        <input
-          type="text"
-          name="city"
-          id="city"
-          placeholder="es. Milano"
-          autoComplete="address-level2"
-          defaultValue={formInitialValues.city}
-        />
+      <label className={styles.field} htmlFor="status">
+        <span>Stato iniziale</span>
+        <select name="status" id="status" defaultValue={formInitialValues.status}>
+          <option value="APPLIED">Candidatura inviata</option>
+          <option value="INTERVIEW">Colloquio</option>
+          <option value="OFFER">Offerta ricevuta</option>
+          <option value="REJECTED">Non selezionata</option>
+          <option value="WITHDRAWN">Ritirata</option>
+        </select>
       </label>
 
-      <label className={styles.field} htmlFor="link">
-        <span className={styles.fieldHeading}>
-          <span>Link annuncio</span>
-          {linkError && (
-            <span id="link-error" className={styles.fieldError} role="alert">
-              {linkError}
-            </span>
-          )}
-        </span>
-        <input
-          type="url"
-          name="link"
-          id="link"
-          placeholder="https://"
-          inputMode="url"
-          defaultValue={formInitialValues.link}
-          aria-invalid={Boolean(linkError)}
-          aria-describedby={linkError ? `link-error` : undefined}
-        />
-      </label>
+      <fieldset className={styles.secondaryFields}>
+        <legend>Dettagli facoltativi</legend>
 
-      <label
-        className={`${styles.field} ${styles.wideField}`}
-        htmlFor="description"
-      >
-        <span>Descrizione</span>
-        <textarea
-          name="description"
-          id="description"
-          placeholder="Aggiungi una nota o i requisiti principali…"
-          defaultValue={formInitialValues.description}
-        />
-      </label>
+        <label className={styles.field} htmlFor="city">
+          <span>Città</span>
+          <input
+            type="text"
+            name="city"
+            id="city"
+            placeholder="es. Milano"
+            autoComplete="address-level2"
+            defaultValue={formInitialValues.city}
+          />
+        </label>
+
+        <label className={styles.field} htmlFor="link">
+          <span className={styles.fieldHeading}>
+            <span>Link annuncio</span>
+            {linkError && (
+              <span id="link-error" className={styles.fieldError} role="alert">
+                {linkError}
+              </span>
+            )}
+          </span>
+          <input
+            type="url"
+            name="link"
+            id="link"
+            placeholder="https://"
+            inputMode="url"
+            defaultValue={formInitialValues.link}
+            aria-invalid={Boolean(linkError)}
+            aria-describedby={linkError ? "link-error" : undefined}
+          />
+        </label>
+
+        <label className={`${styles.field} ${styles.wideField}`} htmlFor="description">
+          <span>Note</span>
+          <textarea
+            name="description"
+            id="description"
+            placeholder="Aggiungi note o requisiti utili…"
+            defaultValue={formInitialValues.description}
+          />
+        </label>
+      </fieldset>
 
       {submitError && (
         <p className={styles.error} role="alert">
@@ -242,17 +258,9 @@ export default function NewApplicationForm({
         >
           Annulla
         </button>
-        <button
-          className={styles.primaryButton}
-          type="submit"
-          disabled={isSaving}
-        >
+        <button className={styles.primaryButton} type="submit" disabled={isSaving}>
           {isSaving ? (
-            <LoaderCircle
-              className={styles.spinner}
-              aria-hidden="true"
-              size={18}
-            />
+            <LoaderCircle className={styles.spinner} aria-hidden="true" size={18} />
           ) : (
             <Check aria-hidden="true" size={18} strokeWidth={2.2} />
           )}

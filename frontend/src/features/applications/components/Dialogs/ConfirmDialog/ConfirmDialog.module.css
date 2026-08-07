@@ -14,8 +14,25 @@
 }
 
 .dialog::backdrop {
-  background: rgb(0 0 0 / 72%);
-  backdrop-filter: blur(2px);
+  background: var(--color-overlay);
+}
+
+.dialog[open] {
+  animation: dialog-enter 220ms var(--ease-out) both;
+}
+
+@keyframes dialog-enter {
+  from {
+    opacity: 0;
+    clip-path: inset(0.75rem round var(--radius-lg));
+    transform: translateY(0.75rem) scale(0.985);
+  }
+
+  to {
+    opacity: 1;
+    clip-path: inset(0 round var(--radius-lg));
+    transform: translateY(0) scale(1);
+  }
 }
 
 .closeButton {
@@ -106,7 +123,7 @@
 }
 
 .confirmButton {
-  color: #ffffff;
+  color: var(--color-on-danger);
   background: var(--color-danger);
   border: 1px solid var(--color-danger);
 }
@@ -148,4 +165,14 @@
   .confirmButton {
     width: 100%;
   }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dialog[open] {
+    animation: none;
+  }
+}
+
+html[data-motion="reduced"] .dialog[open] {
+  animation: none;
 }

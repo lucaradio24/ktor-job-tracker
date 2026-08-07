@@ -2,27 +2,26 @@
 name: JobTracker
 description: Un compagno calmo e preciso per tenere in ordine la ricerca di lavoro.
 colors:
-  night-surface: "#10161e"
-  night-surface-muted: "#0d131a"
-  night-surface-strong: "#17202a"
-  text-primary: "#f2f4f7"
-  text-muted: "#a4abb4"
-  text-subtle: "#7d8792"
-  border: "#27313c"
-  border-strong: "#394652"
-  action-coral: "#ff5146"
-  action-coral-soft: "#30280f"
-  focus-violet: "#b18cff"
-  danger: "#ff5b50"
-  danger-soft: "#391b1b"
-  status-amber: "#ffb800"
-  status-amber-soft: "#382d0e"
-  status-violet: "#b18cff"
-  status-violet-soft: "#281e3e"
-  status-green: "#35d77d"
-  status-green-soft: "#123327"
-  status-rose: "#ff5b50"
-  status-rose-soft: "#391b1b"
+  graphite-background: "#0d0e10"
+  graphite-surface: "#141517"
+  graphite-surface-muted: "#111214"
+  graphite-surface-strong: "#1a1b1e"
+  porcelain: "#f2efe8"
+  text-muted: "#b8b5ae"
+  text-subtle: "#8d8b85"
+  border: "#2b2c30"
+  border-strong: "#414247"
+  focus-violet: "#b6a8dc"
+  danger: "#dc8580"
+  danger-soft: "#352120"
+  status-amber: "#d5ad69"
+  status-amber-soft: "#30291d"
+  status-violet: "#ad9fd4"
+  status-violet-soft: "#292534"
+  status-green: "#87b99a"
+  status-green-soft: "#203027"
+  status-rose: "#d9847f"
+  status-rose-soft: "#352321"
 typography:
   display:
     fontFamily: "Manrope, Segoe UI, system-ui, sans-serif"
@@ -69,179 +68,175 @@ spacing:
   10: "2.5rem"
 components:
   button-primary:
-    backgroundColor: "{colors.action-coral}"
-    textColor: "#ffffff"
+    backgroundColor: "{colors.porcelain}"
+    textColor: "{colors.graphite-background}"
     typography: "{typography.title}"
     rounded: "{rounded.md}"
     padding: "0 1.25rem"
-    height: "3.25rem"
+    minHeight: "2.75rem"
   button-secondary:
-    backgroundColor: "{colors.night-surface}"
-    textColor: "{colors.text-primary}"
+    backgroundColor: "{colors.graphite-surface}"
+    textColor: "{colors.porcelain}"
     typography: "{typography.title}"
     rounded: "{rounded.md}"
     padding: "0 1rem"
-    height: "2.75rem"
+    minHeight: "2.75rem"
   input:
-    backgroundColor: "{colors.night-surface}"
-    textColor: "{colors.text-primary}"
+    backgroundColor: "{colors.graphite-surface}"
+    textColor: "{colors.porcelain}"
     typography: "{typography.body}"
     rounded: "{rounded.sm}"
     padding: "0 0.75rem"
-    height: "2.75rem"
+    minHeight: "2.75rem"
   application-card:
-    backgroundColor: "{colors.night-surface-strong}"
-    textColor: "{colors.text-primary}"
+    backgroundColor: "{colors.graphite-surface-strong}"
+    textColor: "{colors.porcelain}"
     rounded: "{rounded.md}"
-    padding: "0.75rem 1rem 0.5rem"
+    padding: "0.75rem 1rem"
   navigation-active:
-    backgroundColor: "{colors.night-surface-strong}"
-    textColor: "{colors.text-primary}"
+    backgroundColor: "{colors.graphite-surface-strong}"
+    textColor: "{colors.porcelain}"
     typography: "{typography.title}"
     rounded: "{rounded.md}"
-    padding: "0 1.25rem"
-    height: "3.5rem"
+    padding: "0 0.75rem"
+    minHeight: "2.75rem"
 ---
 
 # Design System: JobTracker
 
 ## Overview
 
-**Creative North Star: "Il Compagno di Ricerca"**
+**Creative North Star: “Night Route”**
 
-JobTracker deve sembrare un compagno calmo, competente e umano durante un percorso che può essere stressante. La sua precisione nasce da griglie leggibili, gerarchie nette e contenuti compatti; il calore arriva dal Corallo d'azione, dai Segnali di percorso e dalla mascotte, mai da decorazioni gratuite.
+JobTracker è un ambiente operativo calmo e preciso per un percorso che può essere stressante. Il linguaggio visivo Graphite + Porcelain riduce il rumore: grafite per la struttura, porcellana per testo e azioni primarie, colori di stato attenuati per orientarsi senza trasformare la dashboard in un pannello neon.
 
-Il sistema combina superfici quasi piatte con una stratificazione sobria. Spaziatura e bordi separano la maggior parte dei livelli; le ombre entrano soltanto quando un elemento si solleva davvero, reagisce o richiede attenzione. La mascotte accompagna login, onboarding, stati vuoti, errori e successi; nella board piena può comparire soltanto come firma minima e non urgente.
+La metafora del percorso vive nella board a tre tappe attive, nelle linee di avanzamento e nella cronologia della candidatura. Gli esiti sono separati dalla pipeline, così ciò che è ancora in corso resta immediatamente leggibile. La mascotte è contestuale: aiuta negli stati vuoti o orientativi, non compete con il lavoro quotidiano.
 
 **Key Characteristics:**
 
-- Notte operativa scura, leggibile e priva di estetica gaming.
-- Corallo d'azione raro e inequivocabile sulle azioni primarie.
-- Segnali di percorso usati semanticamente per lo stato delle candidature.
-- Superfici quasi piatte, bordi fini e profondità riservata agli stati reali.
-- Mascotte utile e rassicurante, mai protagonista durante il lavoro intenso.
+- Graphite + Porcelain, con temi scuro e chiaro coerenti.
+- Topbar compatta con Candidature, Statistiche e Impostazioni.
+- Pipeline attiva a tre colonne: Candidature, Colloqui, Offerte.
+- Esiti separati: Non selezionate e Ritirate.
+- Inspector contestuale affiancato su desktop e a pagina intera su mobile.
+- Profondità sobria, moto breve e densità regolabile.
 
 ## Colors
 
-La palette unisce una Notte operativa blu-nera, un Corallo d'azione caldo e Segnali di percorso ad alta leggibilità.
-
 ### Primary
 
-- **Corallo d'azione:** riservato alle CTA primarie e ai momenti che fanno avanzare il flusso.
+- **Porcelain:** testo ad alto contrasto e azione primaria nel tema scuro; nel tema chiaro il rapporto si inverte con il grafite.
+- **Graphite:** fondo, superfici e struttura della workspace; non è nero assoluto e non usa effetti vetro.
 
-### Secondary
+### Semantic signals
 
-- **Segnali di percorso:** ambra per candidature, violetto per colloqui, verde per offerte e rosa per rifiuti o pericolo; ogni colore mantiene lo stesso significato in tutta l'app.
-
-### Neutral
-
-- **Notte operativa:** fondo globale e superfici scure leggermente differenziate per struttura.
-- **Testo lunare:** tre livelli di contrasto per contenuto primario, secondario e ausiliario.
-- **Bordi freddi:** separano superfici e controlli senza trasformare la schermata in una griglia rumorosa.
+- **Ambra:** candidatura inviata.
+- **Violetto:** colloquio.
+- **Verde:** offerta.
+- **Rosa:** esito negativo, ritiro o pericolo contestuale.
+- **Violetto focus:** focus visibile e non affidato al solo colore.
 
 ### Named Rules
 
-**The One Action Rule.** Il Corallo d'azione identifica l'azione primaria; non va usato come riempimento decorativo.
+**The Porcelain Action Rule.** L’azione primaria usa il massimo contrasto Graphite/Porcelain; i colori di stato non diventano CTA generiche.
 
-**The Semantic Signal Rule.** I Segnali di percorso non cambiano significato tra board, card, filtri, statistiche o messaggi.
+**The Semantic Signal Rule.** I colori di stato mantengono lo stesso significato in board, card, inspector, filtri e statistiche.
 
 ## Typography
 
 **Display Font:** Manrope (con Segoe UI e system-ui come fallback)  
 **Body Font:** Manrope (con Segoe UI e system-ui come fallback)
 
-**Character:** una sola famiglia geometrica e cordiale sostiene sia la scansione operativa sia i messaggi più umani. Il sistema crea gerarchia con scala, peso e spaziatura, non con più font.
+Una sola famiglia sostiene sia la scansione operativa sia i messaggi orientativi. La gerarchia nasce da dimensione, peso, spaziatura e contenuto. Date, durate e conteggi usano numeri tabulari quando la comparazione beneficia dell’allineamento.
 
 ### Hierarchy
 
-- **Display:** titoli principali brevi, compatti e autorevoli.
-- **Headline:** titoli di dialoghi e superfici secondarie.
-- **Title:** intestazioni di colonne, card e navigazione.
-- **Body:** istruzioni, descrizioni e dati leggibili; mantenere brevi le righe nei flussi operativi.
-- **Label:** eyebrow e categorie in maiuscolo soltanto quando aiutano l'orientamento.
+- **Display:** titoli principali brevi.
+- **Headline:** titoli di pagina, inspector e dialoghi.
+- **Title:** intestazioni di colonne, card e gruppi di impostazioni.
+- **Body:** istruzioni, descrizioni e dati.
+- **Label:** eyebrow, stati e categorie compatte; maiuscolo solo se aiuta la scansione.
 
 ### Named Rules
 
-**The One Family Rule.** Manrope è l'unica voce tipografica; la gerarchia nasce dal contenuto, non dal cambio di carattere.
+**The One Family Rule.** Manrope è l’unica voce tipografica; non si introducono font decorativi per creare enfasi.
 
 ## Layout
 
-La workspace desktop usa una shell a due colonne con sidebar stabile e area di lavoro fluida. La board presenta quattro colonne equivalenti e limita la larghezza complessiva per mantenere leggibili card e intestazioni. La scala spaziale segue multipli di 0.25rem, con 0.75-1rem per il ritmo interno e 1.5-2.5rem per separare regioni.
+La shell usa una topbar sticky e compatta. Su desktop la dashboard presenta tre colonne equivalenti per `APPLIED`, `INTERVIEW` e `OFFER`; `REJECTED` e `WITHDRAWN` vivono nella vista separata “Uscite”. Quando una card è selezionata, l’inspector entra come regione contestuale accanto alla board. Su mobile la navigazione occupa una seconda riga, la pipeline usa filtri di stato e l’inspector sostituisce la lista come vista a pagina intera con ritorno esplicito.
 
-Tra 48rem e 64rem la sidebar diventa un rail a icone; sotto 48rem passa a navigazione orizzontale superiore e i contenuti diventano una singola colonna. Form e azioni passano da due colonne a una sotto 40rem, con un ulteriore accatastamento sotto 24rem. Le azioni principali diventano a larghezza piena quando lo spazio non consente una coppia leggibile.
+Statistiche e Impostazioni riusano la stessa shell e la stessa larghezza di lettura. La densità “Compatta” riduce la spaziatura senza ridurre i target interattivi; “Comoda” resta il valore predefinito.
 
-**The Scan Before Scroll Rule.** La gerarchia deve chiarire titolo, azione primaria, ricerca e stati prima che l'utente inizi a scorrere.
+**The Scan Before Scroll Rule.** Titolo, ricerca, azione primaria, tappe attive ed esiti devono essere comprensibili prima dello scorrimento.
 
-## Elevation & Depth
+**The Active Route Rule.** La board mostra soltanto il lavoro vivo; gli esiti restano raggiungibili ma non occupano colonne permanenti.
 
-Il sistema è quasi piatto a riposo. Le differenze tonali e i bordi definiscono la struttura; ombre leggere compaiono su card interattive, hover e menu, mentre l'ombra profonda è riservata a dialoghi e superfici modali.
+## Elevation & Motion
 
-### Shadow Vocabulary
+Il sistema è quasi piatto a riposo. Bordi e differenze tonali definiscono la struttura; le ombre compaiono per hover, menu, inspector e dialoghi. Le transizioni usano durate brevi di 120–180 ms. La preferenza “Movimento ridotto” e `prefers-reduced-motion` eliminano animazioni e scorrimento fluido non essenziali.
 
-- **Contatto:** ombra minima per separare una card azionabile dal contenitore.
-- **Sollevamento:** ombra media durante hover, trascinamento o apertura di un menu.
-- **Modalità:** ombra profonda per dialoghi e shell isolate.
+**The Earned Elevation Rule.** Un elemento riceve profondità soltanto quando il suo comportamento giustifica un piano superiore.
 
-### Named Rules
-
-**The Earned Elevation Rule.** Un elemento riceve un'ombra soltanto quando il suo comportamento giustifica un piano superiore.
+**The Motion Has Meaning Rule.** Il movimento chiarisce selezione, entrata o feedback; non viene usato come decorazione continua.
 
 ## Shapes
 
-Gli angoli sono morbidi ma non giocosi: piccoli sui campi, medi su card e pulsanti, ampi sui dialoghi. Le pillole sono riservate a conteggi e stati compatti. I bordi sono sottili e freddi; i contorni colorati appaiono per focus, drop target o pericolo.
+Gli angoli sono morbidi ma operativi: piccoli sui campi, medi su card e pulsanti, ampi sui dialoghi. Le pillole sono riservate a stati e conteggi. I bordi sono sottili e neutri; indicatori più marcati compaiono per focus, selezione e stato.
 
 ## Components
 
-### Buttons
+### Topbar
 
-- **Shape:** rettangoli morbidi, con altezza tattile e raggio medio.
-- **Primary:** Corallo d'azione, testo bianco e peso forte; una sola azione primaria per regione.
-- **Hover / Focus:** lieve sollevamento o schiarimento, più focus violetto chiaramente visibile.
-- **Secondary / Danger:** superfici scure bordate; il pericolo usa il rosa solo quando l'azione è distruttiva.
+Logo, navigazione principale e account convivono in una barra compatta. Lo stato attivo combina superficie, bordo, indicatore e `aria-current`. Su mobile la navigazione diventa una seconda riga a tre destinazioni senza perdere le etichette.
 
-### Chips
+### Application Board
 
-- **Style:** colore di stato su fondo tonale abbinato, forma pill e testo compatto.
-- **State:** semanticamente stabile; non usare i chip di stato come pulsanti generici.
-
-### Cards / Containers
-
-- **Corner Style:** raggio medio.
-- **Background:** superficie forte sopra superficie regolare, con gradiente appena percepibile dove già presente.
-- **Shadow Strategy:** quasi piatta a riposo, sollevata soltanto durante hover o drag.
-- **Border:** sottile per definire la struttura.
-- **Internal Padding:** compatto, in genere 0.75-1rem.
-
-### Inputs / Fields
-
-- **Style:** superficie scura, bordo forte, raggio piccolo e altezza minima adatta al tocco.
-- **Focus:** bordo violetto con alone sottile; il focus non dipende dal solo colore.
-- **Error / Disabled:** messaggio vicino al campo, rosa semantico e opacità soltanto per lo stato disabilitato.
-
-### Navigation
-
-Sidebar testuale su desktop, rail a icone su tablet e barra orizzontale su mobile. Lo stato attivo combina fondo tonale, indicatore ambra e `aria-current`; le etichette possono essere visivamente nascoste ma restano accessibili.
+La board desktop visualizza tre tappe attive con una route line e consente il drag-and-drop. Menu di stato e inspector forniscono alternative esplicite e accessibili. Su mobile si seleziona una tappa per volta tramite filtri con conteggio.
 
 ### Application Card
 
-La card mostra azienda e ruolo come gerarchia primaria, poi data, città e stato. È trascinabile nella board desktop e mantiene sempre un accesso esplicito al dettaglio; il colore comunica lo stato senza sostituire il testo.
+Azienda e ruolo sono la gerarchia primaria; data, città e stato completano la scansione. Selezione, focus e trascinamento sono distinti. L’apertura della card mostra l’inspector senza trasformare tutta la card in un link opaco.
+
+### Application Inspector
+
+Mostra identità, stato corrente, tempo dalla candidatura, tempo nello stato quando noto, cronologia e azioni di avanzamento o uscita. Su desktop è contestuale; su mobile è una vista completa con controllo “Indietro”. La modifica dei dettagli resta separata dal cambio di stato.
+
+### Forms
+
+La creazione chiede azienda, ruolo, data e stato, con `APPLIED` come default ma tutti e cinque gli stati selezionabili. Città, link e note restano secondari. La chiusura di un form sporco richiede conferma. La modifica descrittiva usa un flusso separato e non duplica i controlli di stato dell’inspector.
+
+### Statistics
+
+Le metriche usano numeri e barre CSS, senza librerie grafiche. Evidenziano candidature recenti, avanzamenti, offerte, distribuzione corrente, città e copertura dello storico. Le durate compaiono solo quando esiste un timestamp attendibile e dichiarano la dimensione del campione.
+
+### Settings
+
+Tema (`dark`, `light`, `system`), densità (`comfortable`, `compact`) e movimento (`system`, `reduced`) sono preferenze locali applicate subito. Il tema di sistema reagisce al dispositivo; l’inizializzazione anticipata evita lampeggi di tema.
 
 ### Mascot Moments
 
-La mascotte appare in login, onboarding, stati vuoti, errori e successi per spiegare o rassicurare. Nella board piena resta assente oppure compare come firma minima, senza competere con candidature e azioni.
+Il robot appare negli stati vuoti e nei momenti che richiedono orientamento o rassicurazione. Nella dashboard piena resta assente.
 
-## Do's and Don'ts
+## Data-informed UX
 
-### Do:
+`statusHistory` è una cronologia di transizioni posseduta dal server. Alla creazione il server registra come prima transizione lo stato scelto con il proprio timestamp; i cambi successivi aggiungono una voce solo quando lo stato cambia davvero. Inspector e statistiche trattano i record legacy senza cronologia come dati sconosciuti, mai come durata zero.
 
-- **Do** usare spaziatura e bordi come primo strumento di struttura.
-- **Do** mantenere invariati i significati dei quattro Segnali di percorso.
-- **Do** garantire focus visibile, target tattili e alternative esplicite al drag-and-drop.
-- **Do** usare la mascotte per stati con un bisogno emotivo o orientativo reale.
+`nextAction` è intenzionalmente rinviato: non compare nel modello, nei form o nell’interfaccia finché non esiste un bisogno prodotto confermato.
 
-### Don't:
+## Do’s and Don’ts
 
-- **Don't** trasformare il fondo scuro in neon, glassmorphism o estetica gaming.
-- **Don't** aggiungere ombre a ogni contenitore.
-- **Don't** usare il Corallo d'azione per più azioni concorrenti nella stessa regione.
-- **Don't** usare la mascotte come decorazione ripetuta nella board piena.
+### Do
+
+- Usare Graphite/Porcelain per gerarchia e azioni; riservare i segnali cromatici allo stato.
+- Tenere le tre tappe attive separate dagli esiti.
+- Garantire focus visibile, target tattili e alternativa esplicita al drag-and-drop.
+- Mostrare “dato non disponibile” o la copertura del campione quando manca lo storico.
+- Usare il robot solo quando aggiunge orientamento.
+
+### Don’t
+
+- Reintrodurre sidebar, palette corallo o una quarta colonna degli esiti.
+- Trasformare il tema scuro in neon, glassmorphism o estetica gaming.
+- Inventare durate dai record legacy senza timestamp.
+- Usare colore, drag-and-drop o animazione come unico canale informativo.
+- Aggiungere `nextAction` in modo speculativo.

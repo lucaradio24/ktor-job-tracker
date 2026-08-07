@@ -76,12 +76,12 @@ fun Route.applicationRoutes(service: JobApplicationService) {
                 link = request.link,
                 city = request.city,
             )
-            val created = service.create(application)
-            if (!created){
+            val createdApplication = service.create(application)
+            if (createdApplication == null){
                 return@post call.respond(HttpStatusCode.Conflict, ApiErrorResponse(ErrorCodes.ALREADY_EXISTS,
                     "Application already exists"))
             }
-            call.respond(HttpStatusCode.Created, application)
+            call.respond(HttpStatusCode.Created, createdApplication)
         }
 
         put("/{id}") {

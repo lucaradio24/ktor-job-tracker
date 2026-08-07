@@ -4,6 +4,7 @@ import { getApplication } from "@/features/applications/api/jobApplicationServer
 import EditApplicationForm from "@/features/applications/components/Forms/EditApplicationForm/EditApplicationForm";
 import type { JobApplication } from "@/features/applications/model/jobApplication";
 import { notFound } from "next/navigation";
+import styles from "./page.module.css";
 
 export default async function EditApplicationPage({
   params,
@@ -14,7 +15,7 @@ export default async function EditApplicationPage({
   let application: JobApplication;
 
   try {
-    application = await getApplication(id);
+    application = setTimeout(() => getApplication(id), 10000);
   } catch (error) {
     if (error instanceof ApiError && error.status === 404) {
       notFound();
@@ -23,14 +24,19 @@ export default async function EditApplicationPage({
   }
 
   return (
-    <section>
-      <header>
+    <section className={styles.page}>
+      <header className={styles.header}>
         <BackButton />
-        <p>MODIFICA CANDIDATURA</p>
-        <h1>{application.company}</h1>
-        <p>{application.title}</p>
+        <div>
+          <h1>Modifica candidatura</h1>
+          <p>
+            <strong>{application.company}</strong> · {application.title}
+          </p>
+        </div>
       </header>
-      <EditApplicationForm application={application} />
+      <div className={styles.formPanel}>
+        <EditApplicationForm application={application} />
+      </div>
     </section>
   );
 }

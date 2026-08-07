@@ -1,4 +1,7 @@
-import type { JobApplication } from "../model/jobApplication";
+import type {
+  ApplicationStatus,
+  JobApplication,
+} from "../model/jobApplication";
 
 const APPLICATIONS_URL = "/api/applications";
 
@@ -65,7 +68,15 @@ export async function fetcher<T>(
   return body as T;
 }
 
-export type CreateJobApplication = Omit<JobApplication, "id">;
+export interface CreateJobApplication {
+  company: string;
+  status: ApplicationStatus;
+  title: string;
+  appliedAt: string;
+  description?: string | null;
+  link?: string | null;
+  city?: string | null;
+}
 
 export async function getApplications(): Promise<JobApplication[]> {
   return fetcher<JobApplication[]>(APPLICATIONS_URL);
@@ -87,7 +98,17 @@ export async function createApplication(
   });
 }
 
-export type UpdateJobApplication = Omit<JobApplication, "id">;
+export type UpdateJobApplication = CreateJobApplication;
+
+export interface PatchJobApplication {
+  company?: string;
+  status?: ApplicationStatus;
+  title?: string;
+  appliedAt?: string;
+  description?: string | null;
+  link?: string | null;
+  city?: string | null;
+}
 
 export async function updateApplication(
   id: string,
@@ -104,7 +125,7 @@ export async function updateApplication(
 
 export async function patchApplication(
   id: string,
-  payload: Partial<UpdateJobApplication>,
+  payload: PatchJobApplication,
 ): Promise<JobApplication> {
   return fetcher<JobApplication>(`${APPLICATIONS_URL}/${id}`, {
     method: "PATCH",

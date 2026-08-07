@@ -8,7 +8,7 @@
   flex-direction: column;
   min-width: 0;
 
-  padding: 2.25rem;
+  padding: var(--space-6) clamp(var(--space-5), 2.5vw, var(--space-10));
 }
 
 .visuallyHidden {
@@ -43,7 +43,7 @@
   .main {
     min-height: auto;
     padding:
-      var(--space-5) max(var(--space-4), env(safe-area-inset-right))
+      var(--space-4) max(var(--space-4), env(safe-area-inset-right))
       max(var(--space-10), env(safe-area-inset-bottom))
       max(var(--space-4), env(safe-area-inset-left));
   }

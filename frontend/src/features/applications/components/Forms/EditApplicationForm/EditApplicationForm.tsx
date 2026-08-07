@@ -5,28 +5,24 @@ import { useState, useRef, type FormEvent } from "react";
 import {
   ApiError,
   deleteApplication,
-  updateApplication,
+  patchApplication,
   type FieldError,
-  type UpdateJobApplication,
+  type PatchJobApplication,
 } from "../../../api/jobApplicationApi";
-import type {
-  ApplicationStatus,
-  JobApplication,
-} from "../../../model/jobApplication";
+import type { JobApplication } from "../../../model/jobApplication";
 import ConfirmDialog from "../../Dialogs/ConfirmDialog/ConfirmDialog";
 import { Trash2 } from "lucide-react";
 import styles from "../NewApplicationForm/NewApplicationForm.module.css";
 import editStyles from "./EditApplicationForm.module.css";
 import { useToast } from "@/components/feedback/ToastViewport/ToastProvider";
 
-function readForm(form: HTMLFormElement): UpdateJobApplication {
+function readForm(form: HTMLFormElement): PatchJobApplication {
   const data = new FormData(form);
   const value = (name: string) => String(data.get(name) ?? "").trim();
 
   return {
     company: value("company"),
     title: value("title"),
-    status: value("status") as ApplicationStatus,
     appliedAt: value("appliedAt"),
     city: value("city") || null,
     link: value("link") || null,
@@ -53,12 +49,11 @@ export default function EditApplicationForm({
     JSON.stringify({
       company: application.company,
       title: application.title,
-      status: application.status,
       appliedAt: application.appliedAt,
       city: application.city ?? null,
       link: application.link ?? null,
       description: application.description ?? null,
-    } satisfies UpdateJobApplication),
+    } satisfies PatchJobApplication),
   );
 
   const [isDirty, setIsDirty] = useState(false);
@@ -82,13 +77,14 @@ export default function EditApplicationForm({
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
-    const payload: UpdateJobApplication = readForm(event.currentTarget);
+    const form = event.currentTarget;
+    const payload: PatchJobApplication = readForm(form);
 
     try {
       setIsSaving(true);
       setSubmitError(null);
       setFieldErrors([]);
-      const updatedApplication = await updateApplication(
+      const updatedApplication = await patchApplication(
         application.id,
         payload,
       );
@@ -102,9 +98,15 @@ export default function EditApplicationForm({
       });
     } catch (requestError) {
       if (requestError instanceof ApiError) {
-        const fieldErrors = requestError.fieldErrors ?? [];
-        setFieldErrors(fieldErrors);
-        setSubmitError(fieldErrors.length > 0 ? null : requestError.message);
+        const errors = requestError.fieldErrors ?? [];
+        setFieldErrors(errors);
+        setSubmitError(errors.length > 0 ? null : requestError.message);
+        requestAnimationFrame(() => {
+          const field = errors[0]?.field;
+          if (field) {
+            (form.elements.namedItem(field) as HTMLElement | null)?.focus();
+          }
+        });
         return;
       }
 
@@ -194,17 +196,6 @@ export default function EditApplicationForm({
             aria-invalid={Boolean(titleError)}
             aria-describedby={titleError ? "title-error" : undefined}
           />
-        </label>
-
-        <label className={styles.field} htmlFor="status">
-          <span>Stato</span>
-          <select id="status" name="status" defaultValue={application.status}>
-            <option value="APPLIED">Candidatura inviata</option>
-            <option value="INTERVIEW">Colloquio</option>
-            <option value="OFFER">Offerta ricevuta</option>
-            <option value="REJECTED">Non selezionata</option>
-            <option value="WITHDRAWN">Ritirata</option>
-          </select>
         </label>
 
         <label className={styles.field} htmlFor="appliedAt">

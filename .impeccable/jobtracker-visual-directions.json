@@ -1,0 +1,64 @@
+{
+  "title": "Scegli il mondo visivo di JobTracker",
+  "question": "Quale sistema rende la pipeline più chiara, viva e personale senza perdere il controllo?",
+  "options": [
+    {
+      "id": "night-route",
+      "label": "Night Route",
+      "kicker": "DIREZIONE PROPOSTA",
+      "lineage": "wayfinding metropolitano + product UI di precisione",
+      "thesis": "Ogni candidatura è una fermata e il suo avanzamento diventa un percorso leggibile.",
+      "case": "Identificazione alta e chiarezza alta: traduce la pipeline in movimento senza cambiare il modello mentale della board.",
+      "palette": ["#07131f", "#f3f5f7", "#ff6359", "#ffb84a", "#a682ff", "#78d77a"],
+      "materials": ["smalto blu notte", "linee di segnale", "superfici opache"],
+      "viewport": "La board domina; sottili linee collegano gli stati, mentre una fascia statistiche racconta salute e movimento della pipeline.",
+      "risk": "Le linee diventano rumore se compaiono su tutte le candidature insieme.",
+      "sketch": ".impeccable/sketches/night-route.png",
+      "hero": "https://impeccable.style/worlds/cards/wayfinding-cartography-signage-midnight-transit-diagram-hero.webp",
+      "board": "https://impeccable.style/worlds/cards/wayfinding-cartography-signage-midnight-transit-diagram.webp"
+    },
+    {
+      "id": "calm-cockpit",
+      "label": "Calm Cockpit",
+      "kicker": "ALTERNATIVA",
+      "lineage": "strumentazione aeronautica notturna + dashboard personale",
+      "thesis": "Pochi strumenti concordano tra loro e dicono subito se la ricerca è sotto controllo.",
+      "case": "Chiarezza alta per statistiche e prossime azioni; identificazione media perché la metafora del cockpit è meno naturale per chi cerca lavoro.",
+      "palette": ["#0d0f10", "#f4f1e9", "#ef7162", "#a7c77b", "#d9a441"],
+      "materials": ["pannello nero opaco", "marcature luminose", "indicatori smorzati"],
+      "viewport": "Sei strumenti compatti precedono una board sobria; valori e trend cambiano con movimenti fisici e misurati.",
+      "risk": "Può sembrare un pannello analytics e togliere centralità alle candidature.",
+      "sketch": ".impeccable/sketches/calm-cockpit.png",
+      "hero": "https://impeccable.style/worlds/cards/signals-instruments-night-flight-six-pack-hero.webp",
+      "board": "https://impeccable.style/worlds/cards/signals-instruments-night-flight-six-pack.webp"
+    },
+    {
+      "id": "living-type",
+      "label": "Living Type",
+      "kicker": "ALTERNATIVA",
+      "lineage": "specimen tipografico variabile + workspace interattivo",
+      "thesis": "La tipografia cambia tono e ritmo insieme alla pipeline, dando vita all'interfaccia senza aggiungere decorazione.",
+      "case": "Personalità alta ma chiarezza media: fonde bene con i controlli, meno bene con una board densa e usata ogni giorno.",
+      "palette": ["#101820", "#f6f0e7", "#ff746b", "#ffb45b", "#a873e8", "#83c965"],
+      "materials": ["inchiostro digitale", "assi tipografici", "griglia rigorosa"],
+      "viewport": "Un titolo tipografico vivo governa una board ariosa; filtri e stati reagiscono attraverso peso e larghezza del carattere.",
+      "risk": "La voce tipografica può rubare attenzione al lavoro operativo.",
+      "sketch": ".impeccable/sketches/living-type.png",
+      "hero": "https://impeccable.style/worlds/cards/variable-font-specimen-hero.webp",
+      "board": "https://impeccable.style/worlds/cards/variable-font-specimen.webp"
+    }
+  ],
+  "reroll": true,
+  "canon": true,
+  "canonCard": {
+    "label": "Dark SaaS impeccabile",
+    "lineage": "dashboard e Kanban contemporanei",
+    "thesis": "La convenzione della categoria, eseguita con grande pulizia e senza una metafora propria.",
+    "palette": ["#0b1118", "#f2f4f7", "#ff6258", "#ffb800", "#a983ff", "#74cf78"],
+    "materials": ["superfici slate", "bordi sottili", "card compatte"],
+    "viewport": "Sidebar, toolbar, statistiche compatte e quattro colonne uguali nel formato più familiare possibile.",
+    "risk": "È facile da capire ma difficile da ricordare.",
+    "sketch": ".impeccable/sketches/dark-standard.png"
+  },
+  "steer": true
+}

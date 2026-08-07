@@ -13,13 +13,14 @@ import type {
   ApplicationStatus,
   JobApplication,
 } from "../../model/jobApplication";
-import Link from "next/link";
 import styles from "./ApplicationCard.module.css";
 import { useDraggable } from "@dnd-kit/react";
 
 interface ApplicationCardProps {
   application: JobApplication;
   draggable?: boolean;
+  selected?: boolean;
+  onSelect: (id: string) => void;
   onStatusChange: (id: string, status: ApplicationStatus) => void;
   onDeleteRequest?: (application: JobApplication) => void;
 }
@@ -42,8 +43,12 @@ const statuses: Record<ApplicationStatus, StatusDetails> = {
     label: "Offerta ricevuta",
     className: styles.green,
   },
-  REJECTED: { icon: CircleX, label: "Rifiutata", className: styles.rose },
-  WITHDRAWN: { icon: CircleMinus, label: "Ritirata", className: styles.rose },
+  REJECTED: {
+    icon: CircleX,
+    label: "Non selezionata",
+    className: styles.rose,
+  },
+  WITHDRAWN: { icon: CircleMinus, label: "Ritirata", className: styles.slate },
 };
 
 const statusActions: Array<{
@@ -77,6 +82,8 @@ function getApplicationLink(link: string) {
 export default function ApplicationCard({
   application,
   draggable = true,
+  selected = false,
+  onSelect,
   onStatusChange,
   onDeleteRequest,
 }: ApplicationCardProps) {
@@ -93,17 +100,32 @@ export default function ApplicationCard({
   const availableActions = statusActions.filter(
     (action) => action.status !== application.status,
   );
+  const isInteractiveTarget = (target: EventTarget | null) =>
+    target instanceof Element &&
+    Boolean(target.closest("a, button, input, select, textarea, summary"));
 
   return (
     <article
-      className={`${styles.card} ${isDragging ? styles.dragging : ""}`}
+      id={`application-card-${application.id}`}
+      className={`${styles.card} ${selected ? styles.selected : ""} ${isDragging ? styles.dragging : ""}`}
       ref={ref}
+      role="listitem"
+      tabIndex={0}
+      aria-current={selected ? "true" : undefined}
+      onClick={(event) => {
+        if (!isInteractiveTarget(event.target)) onSelect(application.id);
+      }}
+      onKeyDown={(event) => {
+        if (
+          !isInteractiveTarget(event.target) &&
+          (event.key === "Enter" || event.key === " ")
+        ) {
+          event.preventDefault();
+          onSelect(application.id);
+        }
+      }}
     >
-      <h3 title={application.company}>
-        <Link href={`/applications/${application.id}`}>
-          {application.company}
-        </Link>
-      </h3>
+      <h3 title={application.company}>{application.company}</h3>
       <p className={styles.role} title={application.title}>
         {application.title}
       </p>

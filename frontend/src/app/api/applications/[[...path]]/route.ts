@@ -8,7 +8,7 @@ function apiError(status: number, errorCode: string, message: string) {
 }
 
 async function proxyRequest(request: NextRequest, context: Context) {
-  const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+  const apiUrl = process.env.API_URL;
   if (!apiUrl) {
     return apiError(500, "INTERNAL_ERROR", "API non configurata");
   }

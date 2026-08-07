@@ -3,18 +3,21 @@
   flex-direction: column;
   min-height: 7.75rem;
   padding: var(--space-3) var(--space-4) var(--space-2);
-  background: linear-gradient(
-    145deg,
-    var(--color-surface-strong),
-    var(--color-surface)
-  );
+  background: var(--color-surface-strong);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-md);
   box-shadow: var(--shadow-sm);
   transition:
+    background-color var(--transition-fast),
     border-color var(--transition-fast),
     box-shadow var(--transition-fast),
     transform var(--transition-fast);
+  cursor: pointer;
+}
+.selected {
+  background: var(--color-selected);
+  border-color: var(--color-accent);
+  box-shadow: var(--shadow-hover);
 }
 
 .dragging {
@@ -37,6 +40,11 @@
   font-size: 0.9375rem;
   line-height: 1.35;
   letter-spacing: -0.02em;
+}
+
+.card:focus-visible {
+  outline: 2px solid var(--color-focus);
+  outline-offset: 2px;
 }
 
 .role {
@@ -108,6 +116,10 @@
 
 .rose {
   color: var(--color-status-rose);
+}
+
+.slate {
+  color: var(--color-status-slate);
 }
 
 .cardActions {
@@ -251,7 +263,7 @@
     inset: 0;
     content: "";
     pointer-events: none;
-    background: rgb(0 0 0 / 58%);
+    background: var(--color-overlay);
   }
 
   .statusOptions,
@@ -276,13 +288,5 @@
   .statusOptions button {
     min-height: 3rem;
     font-size: 0.875rem;
-  }
-}
-
-@media (pointer: coarse) {
-  .card h3 a {
-    display: flex;
-    min-height: 2.75rem;
-    align-items: center;
   }
 }

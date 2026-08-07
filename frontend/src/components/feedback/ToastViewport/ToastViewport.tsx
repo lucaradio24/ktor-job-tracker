@@ -1,6 +1,6 @@
 "use client";
 
-import { Undo2 } from "lucide-react";
+import { Undo2, X } from "lucide-react";
 import type { CSSProperties } from "react";
 import styles from "./ToastViewport.module.css";
 
@@ -29,36 +29,47 @@ export default function ToastViewport({ toast, onClose }: ToastViewportProps) {
   }
 
   return (
-    <section
-      className={styles.viewport}
-      aria-label="Notifiche"
-      aria-live="polite"
-    >
+    <section className={styles.viewport} aria-label="Notifiche">
       <article
         className={styles.toast}
-        role="status"
         style={
           {
             "--toast-duration": `${toast.durationMs}ms`,
           } as CSSProperties
         }
       >
-        <div className={styles.copy}>
+        <div className={styles.copy} role="status" aria-atomic="true">
           <strong>{toast.title}</strong>
           {toast.description && <span>{toast.description}</span>}
         </div>
-        {toast.action && (
-          <button type="button" onClick={handleAction}>
-            <Undo2 aria-hidden="true" size={17} />
-            {toast.action.label}
+
+        <div className={styles.actions}>
+          {toast.action && (
+            <button
+              className={styles.actionButton}
+              type="button"
+              onClick={handleAction}
+            >
+              <Undo2 aria-hidden="true" size={16} />
+              {toast.action.label}
+            </button>
+          )}
+          <button
+            className={styles.closeButton}
+            type="button"
+            onClick={onClose}
+            aria-label="Chiudi notifica"
+          >
+            <X aria-hidden="true" size={14} />
           </button>
-        )}
+        </div>
+
         <span
           key={toast.id}
           className={styles.progress}
           aria-hidden="true"
           onAnimationEnd={onClose}
-        />{" "}
+        />
       </article>
     </section>
   );

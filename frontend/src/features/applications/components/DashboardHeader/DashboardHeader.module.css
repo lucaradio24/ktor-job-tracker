@@ -2,20 +2,19 @@
   width: 100%;
   max-width: 100rem;
   margin: 0 auto;
-  padding-bottom: var(--space-6);
+  padding-bottom: var(--space-5);
 }
 
-.copy {
+/* .copy {
   max-width: 46rem;
 }
 
 .copy h1 {
   margin: 0;
-  max-width: 18ch;
-  font-size: clamp(2rem, 3vw, 2.5rem);
-  line-height: 1.1;
-  letter-spacing: -0.04em;
-}
+  font-size: clamp(1.5rem, 2.4vw, 2rem);
+  line-height: 1.2;
+  letter-spacing: -0.035em;
+} */
 
 .description {
   margin: var(--space-2) 0 0;
@@ -31,7 +30,7 @@
   justify-content: center;
   min-height: 3.25rem;
   padding: 0 var(--space-5);
-  color: #ffffff;
+  color: var(--color-on-accent);
   font-size: 0.9375rem;
   font-weight: 750;
   background: var(--color-accent);
@@ -46,8 +45,9 @@
 }
 
 .primaryAction:hover {
-  background: color-mix(in srgb, var(--color-accent) 88%, white);
-  border-color: color-mix(in srgb, var(--color-accent) 88%, white);
+  background: color-mix(in srgb, var(--color-accent) 90%, black);
+  border-color: color-mix(in srgb, var(--color-accent) 90%, black);
+  transform: translateY(-1px);
 }
 
 @media (max-width: 47.999rem) {

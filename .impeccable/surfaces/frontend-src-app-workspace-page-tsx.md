@@ -7,8 +7,12 @@ related_targets: ["frontend/src/app/(workspace)/applications/[id]/page.tsx"]
 
 # Workspace candidature
 
-- **Scope and mode:** full application-management flow in Operate mode: populated board/list, create, detail/edit, archive, empty states and feedback.
-- **Approved direction:** primary comp `.impeccable/mocks/jobtracker-flow-02-focus-first.png`; hybridize its topbar and task funnel with the calmer column rhythm of option 1 and the explicit status menu of option 3. Coral remains the single primary action; the mascot appears only in genuine empty, error, onboarding or success states.
-- **Desktop:** compact topbar with only real destinations, four airy kanban columns, visible `Ritirate`, drag-and-drop plus an explicit menu alternative. Create is a focused dialog; detail/edit is a dedicated page.
-- **Mobile adaptation candidate:** `.impeccable/mocks/jobtracker-flow-mobile-hybrid.png`, pending approval. Replace kanban columns with horizontally scrollable status filters and a vertical card list; use a bottom sheet for status actions and full-page create/detail flows. No drag-only, hover-only or tiny targets.
-- **Do not literalize:** generated companies, dates, avatars and robot are synthetic layout content. Implementation uses real application data, existing authentication identity and the repository mascot. No speculative statistics, settings or navigation destinations.
+- **Scope and mode:** full application-management flow in Operate mode: populated board, create, selected-application inspector, detail/edit, outcomes, empty states and feedback.
+- **Approved direction:** `.impeccable/mocks/jobtracker-night-route-inspector.png`, refined to Graphite + Porcelain. Near-black neutral surfaces replace the blue cast; the primary action is porcelain rather than coral. Status colors and motion carry liveliness.
+- **Desktop:** compact topbar, three active pipeline columns (`Candidature`, `Colloqui`, `Offerte`) and a contextual inspector for the selected application. `Non selezionate` and `Ritirate` are exits from any active stage, not sequential columns.
+- **Route behavior:** a 1px line connects active stage headers at rest. Only the selected application receives a 2px contextual path toward its current or proposed destination. Never connect every card or animate the route continuously.
+- **Approved inspector:** show application identity, dated journey, time since application, time in current state and quick actions. Primary quick action advances state; note and announcement-link actions remain secondary. Rejection and withdrawal stay under `Altre azioni`. `nextAction` is deferred until a real usage requirement emerges.
+- **Data boundary:** dated stage history, time in stage and interview counts require persisted transition/event history; never infer them from current status. Demonstration values are not product claims.
+- **Mobile:** horizontal status filters and a vertical card list; selection opens a dedicated full-page detail with a native back action. No drag-only, hover-only or tiny targets.
+- **Mascot:** use repository robot only in contextual help, empty/error/success states or a quiet inspector prompt; never repeat it in normal cards.
+- **Do not literalize:** generated companies, dates and counts are layout material. Implementation uses real application and authentication data. Statistics remain limited to fields supported by model until history exists.
