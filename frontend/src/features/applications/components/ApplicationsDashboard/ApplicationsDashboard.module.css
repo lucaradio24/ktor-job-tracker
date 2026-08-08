@@ -116,7 +116,7 @@
   cursor: pointer;
 }
 
-.outcomesToggle {
+.archiveToggle {
   display: flex;
   min-height: 3.25rem;
   gap: var(--space-2);
@@ -136,13 +136,13 @@
     background-color var(--transition-fast);
 }
 
-.outcomesToggle[aria-pressed="true"] {
+.archiveToggle[aria-pressed="true"] {
   color: var(--color-text);
   background: var(--color-selected);
   border-color: var(--color-border-strong);
 }
 
-.outcomesCount,
+.archiveCount,
 .resultsCount {
   display: grid;
   min-width: 1.625rem;
@@ -172,13 +172,13 @@
 }
 
 .searchView,
-.outcomesView {
+.archiveView {
   display: grid;
   gap: var(--space-4);
   align-content: start;
 }
 
-.outcomesView {
+.archiveView {
   padding: var(--space-5);
   background: var(--color-surface-muted);
   border: 1px solid var(--color-border);
@@ -210,6 +210,49 @@
   margin-top: var(--space-1);
   color: var(--color-text-muted);
   font-size: 0.875rem;
+}
+
+.filterActions {
+  display: flex;
+  gap: var(--space-2);
+  align-items: center;
+  margin-left: auto;
+}
+
+.filterAction {
+  --filter-tone: var(--color-status-rose);
+  --filter-tone-soft: var(--color-status-rose-soft);
+
+  display: inline-flex;
+  min-height: 2.75rem;
+  gap: var(--space-2);
+  align-items: center;
+  justify-content: center;
+  padding: 0 var(--space-3);
+  color: var(--color-text-muted);
+  font-size: 0.8125rem;
+  font-weight: 750;
+  white-space: nowrap;
+  background: var(--color-surface-muted);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-pill);
+  cursor: pointer;
+  transition:
+    color var(--transition-fast),
+    background-color var(--transition-fast),
+    border-color var(--transition-fast),
+    transform var(--transition-fast);
+}
+
+.filterAction:last-child {
+  --filter-tone: var(--color-status-slate);
+  --filter-tone-soft: var(--color-status-slate-soft);
+}
+
+.filterAction[aria-pressed="true"] {
+  color: var(--filter-tone);
+  background: var(--filter-tone-soft);
+  border-color: color-mix(in srgb, var(--filter-tone) 42%, var(--color-border));
 }
 
 .emptyResults {
@@ -310,11 +353,17 @@
 }
 
 @media (hover: hover) and (pointer: fine) {
-  .outcomesToggle:hover,
-  .clearSearch:hover {
+  .archiveToggle:hover,
+  .clearSearch:hover,
+  .filterAction:hover {
     color: var(--color-text);
     border-color: var(--color-border-strong);
   }
+}
+
+.filterAction:focus-visible {
+  outline: 2px solid var(--color-focus);
+  outline-offset: 2px;
 }
 
 @media (max-width: 79.999rem) {
@@ -344,10 +393,33 @@
   }
 
   .search,
-  .outcomesToggle {
+  .archiveToggle {
     width: 100%;
     max-width: none;
     margin-left: 0;
+  }
+
+  .viewHeader {
+    flex-wrap: wrap;
+  }
+
+  .filterActions {
+    order: 3;
+    flex: 1 0 100%;
+    width: 100%;
+    margin-left: 0;
+    padding-top: var(--space-1);
+    overflow-x: auto;
+    overscroll-behavior-inline: contain;
+    scrollbar-width: none;
+  }
+
+  .filterActions::-webkit-scrollbar {
+    display: none;
+  }
+
+  .filterAction {
+    flex: 0 0 auto;
   }
 
   .workspace[data-inspector-open="true"] {
@@ -358,7 +430,7 @@
     display: none;
   }
 
-  .outcomesView {
+  .archiveView {
     padding: var(--space-4);
   }
 
@@ -372,7 +444,13 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .skeleton {
+  .skeleton,
+  .filterAction {
     animation: none;
+    transition: none;
   }
+}
+
+html[data-motion="reduced"] .filterAction {
+  transition: none;
 }

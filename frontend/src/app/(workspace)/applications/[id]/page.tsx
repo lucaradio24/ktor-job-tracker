@@ -28,7 +28,7 @@ export default async function EditApplicationPage({
       <header className={styles.header}>
         <BackButton />
         <div>
-          <h1>Modifica candidatura</h1>
+          {/* <h1>Modifica candidatura</h1> */}
           <p>
             <strong>{application.company}</strong> · {application.title}
           </p>

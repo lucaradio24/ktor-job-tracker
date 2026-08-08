@@ -13,7 +13,7 @@
 .dialog[open] {
   display: flex;
   flex-direction: column;
-  animation: dialog-enter 220ms var(--ease-out) both;
+  animation: dialog-enter 150ms var(--ease-out) both;
 }
 
 .dialog::backdrop {
@@ -41,7 +41,7 @@
   align-items: flex-start;
   justify-content: space-between;
   padding: var(--space-6);
-  border-bottom: 1px solid var(--color-border);
+  /* border-bottom: 1px solid var(--color-border); */
 }
 
 .copy h2 {

@@ -48,7 +48,8 @@ export default function ApplicationsDashboard({
   >(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [query, setQuery] = useState("");
-  const [showOutcomes, setShowOutcomes] = useState(false);
+  const [showArchive, setshowArchive] = useState(false);
+  const [archiveFilter, setArchiveFilter] = useState<string | null>(null);
   const [updateError, setUpdateError] = useState<string | null>(null);
   const [applicationToDelete, setApplicationToDelete] =
     useState<JobApplication | null>(null);
@@ -125,8 +126,8 @@ export default function ApplicationsDashboard({
         requestError instanceof ApiError && requestError.status === 404
           ? "La candidatura non esiste più. L’elenco è stato aggiornato."
           : requestError instanceof Error
-          ? requestError.message
-          : "Non è stato possibile annullare lo spostamento.",
+            ? requestError.message
+            : "Non è stato possibile annullare lo spostamento.",
       );
     } finally {
       pendingStatusChanges.current.delete(id);
@@ -150,7 +151,7 @@ export default function ApplicationsDashboard({
 
     pendingStatusChanges.current.add(id);
     if (selectedApplicationId === id) {
-      const remainsVisible = showOutcomes
+      const remainsVisible = showArchive
         ? !pipelineStatuses.has(status)
         : hasQuery || pipelineStatuses.has(status);
       if (!remainsVisible) setSelectedApplicationId(null);
@@ -197,8 +198,8 @@ export default function ApplicationsDashboard({
         isMissing
           ? "La candidatura non esiste più. L’elenco è stato aggiornato."
           : requestError instanceof Error
-          ? requestError.message
-          : "Non è stato possibile spostare la candidatura.",
+            ? requestError.message
+            : "Non è stato possibile spostare la candidatura.",
       );
     } finally {
       pendingStatusChanges.current.delete(id);
@@ -241,14 +242,22 @@ export default function ApplicationsDashboard({
   const pipelineApplications = matchingApplications.filter((application) =>
     pipelineStatuses.has(application.status),
   );
-  const outcomeApplications = matchingApplications.filter(
+  const archivedApplications = matchingApplications.filter(
     (application) => !pipelineStatuses.has(application.status),
   );
-  const outcomesCount = jobApplications.filter(
+
+  const filteredArchivedApplications =
+    archiveFilter === null
+      ? archivedApplications
+      : archivedApplications.filter(
+          (application) => application.status === archiveFilter,
+        );
+
+  const archiveCount = jobApplications.filter(
     (application) => !pipelineStatuses.has(application.status),
   ).length;
-  const visibleApplications = showOutcomes
-    ? outcomeApplications
+  const visibleApplications = showArchive
+    ? archivedApplications
     : hasQuery
       ? matchingApplications
       : pipelineApplications;
@@ -320,7 +329,7 @@ export default function ApplicationsDashboard({
                   );
                   if (
                     selected &&
-                    !showOutcomes &&
+                    !showArchive &&
                     !pipelineStatuses.has(selected.status)
                   ) {
                     setSelectedApplicationId(null);
@@ -335,27 +344,28 @@ export default function ApplicationsDashboard({
 
           <button
             type="button"
-            className={styles.outcomesToggle}
-            aria-pressed={showOutcomes}
+            className={styles.archiveToggle}
+            aria-pressed={showArchive}
             onClick={() => {
-              const nextShowOutcomes = !showOutcomes;
-              setShowOutcomes(nextShowOutcomes);
+              const nextshowArchive = !showArchive;
+              setshowArchive(nextshowArchive);
               const selected = jobApplications.find(
                 (application) => application.id === selectedApplicationId,
               );
               if (
                 selected &&
-                pipelineStatuses.has(selected.status) === nextShowOutcomes
+                pipelineStatuses.has(selected.status) === nextshowArchive
               ) {
                 setSelectedApplicationId(null);
               }
+              setArchiveFilter(null);
             }}
             aria-controls="applications-view"
           >
             <Archive aria-hidden="true" size={18} strokeWidth={1.8} />
-            <span>{showOutcomes ? "Torna alla pipeline" : "Uscite"}</span>
-            <span className={styles.outcomesCount} aria-hidden="true">
-              {outcomesCount}
+            <span>{showArchive ? "Torna alla board" : "Archivio"}</span>
+            <span className={styles.archiveCount} aria-hidden="true">
+              {archiveCount}
             </span>
           </button>
 
@@ -374,33 +384,68 @@ export default function ApplicationsDashboard({
           data-inspector-open={selectedApplication ? "true" : "false"}
         >
           <div id="applications-view" className={styles.applicationsView}>
-            {showOutcomes ? (
-              <section className={styles.outcomesView} aria-labelledby="outcomes-title">
+            {showArchive ? (
+              <section
+                className={styles.archiveView}
+                aria-labelledby="archive-title"
+              >
                 <header className={styles.viewHeader}>
                   <div>
-                    <h2 id="outcomes-title" className={styles.viewTitle}>Uscite</h2>
+                    <h2 id="archive-title" className={styles.viewTitle}>
+                      Archiviate
+                    </h2>
                     <p className={styles.viewDescription}>
-                      Candidature non selezionate e ritirate.
+                      {`Candidature ${statusLabels["REJECTED"]} e ${statusLabels["WITHDRAWN"]}.`}
                     </p>
                   </div>
-                  <span className={styles.resultsCount}>
-                    {outcomeApplications.length}
-                  </span>
+                  <div className={styles.filterActions}>
+                    <button
+                      type="button"
+                      className={styles.filterAction}
+                      aria-label="Filtra per Non selezionate"
+                      aria-pressed={archiveFilter === "REJECTED"}
+                      onClick={() =>
+                        archiveFilter === "REJECTED"
+                          ? setArchiveFilter(null)
+                          : setArchiveFilter("REJECTED")
+                      }
+                    >
+                      {`${statusLabels["REJECTED"]}`}
+                    </button>
+                    <button
+                      type="button"
+                      className={styles.filterAction}
+                      aria-label="Filtra per Ritirate"
+                      aria-pressed={archiveFilter === "WITHDRAWN"}
+                      onClick={() =>
+                        archiveFilter === "WITHDRAWN"
+                          ? setArchiveFilter(null)
+                          : setArchiveFilter("WITHDRAWN")
+                      }
+                    >
+                      {`${statusLabels["WITHDRAWN"]}`}
+                    </button>
+                  </div>
                 </header>
-                {outcomeApplications.length > 0 ? (
+                {filteredArchivedApplications.length > 0 ? (
                   <ApplicationsList
-                    applications={outcomeApplications}
+                    applications={filteredArchivedApplications}
                     onDeleteRequest={setApplicationToDelete}
                     onSelect={setSelectedApplicationId}
                     onStatusChange={handleStatusChange}
                     selectedApplicationId={selectedApplicationId}
                   />
                 ) : (
-                  <p className={styles.emptyResults}>Nessuna uscita da mostrare.</p>
+                  <p className={styles.emptyResults}>
+                    Nessuna candidatura da mostrare.
+                  </p>
                 )}
               </section>
             ) : hasQuery ? (
-              <section className={styles.searchView} aria-labelledby="search-results-title">
+              <section
+                className={styles.searchView}
+                aria-labelledby="search-results-title"
+              >
                 <header className={styles.viewHeader}>
                   <h2 className={styles.viewTitle} id="search-results-title">
                     Risultati per “{query.trim()}”

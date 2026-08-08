@@ -58,7 +58,7 @@ export default function ApplicationStats({ stats }: { stats: Stats }) {
         <section className={styles.panel} aria-labelledby="distribution-title">
           <div className={styles.panelHeader}>
             <div>
-              <p className={styles.eyebrow}>Pipeline e uscite</p>
+              <p className={styles.eyebrow}>Pipeline e archiviate</p>
               <h2 id="distribution-title">Distribuzione attuale</h2>
             </div>
             <strong data-numeric>{stats.totalApplications}</strong>
@@ -122,8 +122,8 @@ export default function ApplicationStats({ stats }: { stats: Stats }) {
       {stats.historyCoverage.tracked < stats.historyCoverage.total && (
         <p className={styles.coverage}>
           Storico disponibile per {stats.historyCoverage.tracked} candidature su{" "}
-          {stats.historyCoverage.total} ({stats.historyCoverage.percentage}%). Le
-          durate escludono i record senza timestamp.
+          {stats.historyCoverage.total} ({stats.historyCoverage.percentage}%).
+          Le durate escludono i record senza timestamp.
         </p>
       )}
     </div>
