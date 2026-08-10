@@ -117,6 +117,7 @@
 }
 
 .archiveToggle {
+  position: relative;
   display: flex;
   min-height: 3.25rem;
   gap: var(--space-2);
@@ -138,8 +139,35 @@
 
 .archiveToggle[aria-pressed="true"] {
   color: var(--color-text);
-  background: var(--color-selected);
+  background: var(--color-surface-strong);
   border-color: var(--color-border-strong);
+  box-shadow: none;
+}
+
+.archiveToggle[aria-pressed="true"]::after {
+  opacity: 1;
+  transform: scaleX(1);
+}
+
+.archiveToggle[aria-pressed="true"] .archiveCount {
+  color: var(--color-on-accent);
+  background: var(--color-accent);
+}
+
+.archiveToggle::after {
+  position: absolute;
+  right: var(--space-3);
+  bottom: 0.25rem;
+  left: var(--space-3);
+  height: 2px;
+  content: "";
+  background: var(--color-text);
+  border-radius: var(--radius-pill);
+  opacity: 0;
+  transform: scaleX(0.5);
+  transition:
+    opacity var(--transition-fast),
+    transform var(--transition-fast);
 }
 
 .archiveCount,

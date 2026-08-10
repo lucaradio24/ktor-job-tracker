@@ -30,7 +30,7 @@
   --color-surface-muted: #111214;
   --color-surface-strong: #1a1b1e;
   --color-overlay: rgb(3 4 5 / 72%);
-  --color-selected: #222327;
+  --color-selected: oklch(22.8% 0.007 283.4);
   --color-text: #f2efe8;
   --color-text-muted: #b8b5ae;
   --color-text-subtle: #8d8b85;

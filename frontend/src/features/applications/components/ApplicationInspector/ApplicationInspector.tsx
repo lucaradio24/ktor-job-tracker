@@ -118,7 +118,10 @@ export default function ApplicationInspector({
         </button>
 
         <div className={styles.identity}>
-          <span className={styles.status} data-status={application.status.toLowerCase()}>
+          <span
+            className={styles.status}
+            data-status={application.status.toLowerCase()}
+          >
             {statusLabels[application.status]}
           </span>
           <h2>{application.company}</h2>
@@ -170,7 +173,10 @@ export default function ApplicationInspector({
           </li>
           {history.map((transition, index) => (
             <li key={`${transition.changedAt}-${transition.status}`}>
-              <span className={styles.journeyMarker} data-status={transition.status.toLowerCase()} />
+              <span
+                className={styles.journeyMarker}
+                data-status={transition.status.toLowerCase()}
+              />
               <div>
                 <strong>{transitionLabel(transition, index)}</strong>
                 <time dateTime={transition.changedAt}>
@@ -183,7 +189,9 @@ export default function ApplicationInspector({
             <li>
               <span className={styles.journeyMarker} />
               <div>
-                <strong>Stato attuale: {statusLabels[application.status]}</strong>
+                <strong>
+                  Stato attuale: {statusLabels[application.status]}
+                </strong>
                 <span>Data non disponibile</span>
               </div>
             </li>
@@ -226,7 +234,10 @@ export default function ApplicationInspector({
       {!(["REJECTED", "WITHDRAWN"] as ApplicationStatus[]).includes(
         application.status,
       ) && (
-        <section className={styles.otherActions} aria-labelledby="other-actions-title">
+        <section
+          className={styles.otherActions}
+          aria-labelledby="other-actions-title"
+        >
           <h3 id="other-actions-title">Altre azioni</h3>
           <button
             type="button"
