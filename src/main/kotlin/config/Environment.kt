@@ -22,4 +22,10 @@ object Environment {
     val auth0Audience: String = dotenv["AUTH0_AUDIENCE"]
     ?: System.getenv("AUTH0_AUDIENCE")
     ?: error("AUTH0_AUDIENCE is not set")
+
+    val corsAllowedOrigins: List<String> = (
+        dotenv["CORS_ALLOWED_ORIGINS"]
+            ?: System.getenv("CORS_ALLOWED_ORIGINS")
+            ?: "http://localhost:3000,http://127.0.0.1:3000"
+        ).split(',').map(String::trim).filter(String::isNotEmpty)
 }

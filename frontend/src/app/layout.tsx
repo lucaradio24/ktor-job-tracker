@@ -1,6 +1,7 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Manrope } from "next/font/google";
 import { headers } from "next/headers";
+import { PREFERENCES_INITIALIZER_SCRIPT } from "@/features/preferences/preferences";
 import "@/styles/tokens.css";
 import "@/styles/base.css";
 
@@ -13,6 +14,12 @@ const manrope = Manrope({
 const title = "Job Tracker | Le tue candidature";
 const description =
   "Organizza candidature, colloqui e offerte in un'unica dashboard.";
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  viewportFit: "cover",
+};
 
 export async function generateMetadata(): Promise<Metadata> {
   const requestHeaders = await headers();
@@ -52,7 +59,17 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="it" className={manrope.variable}>
+    <html
+      lang="it"
+      className={manrope.variable}
+      suppressHydrationWarning
+    >
+      <head>
+        <script
+          id="jobtracker-preferences"
+          dangerouslySetInnerHTML={{ __html: PREFERENCES_INITIALIZER_SCRIPT }}
+        />
+      </head>
       <body>{children}</body>
     </html>
   );

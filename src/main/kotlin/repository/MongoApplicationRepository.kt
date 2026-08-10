@@ -2,7 +2,10 @@ package com.example.repository
 
 import com.example.model.JobApplication
 import com.example.model.JobApplicationChanges
+import com.example.model.StatusTransition
 import com.mongodb.client.model.Filters.and
+import com.mongodb.client.model.Filters.ne
+import com.mongodb.client.model.Updates.push
 import com.mongodb.client.model.Updates.set
 import com.mongodb.client.model.Updates.combine
 import com.mongodb.client.model.Filters.eq
@@ -39,17 +42,20 @@ class MongoApplicationRepository(
     override suspend fun update(
         id: String,
         ownerId: String,
-        jobApplication: JobApplication
+        jobApplication: JobApplication,
+        statusTransition: StatusTransition,
     ): JobApplication? {
-        val updatedApplication = jobApplication.copy(id = id, ownerId = ownerId)
+        val updates = listOf(
+            set("company", jobApplication.company),
+            set("status", jobApplication.status),
+            set("title", jobApplication.title),
+            set("appliedAt", jobApplication.appliedAt),
+            set("description", jobApplication.description),
+            set("link", jobApplication.link),
+            set("city", jobApplication.city),
+        )
 
-        val result = collection.replaceOne(and(eq("id", id),
-            eq("ownerId", ownerId)),
-            updatedApplication)
-
-        if (result.matchedCount == 0L) return null
-
-        return updatedApplication
+        return updateFields(id, ownerId, updates, statusTransition)
     }
 
     override suspend fun delete(id: String, ownerId: String): JobApplication? {
@@ -61,7 +67,12 @@ class MongoApplicationRepository(
         return application
     }
 
-    override suspend fun patch(id: String, ownerId: String, changes: JobApplicationChanges): JobApplication? {
+    override suspend fun patch(
+        id: String,
+        ownerId: String,
+        changes: JobApplicationChanges,
+        statusTransition: StatusTransition?,
+    ): JobApplication? {
         val updatedFields = mutableListOf<Bson>()
 
         changes.company?.let {
@@ -94,10 +105,27 @@ class MongoApplicationRepository(
 
         if(updatedFields.isEmpty()) return findById(id, ownerId)
 
-        val result = collection.updateOne(and(eq("id", id), eq("ownerId", ownerId) ),
-            combine(updatedFields))
+        return updateFields(id, ownerId, updatedFields, statusTransition)
+    }
 
-        if (result.matchedCount == 0L) return null
+    private suspend fun updateFields(
+        id: String,
+        ownerId: String,
+        updates: List<Bson>,
+        statusTransition: StatusTransition?,
+    ): JobApplication? {
+        val ownerFilter = and(eq("id", id), eq("ownerId", ownerId))
+
+        if (statusTransition != null) {
+            val changed = collection.updateOne(
+                and(ownerFilter, ne("status", statusTransition.status)),
+                combine(updates + push("statusHistory", statusTransition)),
+            )
+            if (changed.matchedCount > 0L) return findById(id, ownerId)
+        }
+
+        val unchanged = collection.updateOne(ownerFilter, combine(updates))
+        if (unchanged.matchedCount == 0L) return null
 
         return findById(id, ownerId)
     }

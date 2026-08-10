@@ -1,0 +1,208 @@
+.page {
+  display: grid;
+  width: 100%;
+  max-width: 80rem;
+  gap: var(--space-6);
+  margin: 0 auto;
+}
+
+.header {
+  display: flex;
+  gap: var(--space-6);
+  align-items: flex-end;
+  justify-content: space-between;
+  padding: var(--space-4) 0 var(--space-5);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.header h1,
+.header p,
+.eyebrow,
+.empty h1,
+.empty p {
+  margin: 0;
+}
+
+.header h1,
+.empty h1 {
+  margin-top: var(--space-1);
+  font-size: clamp(2rem, 4vw, 3.25rem);
+  line-height: 1;
+  letter-spacing: -0.055em;
+}
+
+.header > p {
+  max-width: 34rem;
+  color: var(--color-text-muted);
+  font-size: 0.875rem;
+  text-align: right;
+}
+
+.eyebrow {
+  color: var(--color-text-subtle);
+  font-size: 0.6875rem;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.empty {
+  display: grid;
+  grid-template-columns: minmax(10rem, 15rem) minmax(0, 28rem);
+  width: min(100%, 48rem);
+  min-height: min(36rem, 70dvh);
+  gap: clamp(var(--space-6), 6vw, var(--space-10));
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
+}
+
+.empty img {
+  width: 100%;
+  height: auto;
+  max-height: 28rem;
+  object-fit: contain;
+}
+
+.empty div > p:not(.eyebrow) {
+  margin-top: var(--space-4);
+  color: var(--color-text-muted);
+}
+
+.empty a {
+  display: inline-flex;
+  min-height: 2.75rem;
+  align-items: center;
+  margin-top: var(--space-5);
+  padding: 0 var(--space-4);
+  color: var(--color-on-accent);
+  font-weight: 800;
+  background: var(--color-accent);
+  border-radius: var(--radius-md);
+}
+
+.skeleton {
+  display: block;
+  background: linear-gradient(
+    90deg,
+    var(--color-surface-strong),
+    var(--color-surface),
+    var(--color-surface-strong)
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.5s linear infinite;
+}
+
+.skeletonEyebrow {
+  width: 6rem;
+  height: 0.75rem;
+  border-radius: var(--radius-pill);
+}
+
+.skeletonTitle {
+  width: 12rem;
+  height: 3rem;
+  margin-top: var(--space-2);
+  border-radius: var(--radius-sm);
+}
+
+.skeletonCopy {
+  width: min(30rem, 45vw);
+  height: 2.5rem;
+  border-radius: var(--radius-sm);
+}
+
+.skeletonContent {
+  display: grid;
+  gap: var(--space-6);
+}
+
+.skeletonMetrics {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: var(--space-3);
+}
+
+.skeletonMetric,
+.skeletonPanel {
+  background: var(--color-surface-muted);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+}
+
+.skeletonMetric {
+  min-height: 11rem;
+}
+
+.skeletonDetails {
+  display: grid;
+  grid-template-columns: minmax(0, 1.45fr) minmax(18rem, 0.8fr);
+  gap: var(--space-4);
+}
+
+.skeletonPanel {
+  min-height: 22rem;
+}
+
+@keyframes shimmer {
+  to {
+    background-position: -200% 0;
+  }
+}
+
+@media (max-width: 47.999rem) {
+  .header {
+    display: grid;
+    gap: var(--space-3);
+    align-items: start;
+  }
+
+  .header > p {
+    text-align: left;
+  }
+
+  .skeletonCopy {
+    width: min(100%, 24rem);
+  }
+
+  .empty {
+    grid-template-columns: 1fr;
+    min-height: auto;
+    text-align: center;
+  }
+
+  .empty img {
+    width: min(11rem, 48vw);
+    margin: 0 auto;
+  }
+}
+
+@media (max-width: 64rem) {
+  .skeletonMetrics {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .skeletonDetails {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 35rem) {
+  .skeletonMetrics {
+    grid-template-columns: 1fr;
+  }
+
+  .skeletonMetric {
+    min-height: 8rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .skeleton {
+    animation: none;
+  }
+}
+
+html[data-motion="reduced"] .skeleton {
+  animation: none;
+}

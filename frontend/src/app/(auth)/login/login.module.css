@@ -9,12 +9,12 @@
   grid-template-rows: auto 1fr;
   gap: clamp(1.5rem, 4vh, 2.5rem);
   padding: clamp(1.25rem, 3vw, 2.5rem);
-  background:
+  /* background:
     radial-gradient(circle at 75% 50%, rgba(35, 52, 67, 0.22), transparent 38%),
-    rgba(7, 12, 18, 0.58);
-  border: 1px solid var(--color-border-strong);
-  border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-lg);
+    rgba(7, 12, 18, 0.58); */
+  /* border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-lg); */
+  /* box-shadow: var(--shadow-lg); */
 }
 
 .brand {
@@ -44,12 +44,12 @@
   padding: clamp(1.5rem, 4vw, 3rem);
   background: linear-gradient(
     145deg,
-    rgba(22, 29, 37, 0.94),
-    rgba(13, 19, 26, 0.96)
+    var(--color-surface-strong),
+    var(--color-background)
   );
   border: 1px solid var(--color-border);
   border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-lg);
+  /* box-shadow: var(--shadow-lg); */
   position: relative;
   grid-column: 2;
 }
@@ -155,7 +155,7 @@
 .mascotImage {
   position: absolute;
   top: 50%;
-  left: 25%;
+  left: 20%;
   width: min(100%, clamp(18rem, 25vw, 24rem));
   height: auto;
   transform: translate(-50%, -43%);

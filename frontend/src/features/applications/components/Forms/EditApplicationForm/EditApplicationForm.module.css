@@ -1,0 +1,67 @@
+.saveBar {
+  position: fixed;
+  z-index: 40;
+  right: 50%;
+  bottom: max(var(--space-5), env(safe-area-inset-bottom));
+  display: flex;
+  width: min(44rem, calc(100vw - 2rem));
+  gap: var(--space-5);
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-3) var(--space-4);
+  background: var(--color-surface-strong);
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+  transform: translateX(50%);
+  pointer-events: none;
+  visibility: hidden;
+  transition:
+    opacity var(--transition-fast),
+    transform var(--transition-fast),
+    visibility 0s linear 120ms;
+}
+
+.savebarVisible {
+  visibility: visible;
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.message {
+  display: grid;
+  gap: var(--space-1);
+}
+
+.message strong,
+.message span {
+  margin: 0;
+}
+
+.message span {
+  color: var(--color-text-muted);
+  font-size: 0.8125rem;
+}
+
+.actions {
+  display: flex;
+  flex: 0 0 auto;
+  gap: var(--space-3);
+}
+
+@media (max-width: 40rem) {
+  .formWithSaveBar {
+    padding-bottom: 11rem;
+  }
+
+  .saveBar {
+    bottom: max(var(--space-3), env(safe-area-inset-bottom));
+    display: grid;
+    gap: var(--space-3);
+  }
+
+  .actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+}

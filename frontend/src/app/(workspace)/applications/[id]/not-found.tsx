@@ -15,7 +15,7 @@ export default function NotFound() {
           </h1>
           <p className={styles.description}>
             <span>Il collegamento che cercavi non è più valido</span>
-            <span> oppure è stata rimosso.</span>
+            <span> oppure è stata rimossa.</span>
           </p>
 
           <div className={styles.actions}>
@@ -32,7 +32,7 @@ export default function NotFound() {
       <div className={styles.robot} aria-hidden="true">
         <Image
           src="/robot-paperwork-search.png"
-          alt="404 mascotte logo"
+          alt=""
           fill
           sizes="(max-width: 48rem) 70vw, 40vw"
           loading="eager"

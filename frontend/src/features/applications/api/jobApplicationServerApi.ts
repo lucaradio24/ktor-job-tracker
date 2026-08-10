@@ -4,10 +4,10 @@ import { auth0 } from "@/lib/auth0";
 import type { JobApplication } from "../model/jobApplication";
 import { fetcher } from "./jobApplicationApi";
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL;
+const API_URL = process.env.API_URL;
 
 async function authenticatedFetcher<T>(path: string): Promise<T> {
-  if (!API_URL) throw new Error("NEXT_PUBLIC_API_URL non configurata");
+  if (!API_URL) throw new Error("API_URL non configurata");
 
   const { token } = await auth0.getAccessToken();
 

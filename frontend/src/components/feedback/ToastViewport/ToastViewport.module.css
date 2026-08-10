@@ -1,0 +1,148 @@
+.viewport {
+  position: fixed;
+  z-index: 100;
+  top: calc(4.5rem + var(--space-4));
+  right: max(var(--space-4), env(safe-area-inset-right));
+  display: grid;
+  width: min(24rem, calc(100vw - 2rem));
+  pointer-events: none;
+}
+
+.toast {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: var(--space-3);
+  align-items: center;
+  padding: var(--space-3);
+  overflow: hidden;
+  color: var(--color-text);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-md);
+  /* box-shadow: var(--shadow-lg); */
+  pointer-events: auto;
+  animation: toast-enter var(--transition-normal) both;
+}
+
+.copy {
+  display: grid;
+  gap: var(--space-1);
+  min-width: 0;
+  padding-left: var(--space-1);
+}
+
+.copy strong {
+  font-size: 0.875rem;
+  line-height: 1.35;
+}
+
+.copy span {
+  color: var(--color-text-muted);
+  font-size: 0.8125rem;
+  line-height: 1.4;
+  overflow-wrap: anywhere;
+}
+
+.actions {
+  display: flex;
+  gap: var(--space-1);
+  align-items: center;
+}
+
+.actionButton,
+.closeButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 2.75rem;
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+  transition:
+    color var(--transition-fast),
+    background-color var(--transition-fast);
+}
+
+.actionButton {
+  gap: var(--space-2);
+  padding-inline: var(--space-2);
+  color: var(--color-text);
+  font-size: 0.8125rem;
+  font-weight: 750;
+}
+
+.closeButton {
+  width: 2.75rem;
+  padding: 0;
+  color: var(--color-text-muted);
+}
+
+.progress {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  height: 0.1875rem;
+  background: var(--color-success);
+  transform-origin: left;
+  animation: toast-progress var(--toast-duration) linear forwards;
+}
+
+.toast:hover .progress,
+.toast:focus-within .progress {
+  animation-play-state: paused;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .actionButton:hover {
+    background: var(--color-selected);
+  }
+
+  .closeButton:hover {
+    color: var(--color-text);
+    background: var(--color-surface-strong);
+  }
+}
+
+@keyframes toast-progress {
+  from {
+    transform: scaleX(1);
+  }
+
+  to {
+    transform: scaleX(0);
+  }
+}
+
+@keyframes toast-enter {
+  from {
+    opacity: 0;
+    transform: translateY(-0.5rem);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .toast {
+    animation: none;
+  }
+
+  .progress {
+    opacity: 0;
+    animation-duration: var(--toast-duration) !important;
+  }
+}
+
+html[data-motion="reduced"] .toast {
+  animation: none;
+}
+
+html[data-motion="reduced"] .progress {
+  opacity: 0;
+  animation-duration: var(--toast-duration) !important;
+}

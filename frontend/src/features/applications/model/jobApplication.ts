@@ -5,6 +5,11 @@ export type ApplicationStatus =
   | "WITHDRAWN"
   | "OFFER";
 
+export interface StatusTransition {
+  status: ApplicationStatus;
+  changedAt: string;
+}
+
 export interface JobApplication {
   id: string;
   company: string;
@@ -14,4 +19,5 @@ export interface JobApplication {
   description?: string | null;
   link?: string | null;
   city?: string | null;
+  statusHistory: StatusTransition[];
 }

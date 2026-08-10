@@ -1,0 +1,11 @@
+{
+  "prompt": "See jobtracker-flow-02-focus-first.prompt.txt; the exact prompt is also embedded in the PNG metadata.",
+  "promptFile": ".impeccable/mocks/jobtracker-flow-02-focus-first.prompt.txt",
+  "approved": true,
+  "approvedAt": "2026-08-05",
+  "selection": "Hybrid: Focus-First topbar, Pipeline Panorama board spacing, Operational Compact status menu.",
+  "carryForward": [
+    ".impeccable/mocks/jobtracker-flow-01-pipeline-panorama.png",
+    ".impeccable/mocks/jobtracker-flow-03-operational-compact.png"
+  ]
+}

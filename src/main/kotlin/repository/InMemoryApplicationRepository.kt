@@ -3,20 +3,10 @@ package com.example.repository
 import com.example.model.ApplicationStatus
 import com.example.model.JobApplication
 import com.example.model.JobApplicationChanges
-import java.time.LocalDateTime
+import com.example.model.StatusTransition
 
 class InMemoryApplicationRepository (
-    private val applications: MutableList<JobApplication> = mutableListOf(
-        JobApplication(
-            ownerId = "demo",
-            id = "1",
-            company = "JetBrains",
-            status = ApplicationStatus.APPLIED,
-            title = "Front end developer",
-            appliedAt = LocalDateTime.now().toString()
-
-        )
-    )
+    private val applications: MutableList<JobApplication> = mutableListOf()
 ) : ApplicationRepository {
 
 
@@ -39,11 +29,17 @@ class InMemoryApplicationRepository (
     override suspend fun update(
         id: String,
         ownerId: String,
-        jobApplication: JobApplication
+        jobApplication: JobApplication,
+        statusTransition: StatusTransition,
     ): JobApplication? {
         val index = applications.indexOfFirst { it.id == id && it.ownerId == ownerId}
         if (index == -1) return null
-        val updatedApplication = jobApplication.copy(id = id, ownerId = ownerId)
+        val current = applications[index]
+        val updatedApplication = jobApplication.copy(
+            id = id,
+            ownerId = ownerId,
+            statusHistory = current.statusHistory.appendIfChanged(current.status, statusTransition),
+        )
         applications[index] = updatedApplication
         return updatedApplication
     }
@@ -56,7 +52,12 @@ class InMemoryApplicationRepository (
         return applicationToRemove
     }
 
-    override suspend fun patch(id: String, ownerId: String, changes: JobApplicationChanges): JobApplication? {
+    override suspend fun patch(
+        id: String,
+        ownerId: String,
+        changes: JobApplicationChanges,
+        statusTransition: StatusTransition?,
+    ): JobApplication? {
         val index = applications.indexOfFirst { it.id == id && it.ownerId == ownerId}
 
         if (index == -1) return null
@@ -70,7 +71,8 @@ class InMemoryApplicationRepository (
             appliedAt = changes.appliedAt ?: current.appliedAt,
             description = changes.description ?: current.description,
             link = changes.link ?: current.link,
-            city = changes.city ?: current.city
+            city = changes.city ?: current.city,
+            statusHistory = current.statusHistory.appendIfChanged(current.status, statusTransition),
         )
 
         applications[index] = updated
@@ -79,3 +81,9 @@ class InMemoryApplicationRepository (
     }
 
 }
+
+private fun List<StatusTransition>.appendIfChanged(
+    currentStatus: ApplicationStatus,
+    transition: StatusTransition?,
+): List<StatusTransition> =
+    if (transition != null && transition.status != currentStatus) this + transition else this

@@ -1,28 +1,42 @@
 "use client";
 
-import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useState, type FormEvent } from "react";
+import { useState, useRef, type FormEvent } from "react";
 import {
   ApiError,
   deleteApplication,
-  updateApplication,
+  patchApplication,
   type FieldError,
-  type UpdateJobApplication,
+  type PatchJobApplication,
 } from "../../../api/jobApplicationApi";
-import type {
-  ApplicationStatus,
-  JobApplication,
-} from "../../../model/jobApplication";
+import type { JobApplication } from "../../../model/jobApplication";
 import ConfirmDialog from "../../Dialogs/ConfirmDialog/ConfirmDialog";
 import { Trash2 } from "lucide-react";
 import styles from "../NewApplicationForm/NewApplicationForm.module.css";
+import editStyles from "./EditApplicationForm.module.css";
+import { useToast } from "@/components/feedback/ToastViewport/ToastProvider";
+
+function readForm(form: HTMLFormElement): PatchJobApplication {
+  const data = new FormData(form);
+  const value = (name: string) => String(data.get(name) ?? "").trim();
+
+  return {
+    company: value("company"),
+    title: value("title"),
+    appliedAt: value("appliedAt"),
+    city: value("city") || null,
+    link: value("link") || null,
+    description: value("description") || null,
+  };
+}
 
 export default function EditApplicationForm({
   application,
 }: {
   application: JobApplication;
 }) {
+  const { showToast } = useToast();
+
   const router = useRouter();
   const [isSaving, setIsSaving] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
@@ -30,6 +44,27 @@ export default function EditApplicationForm({
   const [fieldErrors, setFieldErrors] = useState<FieldError[]>([]);
   const isBusy = isSaving || isDeleting;
   const [isConfirmDialogOpen, setIsConfirmDialogOpen] = useState(false);
+
+  const initialValues = useRef(
+    JSON.stringify({
+      company: application.company,
+      title: application.title,
+      appliedAt: application.appliedAt,
+      city: application.city ?? null,
+      link: application.link ?? null,
+      description: application.description ?? null,
+    } satisfies PatchJobApplication),
+  );
+
+  const [isDirty, setIsDirty] = useState(false);
+  const formRef = useRef<HTMLFormElement>(null);
+
+  function handleReset() {
+    formRef.current?.reset();
+    setIsDirty(false);
+    setSubmitError(null);
+    setFieldErrors([]);
+  }
 
   const getFieldError = (field: string) =>
     fieldErrors.find((error) => error.field === field)?.message;
@@ -42,30 +77,36 @@ export default function EditApplicationForm({
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
-    const data = new FormData(event.currentTarget);
-    const value = (name: string) => String(data.get(name) ?? "").trim();
-
-    const payload: UpdateJobApplication = {
-      company: value("company"),
-      title: value("title"),
-      status: value("status") as ApplicationStatus,
-      appliedAt: value("appliedAt"),
-      city: value("city") || null,
-      link: value("link") || null,
-      description: value("description") || null,
-    };
+    const form = event.currentTarget;
+    const payload: PatchJobApplication = readForm(form);
 
     try {
       setIsSaving(true);
       setSubmitError(null);
       setFieldErrors([]);
-      await updateApplication(application.id, payload);
-      router.push("/");
+      const updatedApplication = await patchApplication(
+        application.id,
+        payload,
+      );
+      initialValues.current = JSON.stringify(payload);
+      setIsDirty(false);
+      router.refresh();
+      showToast({
+        title: "Modifiche salvate",
+        description: `${updatedApplication.company} - ${updatedApplication.title}`,
+        durationMs: 2_000,
+      });
     } catch (requestError) {
       if (requestError instanceof ApiError) {
-        const fieldErrors = requestError.fieldErrors ?? [];
-        setFieldErrors(fieldErrors);
-        setSubmitError(fieldErrors.length > 0 ? null : requestError.message);
+        const errors = requestError.fieldErrors ?? [];
+        setFieldErrors(errors);
+        setSubmitError(errors.length > 0 ? null : requestError.message);
+        requestAnimationFrame(() => {
+          const field = errors[0]?.field;
+          if (field) {
+            (form.elements.namedItem(field) as HTMLElement | null)?.focus();
+          }
+        });
         return;
       }
 
@@ -77,6 +118,12 @@ export default function EditApplicationForm({
     } finally {
       setIsSaving(false);
     }
+  }
+
+  function handleChange(event: FormEvent<HTMLFormElement>) {
+    setIsDirty(
+      JSON.stringify(readForm(event.currentTarget)) !== initialValues.current,
+    );
   }
 
   async function handleDeleteApplication() {
@@ -100,7 +147,15 @@ export default function EditApplicationForm({
 
   return (
     <>
-      <form className={styles.form} onSubmit={handleSubmit} aria-busy={isBusy}>
+      <form
+        ref={formRef}
+        className={`${styles.form} ${
+          isDirty ? editStyles.formWithSaveBar : ""
+        }`}
+        onSubmit={handleSubmit}
+        onChange={handleChange}
+        aria-busy={isBusy}
+      >
         <label className={styles.field} htmlFor="company">
           <span className={styles.fieldHeading}>
             <span>Azienda</span>
@@ -141,17 +196,6 @@ export default function EditApplicationForm({
             aria-invalid={Boolean(titleError)}
             aria-describedby={titleError ? "title-error" : undefined}
           />
-        </label>
-
-        <label className={styles.field} htmlFor="status">
-          <span>Stato</span>
-          <select id="status" name="status" defaultValue={application.status}>
-            <option value="APPLIED">Candidatura inviata</option>
-            <option value="INTERVIEW">Colloquio</option>
-            <option value="OFFER">Offerta ricevuta</option>
-            <option value="REJECTED">Non selezionata</option>
-            <option value="WITHDRAWN">Ritirata</option>
-          </select>
         </label>
 
         <label className={styles.field} htmlFor="appliedAt">
@@ -220,19 +264,35 @@ export default function EditApplicationForm({
           </p>
         )}
 
-        <footer className={styles.actions}>
-          <Link className={styles.secondaryButton} href="/">
-            Annulla
-          </Link>
+        <footer
+          className={`${editStyles.saveBar} ${isDirty ? editStyles.savebarVisible : ""}`}
+          aria-hidden={!isDirty}
+        >
+          <div className={editStyles.message}>
+            <strong>Hai modifiche non salvate</strong>
+            <span>Salva oppure ripristina i valori precedenti.</span>
+          </div>
 
-          <button
-            className={styles.primaryButton}
-            type="submit"
-            disabled={isBusy}
-          >
-            {isSaving ? "Salvataggio…" : "Salva modifiche"}
-          </button>
+          <div className={editStyles.actions}>
+            <button
+              className={styles.secondaryButton}
+              type="button"
+              onClick={handleReset}
+              disabled={!isDirty || isBusy}
+            >
+              Annulla modifiche
+            </button>
+
+            <button
+              className={styles.primaryButton}
+              type="submit"
+              disabled={!isDirty || isBusy}
+            >
+              {isSaving ? "Salvataggio…" : "Salva modifiche"}
+            </button>
+          </div>
         </footer>
+
         <section
           className={styles.deleteActions}
           aria-labelledby="delete-application-title"

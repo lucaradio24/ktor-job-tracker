@@ -1,34 +1,66 @@
-# ktor-jobs-tracker
+# JobTracker
 
-This project was created using the [Ktor Project Generator](https://start.ktor.io).
+JobTracker organizza candidature, colloqui, offerte e uscite. Il repository
+contiene un'API Ktor con MongoDB e un frontend Next.js autenticato con Auth0.
 
-Here are some useful links to get you started:
- * [Ktor Documentation](https://ktor.io/docs/home.html)
- * [Ktor GitHub page](https://github.com/ktorio/ktor)
- * [Ktor Slack chat](https://app.slack.com/client/T09229ZC6/C0A974TJ9). [Request an invite](https://surveys.jetbrains.com/s3/kotlin-slack-sign-up).
+## Architettura
 
+Il browser parla soltanto con Next.js. Le route server e il proxy same-origin
+`/api/applications` ottengono l'access token Auth0 e chiamano Ktor; Ktor ricava
+`ownerId` dal claim `sub` e filtra ogni query MongoDB per utente.
 
-## Features
-Here's a list of features included in this project:
-
-| Name | Description |
-|------|-------------|
-| [Content Negotiation](https://start.ktor.io/p/io.ktor/server-content-negotiation) | Provides automatic content conversion according to Content-Type and Accept headers |
-| [kotlinx.serialization](https://start.ktor.io/p/io.ktor/server-kotlinx-serialization) | Handles JSON serialization using kotlinx.serialization library |
-
-
-## Building & Running
-To build or run the project, use one of the following tasks:
-
-
-| Task | Description |
-|------|-------------|
-| `./gradlew test`    | Run the tests     |
-| `./gradlew build`   | Build the project |
-| `./gradlew run`     | Run the server    |
-
-If the server starts successfully, you'll see the following output:
+```text
+Browser → Next.js/Auth0 → Ktor API → MongoDB
 ```
-2024-12-04 14:32:45.584 [main] INFO  Application - Application started in 0.303 seconds.
-2024-12-04 14:32:45.682 [main] INFO  Application - Responding at http://0.0.0.0:8080
+
+Lo storico degli stati è scritto dal server. Il frontend non può inviare o
+riscrivere `statusHistory`.
+
+## Requisiti
+
+- JDK 21;
+- MongoDB;
+- tenant Auth0 con una API e una Regular Web Application;
+- Node.js 24 e pnpm per il frontend.
+
+## Configurazione backend
+
+Copia `.env.example` in `.env` e sostituisci i placeholder. `.env` è ignorato
+da Git e non deve essere versionato.
+
+| Variabile | Obbligatoria | Uso |
+| --- | --- | --- |
+| `MONGODB_URI` | sì | Connessione MongoDB |
+| `MONGODB_DATABASE` | no | Database, default `job_tracker` |
+| `AUTH0_ISSUER` | sì | Issuer JWT completo di `https://` |
+| `AUTH0_AUDIENCE` | sì | Audience dell'API Auth0 |
+| `CORS_ALLOWED_ORIGINS` | no | Origini esatte separate da virgola; default locale |
+
+In produzione limita `CORS_ALLOWED_ORIGINS` ai soli frontend previsti. Il flusso
+normale usa il proxy Next e non espone l'URL Ktor al browser.
+
+## Avvio locale
+
+Avvia MongoDB, quindi dalla root:
+
+```powershell
+.\gradlew.bat run
 ```
+
+L'API risponde su `http://localhost:8080`; `GET /health` verifica il processo e
+`GET /mongo-health` verifica anche MongoDB. Per il frontend segui
+[frontend/README.md](frontend/README.md).
+
+## Verifica
+
+```powershell
+.\gradlew.bat test
+.\gradlew.bat build
+Set-Location frontend
+node --test src/features/applications/model/applicationStats.test.ts src/features/preferences/preferences.test.ts
+pnpm lint
+pnpm build
+```
+
+Il deploy non è incluso: provider, domini, callback Auth0 e segreti vanno
+configurati nell'ambiente scelto senza commetterli nel repository.

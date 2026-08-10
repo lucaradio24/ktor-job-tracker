@@ -1,0 +1,100 @@
+.page {
+  display: grid;
+  width: min(100%, 48rem);
+  gap: var(--space-6);
+  margin: 0 auto;
+}
+
+.header {
+  padding: var(--space-4) 0 var(--space-5);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.header p,
+.header h1,
+.header span {
+  margin: 0;
+}
+
+.header p {
+  color: var(--color-text-subtle);
+  font-size: 0.6875rem;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.header h1 {
+  margin-top: var(--space-1);
+  font-size: clamp(2rem, 4vw, 3.25rem);
+  line-height: 1;
+  letter-spacing: -0.055em;
+}
+
+.header span {
+  display: block;
+  max-width: 36rem;
+  margin-top: var(--space-4);
+  color: var(--color-text-muted);
+  font-size: 0.875rem;
+}
+
+.skeleton {
+  display: block;
+  background: linear-gradient(
+    90deg,
+    var(--color-surface-strong),
+    var(--color-surface),
+    var(--color-surface-strong)
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.5s linear infinite;
+}
+
+.skeletonEyebrow {
+  width: 8rem;
+  height: 0.75rem;
+  border-radius: var(--radius-pill);
+}
+
+.skeletonTitle {
+  width: 13rem;
+  height: 3rem;
+  margin-top: var(--space-2);
+  border-radius: var(--radius-sm);
+}
+
+.skeletonCopy {
+  width: min(100%, 34rem);
+  height: 1.25rem;
+  margin-top: var(--space-4);
+  border-radius: var(--radius-sm);
+}
+
+.skeletonForm {
+  display: grid;
+  gap: var(--space-4);
+}
+
+.skeletonGroup {
+  min-height: 9rem;
+  background: var(--color-surface-muted);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+}
+
+@keyframes shimmer {
+  to {
+    background-position: -200% 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .skeleton {
+    animation: none;
+  }
+}
+
+html[data-motion="reduced"] .skeleton {
+  animation: none;
+}

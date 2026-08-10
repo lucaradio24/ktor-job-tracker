@@ -11,12 +11,14 @@ export type ColumnTone = "amber" | "violet" | "green" | "rose";
 
 interface ApplicationColumnProps {
   id: string;
-  title: string;
+  labelledBy: string;
   applications: JobApplication[];
   tone: ColumnTone;
   emptyIcon: LucideIcon;
   emptyMessage: string;
   onStatusChange: (id: string, status: ApplicationStatus) => void;
+  onSelect: (id: string) => void;
+  selectedApplicationId: string | null;
   status: ApplicationStatus;
 }
 
@@ -29,37 +31,42 @@ const toneClasses: Record<ColumnTone, string> = {
 
 export default function ApplicationColumn({
   id,
-  title,
+  labelledBy,
   applications,
   tone,
   emptyIcon: EmptyIcon,
   emptyMessage,
   onStatusChange,
+  onSelect,
+  selectedApplicationId,
   status,
 }: ApplicationColumnProps) {
   const { ref, isDropTarget } = useDroppable({ id: status });
+
+  function sortApplicationsFromTheMostRecentToTheOldest(
+    a: JobApplication,
+    b: JobApplication,
+  ) {
+    return b.appliedAt.localeCompare(a.appliedAt);
+  }
+
+  applications.sort(sortApplicationsFromTheMostRecentToTheOldest);
 
   return (
     <section
       ref={ref}
       className={`${styles.column} ${toneClasses[tone]} ${isDropTarget ? styles.dropTarget : ""}`}
       id={id}
+      aria-labelledby={labelledBy}
     >
-      <header className={styles.header}>
-        <div className={styles.titleGroup}>
-          <h2>{title}</h2>
-          <span className={styles.count} aria-label={`${applications.length}`}>
-            {applications.length}
-          </span>
-        </div>
-      </header>
-
-      <div className={styles.content}>
+      <div className={styles.content} role="list">
         {applications.map((application) => (
           <ApplicationCard
             onStatusChange={onStatusChange}
+            onSelect={onSelect}
             application={application}
             key={application.id}
+            selected={application.id === selectedApplicationId}
           />
         ))}
 

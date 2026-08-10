@@ -4,6 +4,6 @@ export const auth0 = new Auth0Client({
   enableAccessTokenEndpoint: false,
   authorizationParameters: {
     audience: process.env.AUTH0_AUDIENCE,
-    scope: "openid profile email",
+    scope: "openid profile email offline_access",
   },
 });
