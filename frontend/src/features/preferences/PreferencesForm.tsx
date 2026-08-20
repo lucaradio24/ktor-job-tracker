@@ -151,6 +151,7 @@ export default function PreferencesForm() {
       <p className={styles.saved} aria-live="polite">
         {saved ? "Salvato" : "Le modifiche vengono salvate automaticamente"}
       </p>
+      <p>Versione 0.1.0</p>
     </form>
   );
 }
