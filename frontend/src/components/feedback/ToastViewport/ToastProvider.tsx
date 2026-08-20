@@ -13,13 +13,19 @@ type ToastContextValue = {
 
 const ToastContext = createContext<ToastContextValue | null>(null);
 
+function createToastId() {
+  return Array.from(crypto.getRandomValues(new Uint8Array(16)), (byte) =>
+    byte.toString(16).padStart(2, "0"),
+  ).join("");
+}
+
 export function ToastProvider({ children }: { children: ReactNode }) {
   const [toast, setToast] = useState<ToastMessage | null>(null);
 
   function showToast(newToast: NewToast) {
     setToast({
       ...newToast,
-      id: crypto.randomUUID(),
+      id: createToastId(),
       durationMs: newToast.durationMs ?? 6_000,
     });
   }
