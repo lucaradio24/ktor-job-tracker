@@ -9,15 +9,15 @@ movimento. Il layout segue la direzione Graphite + Porcelain.
 Richiede Node.js 24 e pnpm. Copia `.env.example` in `.env.local`, poi sostituisci
 i placeholder senza versionare il file.
 
-| Variabile | Uso |
-| --- | --- |
-| `API_URL` | URL Ktor server-only, per esempio `http://localhost:8080` |
-| `AUTH0_DOMAIN` | Dominio tenant Auth0 |
-| `AUTH0_CLIENT_ID` | Client ID della Regular Web Application |
-| `AUTH0_CLIENT_SECRET` | Client secret Auth0 |
-| `AUTH0_SECRET` | Segreto esadecimale per cookie/sessione |
-| `APP_BASE_URL` | URL pubblico Next, in locale `http://localhost:3000` |
-| `AUTH0_AUDIENCE` | Audience della stessa API configurata in Ktor |
+| Variabile             | Uso                                                       |
+| --------------------- | --------------------------------------------------------- |
+| `API_URL`             | URL Ktor server-only, per esempio `http://localhost:8080` |
+| `AUTH0_DOMAIN`        | Dominio tenant Auth0                                      |
+| `AUTH0_CLIENT_ID`     | Client ID della Regular Web Application                   |
+| `AUTH0_CLIENT_SECRET` | Client secret Auth0                                       |
+| `AUTH0_SECRET`        | Segreto esadecimale per cookie/sessione                   |
+| `APP_BASE_URL`        | URL pubblico Next, in locale `http://localhost:3000`      |
+| `AUTH0_AUDIENCE`      | Audience della stessa API configurata in Ktor             |
 
 `API_URL` non è pubblica: browser e componenti client usano il proxy
 same-origin `/api/applications`. Per lo sviluppo configura in Auth0 almeno la
@@ -60,3 +60,5 @@ pnpm build
 
 La build non contiene credenziali o dati demo. Configura segreti e URL nel
 provider scelto al momento del deploy.
+
+test
