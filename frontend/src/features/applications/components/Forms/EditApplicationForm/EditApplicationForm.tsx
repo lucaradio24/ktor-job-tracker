@@ -11,7 +11,7 @@ import {
 } from "../../../api/jobApplicationApi";
 import type { JobApplication } from "../../../model/jobApplication";
 import ConfirmDialog from "../../Dialogs/ConfirmDialog/ConfirmDialog";
-import { Trash2 } from "lucide-react";
+import { Calendar, Trash2 } from "lucide-react";
 import styles from "../NewApplicationForm/NewApplicationForm.module.css";
 import editStyles from "./EditApplicationForm.module.css";
 import { useToast } from "@/components/feedback/ToastViewport/ToastProvider";
@@ -44,6 +44,9 @@ export default function EditApplicationForm({
   const [fieldErrors, setFieldErrors] = useState<FieldError[]>([]);
   const isBusy = isSaving || isDeleting;
   const [isConfirmDialogOpen, setIsConfirmDialogOpen] = useState(false);
+  const isMobile =
+    typeof window !== "undefined" &&
+    window.matchMedia("(max-width: 47.999rem)").matches;
 
   const initialValues = useRef(
     JSON.stringify({
@@ -211,15 +214,25 @@ export default function EditApplicationForm({
               </span>
             )}
           </span>
-          <input
-            id="appliedAt"
-            type="date"
-            name="appliedAt"
-            defaultValue={application.appliedAt}
-            required
-            aria-invalid={Boolean(appliedAtError)}
-            aria-describedby={appliedAtError ? "appliedAt-error" : undefined}
-          />
+          <div className={styles.dateField}>
+            <input
+              id="appliedAt"
+              type="date"
+              name="appliedAt"
+              className={editStyles.appliedAt}
+              defaultValue={application.appliedAt}
+              required
+              aria-invalid={Boolean(appliedAtError)}
+              aria-describedby={appliedAtError ? "appliedAt-error" : undefined}
+            />
+            {isMobile && (
+              <Calendar
+                className={styles.dateIcon}
+                aria-hidden="true"
+                size={18}
+              />
+            )}
+          </div>
         </label>
 
         <label className={styles.field} htmlFor="city">

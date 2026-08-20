@@ -51,6 +51,32 @@
   box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-focus) 16%, transparent);
 }
 
+.appliedAt {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+  padding-right: 2.75rem;
+  appearance: none;
+  -webkit-appearance: none;
+}
+
+.dateField {
+  position: relative;
+  min-width: 0;
+}
+
+.dateIcon {
+  position: absolute;
+  top: 50%;
+  right: var(--space-3);
+  color: var(--color-text-muted);
+  pointer-events: none;
+  transform: translateY(-50%);
+}
+
 .field textarea {
   min-height: 7.5rem;
   padding-block: var(--space-3);

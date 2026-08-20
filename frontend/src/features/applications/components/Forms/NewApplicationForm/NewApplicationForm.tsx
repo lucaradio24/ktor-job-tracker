@@ -1,6 +1,6 @@
 "use client";
 
-import { Check, LoaderCircle } from "lucide-react";
+import { Calendar, Check, LoaderCircle } from "lucide-react";
 import { useState, type FormEvent } from "react";
 import {
   ApiError,
@@ -63,6 +63,9 @@ export default function NewApplicationForm({
   const [isSaving, setIsSaving] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
   const [fieldErrors, setFieldErrors] = useState<FieldError[]>([]);
+  const isMobile =
+    typeof window !== "undefined" &&
+    window.matchMedia("(max-width: 47.999rem)").matches;
 
   const getFieldError = (field: string) =>
     fieldErrors.find((error) => error.field === field)?.message;
@@ -169,25 +172,43 @@ export default function NewApplicationForm({
         <span className={styles.fieldHeading}>
           <span>Data candidatura</span>
           {appliedAtError && (
-            <span id="appliedAt-error" className={styles.fieldError} role="alert">
+            <span
+              id="appliedAt-error"
+              className={styles.fieldError}
+              role="alert"
+            >
               {appliedAtError}
             </span>
           )}
         </span>
-        <input
-          type="date"
-          name="appliedAt"
-          id="appliedAt"
-          defaultValue={formInitialValues.appliedAt}
-          required
-          aria-invalid={Boolean(appliedAtError)}
-          aria-describedby={appliedAtError ? "appliedAt-error" : undefined}
-        />
+        <div className={styles.dateField}>
+          <input
+            type="date"
+            name="appliedAt"
+            id="appliedAt"
+            className={styles.appliedAt}
+            defaultValue={formInitialValues.appliedAt}
+            required
+            aria-invalid={Boolean(appliedAtError)}
+            aria-describedby={appliedAtError ? "appliedAt-error" : undefined}
+          />
+          {isMobile && (
+            <Calendar
+              className={styles.dateIcon}
+              aria-hidden="true"
+              size={18}
+            />
+          )}
+        </div>
       </label>
 
       <label className={styles.field} htmlFor="status">
         <span>Stato iniziale</span>
-        <select name="status" id="status" defaultValue={formInitialValues.status}>
+        <select
+          name="status"
+          id="status"
+          defaultValue={formInitialValues.status}
+        >
           <option value="APPLIED">Candidatura inviata</option>
           <option value="INTERVIEW">Colloquio</option>
           <option value="OFFER">Offerta ricevuta</option>
@@ -232,7 +253,10 @@ export default function NewApplicationForm({
           />
         </label>
 
-        <label className={`${styles.field} ${styles.wideField}`} htmlFor="description">
+        <label
+          className={`${styles.field} ${styles.wideField}`}
+          htmlFor="description"
+        >
           <span>Note</span>
           <textarea
             name="description"
@@ -258,9 +282,17 @@ export default function NewApplicationForm({
         >
           Annulla
         </button>
-        <button className={styles.primaryButton} type="submit" disabled={isSaving}>
+        <button
+          className={styles.primaryButton}
+          type="submit"
+          disabled={isSaving}
+        >
           {isSaving ? (
-            <LoaderCircle className={styles.spinner} aria-hidden="true" size={18} />
+            <LoaderCircle
+              className={styles.spinner}
+              aria-hidden="true"
+              size={18}
+            />
           ) : (
             <Check aria-hidden="true" size={18} strokeWidth={2.2} />
           )}
