@@ -49,7 +49,12 @@ async function proxyRequest(request: NextRequest, context: Context) {
       status: response.status,
       headers: responseHeaders,
     });
-  } catch {
+  } catch (error) {
+    console.error("[applications proxy] upstream request failed", {
+      method: request.method,
+      target,
+      error,
+    });
     return apiError(502, "NETWORK_ERROR", "Impossibile connettersi al server");
   }
 }

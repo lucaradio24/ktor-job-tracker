@@ -54,6 +54,17 @@ const statuses: Record<ApplicationStatus, StatusDetails> = {
   WITHDRAWN: { icon: CircleMinus, label: "Ritirata", className: styles.slate },
 };
 
+const statusActions: Array<{
+  status: ApplicationStatus;
+  label: string;
+}> = [
+  { status: "WITHDRAWN", label: "Archivia come Ritirata" },
+  { status: "REJECTED", label: "Segna come Rifiutata" },
+  { status: "OFFER", label: "Sposta in Offerte" },
+  { status: "INTERVIEW", label: "Sposta in Colloqui" },
+  { status: "APPLIED", label: "Sposta in Candidature" },
+];
+
 function formatApplicationDate(value: string) {
   const parsedDate = new Date(`${value}T00:00:00`);
 
