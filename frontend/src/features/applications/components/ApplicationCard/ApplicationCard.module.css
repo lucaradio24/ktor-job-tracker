@@ -130,12 +130,15 @@
 }
 
 .linkIcon,
-.statusMenu summary {
+.statusMenuTrigger {
   display: grid;
   width: 2.75rem;
   height: 2.75rem;
+  padding: 0;
   place-items: center;
   color: var(--color-text-muted);
+  background: transparent;
+  border: 0;
   border-radius: var(--radius-sm);
   cursor: pointer;
   transition:
@@ -151,19 +154,11 @@
   position: relative;
 }
 
-.statusMenu summary {
-  list-style: none;
-}
-
-.statusMenu summary::-webkit-details-marker {
-  display: none;
-}
-
-.statusMenu[open] {
+.statusMenuOpen {
   z-index: 20;
 }
 
-.statusMenu[open] summary {
+.statusMenuOpen .statusMenuTrigger {
   color: var(--color-status-amber);
   background: var(--color-status-amber-soft);
 }
@@ -203,22 +198,26 @@
   bottom: calc(100% + var(--space-2));
 }
 
-.statusMenu[open] .statusOptions {
-  visibility: hidden;
-}
-
-.statusMenu[open].positioned .statusOptions {
-  visibility: visible;
+.desktopStatusOptions {
+  display: grid;
 }
 
 .statusOptions .withdrawAction {
   color: var(--color-status-rose);
 }
 
-.statusMenu summary:focus-visible,
+.statusMenuTrigger:focus-visible,
 .statusOptions button:focus-visible {
   outline: 2px solid var(--color-focus);
   outline-offset: 2px;
+}
+
+.mobileStatusOverlay {
+  display: none;
+}
+
+.mobileStatusSheet {
+  pointer-events: auto;
 }
 
 .statusOptions .deleteAction {
@@ -235,7 +234,7 @@
   }
 
   .linkIcon:hover,
-  .statusMenu summary:hover,
+  .statusMenuTrigger:hover,
   .statusOptions button:hover {
     color: var(--color-text);
     background: var(--color-surface-muted);
@@ -253,39 +252,46 @@
 }
 
 @media (max-width: 47.999rem) {
-  .statusMenu[open] {
-    z-index: 60;
+  .desktopStatusOptions {
+    display: none;
   }
 
-  .statusMenu[open]::before {
+  .mobileStatusOverlay {
     position: fixed;
-    z-index: 59;
+    z-index: 1000;
     inset: 0;
-    content: "";
-    pointer-events: none;
+    display: flex;
+    align-items: flex-end;
+    pointer-events: auto;
     background: var(--color-overlay);
   }
 
-  .statusOptions,
-  .statusMenu.openUpwards .statusOptions {
-    position: fixed;
-    z-index: 60;
-    top: auto;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    width: auto;
-    min-width: 0;
-    max-width: none;
+  .mobileStatusSheet {
+    position: relative;
+    z-index: 1;
+    width: 100%;
     padding: var(--space-3) var(--space-4)
       max(var(--space-4), env(safe-area-inset-bottom));
+    background: var(--color-surface-strong);
+    border: 1px solid var(--color-border-strong);
     border-right: 0;
     border-bottom: 0;
     border-left: 0;
     border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+    box-shadow: var(--shadow-hover);
   }
 
-  .statusOptions button {
+  .mobileStatusSheet .statusOptions {
+    position: static;
+    width: auto;
+    min-width: 0;
+    max-width: none;
+    padding: 0;
+    border: 0;
+    box-shadow: none;
+  }
+
+  .mobileStatusSheet .statusOptions button {
     min-height: 3rem;
     font-size: 0.875rem;
   }
