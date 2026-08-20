@@ -49,6 +49,18 @@
   gap: var(--space-3);
 }
 
+.appliedAt {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+  padding-right: 2.75rem;
+  appearance: none;
+  -webkit-appearance: none;
+}
+
 @media (max-width: 40rem) {
   .formWithSaveBar {
     padding-bottom: 11rem;
