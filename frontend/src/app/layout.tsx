@@ -11,7 +11,8 @@ const manrope = Manrope({
   variable: "--font-manrope",
 });
 
-const title = "Job Tracker | Le tue candidature";
+const defaultTitle = "Job Tracker";
+
 const description =
   "Organizza candidature, colloqui e offerte in un'unica dashboard.";
 
@@ -35,10 +36,16 @@ export async function generateMetadata(): Promise<Metadata> {
 
   return {
     metadataBase,
-    title,
+    title: {
+      default: defaultTitle,
+      template: `%s | ${defaultTitle}`,
+    },
     description,
     openGraph: {
-      title,
+      title: {
+        default: defaultTitle,
+        template: `${defaultTitle} | %s`,
+      },
       description,
       type: "website",
       url: metadataBase,
@@ -46,7 +53,10 @@ export async function generateMetadata(): Promise<Metadata> {
     },
     twitter: {
       card: "summary_large_image",
-      title,
+      title: {
+        default: defaultTitle,
+        template: `%s |${defaultTitle}`,
+      },
       description,
       images: [socialImage],
     },
@@ -59,11 +69,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html
-      lang="it"
-      className={manrope.variable}
-      suppressHydrationWarning
-    >
+    <html lang="it" className={manrope.variable} suppressHydrationWarning>
       <head>
         <script
           id="jobtracker-preferences"

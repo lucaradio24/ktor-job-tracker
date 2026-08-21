@@ -1,5 +1,10 @@
 import PreferencesForm from "@/features/preferences/PreferencesForm";
 import styles from "./settings.module.css";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Impostazioni",
+};
 
 export default function SettingsPage() {
   return (
