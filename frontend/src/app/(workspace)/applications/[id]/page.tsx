@@ -5,6 +5,20 @@ import EditApplicationForm from "@/features/applications/components/Forms/EditAp
 import type { JobApplication } from "@/features/applications/model/jobApplication";
 import { notFound } from "next/navigation";
 import styles from "./page.module.css";
+import type { Metadata } from "next";
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}): Promise<Metadata> {
+  const { id } = await params;
+  const application = await getApplication(id);
+
+  return {
+    title: `${application.company} @ ${application.title}`,
+  };
+}
 
 export default async function EditApplicationPage({
   params,

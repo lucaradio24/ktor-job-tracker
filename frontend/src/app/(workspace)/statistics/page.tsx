@@ -4,6 +4,11 @@ import { getApplications } from "@/features/applications/api/jobApplicationServe
 import ApplicationStats from "@/features/applications/components/ApplicationStats/ApplicationStats";
 import { calculateApplicationStats } from "@/features/applications/model/applicationStats";
 import styles from "./statistics.module.css";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Statistiche",
+};
 
 export default async function StatisticsPage() {
   const applications = await getApplications();
