@@ -45,9 +45,7 @@ export default async function LoginPage() {
                   className={`${style.provider} ${style.googleProvider}`}
                   href="/auth/login?connection=google-oauth2"
                 >
-                  <span className={style.googleMark} aria-hidden="true">
-                    G
-                  </span>
+                  <Image src="/google.svg" alt="" width={24} height={24} />
                   Continua con Google
                 </a>
 
@@ -55,9 +53,7 @@ export default async function LoginPage() {
                   className={`${style.provider} ${style.githubProvider}`}
                   href="/auth/login?connection=github"
                 >
-                  <span className={style.providerMark} aria-hidden="true">
-                    GH
-                  </span>
+                  <Image src="/github.svg" alt="" width={24} height={24} />
                   Continua con GitHub
                 </a>
               </div>
@@ -72,7 +68,7 @@ export default async function LoginPage() {
           <div className={style.mascot} aria-hidden="true">
             <Image
               className={style.mascotImage}
-              src="/robot-login-wav.png"
+              src="/robot-login-wav3.png"
               alt=""
               width={1024}
               height={1536}
