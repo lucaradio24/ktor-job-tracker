@@ -1,5 +1,22 @@
 # JobTracker
 
+
+
+
+
+
+WORK IN PROGRESS
+
+
+
+
+
+
+
+
+
+
+
 JobTracker organizza candidature, colloqui, offerte e uscite. Il repository
 contiene un'API Ktor con MongoDB e un frontend Next.js autenticato con Auth0.
 
