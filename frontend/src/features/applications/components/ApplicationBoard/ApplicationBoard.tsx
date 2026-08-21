@@ -5,7 +5,7 @@ import {
   type LucideIcon,
 } from "lucide-react";
 import { DragDropProvider, PointerSensor } from "@dnd-kit/react";
-import { useState } from "react";
+import { useSearchParams } from "next/navigation";
 import type {
   ApplicationStatus,
   JobApplication,
@@ -15,7 +15,6 @@ import ApplicationColumn, {
 } from "../ApplicationColumn/ApplicationColumn";
 import ApplicationsList from "../ApplicationsList/ApplicationsList";
 import styles from "./ApplicationBoard.module.css";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 interface ApplicationBoardProps {
   applications: JobApplication[];
@@ -87,13 +86,10 @@ export default function ApplicationBoard({
     ? selectedStatus?.toLowerCase()
     : undefined;
 
-  const router = useRouter();
-  const pathName = usePathname();
-
   function handleStatusFilterChange(status: ApplicationStatus) {
     const params = new URLSearchParams(searchParams.toString());
-    params.set("status", status);
-    router.replace(`${pathName}?${params.toString().toLowerCase()}`);
+    params.set("status", status.toLowerCase());
+    window.history.replaceState(null, "", `?${params.toString()}`);
   }
 
   return (
