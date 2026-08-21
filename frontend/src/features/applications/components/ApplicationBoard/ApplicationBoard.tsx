@@ -15,6 +15,7 @@ import ApplicationColumn, {
 } from "../ApplicationColumn/ApplicationColumn";
 import ApplicationsList from "../ApplicationsList/ApplicationsList";
 import styles from "./ApplicationBoard.module.css";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 interface ApplicationBoardProps {
   applications: JobApplication[];
