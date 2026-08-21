@@ -5,7 +5,6 @@ import {
   type LucideIcon,
 } from "lucide-react";
 import { DragDropProvider, PointerSensor } from "@dnd-kit/react";
-import { useSearchParams } from "next/navigation";
 import type {
   ApplicationStatus,
   JobApplication,
@@ -15,7 +14,7 @@ import ApplicationColumn, {
 } from "../ApplicationColumn/ApplicationColumn";
 import ApplicationsList from "../ApplicationsList/ApplicationsList";
 import styles from "./ApplicationBoard.module.css";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 
 interface ApplicationBoardProps {
   applications: JobApplication[];
