@@ -1,4 +1,9 @@
-import { BadgeCheck, BriefcaseBusiness, CalendarClock, type LucideIcon } from "lucide-react";
+import {
+  BadgeCheck,
+  BriefcaseBusiness,
+  CalendarClock,
+  type LucideIcon,
+} from "lucide-react";
 import { DragDropProvider, PointerSensor } from "@dnd-kit/react";
 import { useState } from "react";
 import type {
@@ -10,6 +15,7 @@ import ApplicationColumn, {
 } from "../ApplicationColumn/ApplicationColumn";
 import ApplicationsList from "../ApplicationsList/ApplicationsList";
 import styles from "./ApplicationBoard.module.css";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 interface ApplicationBoardProps {
   applications: JobApplication[];
@@ -62,8 +68,12 @@ export default function ApplicationBoard({
   selectedApplicationId,
   selectedStatus,
 }: ApplicationBoardProps) {
-  const [mobileStatus, setMobileStatus] =
-    useState<ApplicationStatus>("APPLIED");
+  const searchParams = useSearchParams();
+
+  const mobileStatus =
+    (searchParams.get("status")?.toUpperCase() as ApplicationStatus) ??
+    "APPLIED";
+
   const mobileColumn = columns.find(
     (column) => column.status === mobileStatus,
   )!;
@@ -77,6 +87,15 @@ export default function ApplicationBoard({
     ? selectedStatus?.toLowerCase()
     : undefined;
 
+  const router = useRouter();
+  const pathName = usePathname();
+
+  function handleStatusFilterChange(status: ApplicationStatus) {
+    const params = new URLSearchParams(searchParams.toString());
+    params.set("status", status);
+    router.replace(`${pathName}?${params.toString().toLowerCase()}`);
+  }
+
   return (
     <>
       <div className={styles.desktopView}>
@@ -89,14 +108,19 @@ export default function ApplicationBoard({
             return (
               <div
                 className={styles.stage}
-                data-active={selectedStatus === column.status ? "true" : undefined}
+                data-active={
+                  selectedStatus === column.status ? "true" : undefined
+                }
                 data-tone={column.tone}
                 key={column.status}
               >
                 <div className={styles.stageInner}>
                   <span className={styles.marker} aria-hidden="true" />
                   <h2 id={`${column.id}-title`}>{column.title}</h2>
-                  <span className={styles.count} aria-label={`${count} candidature`}>
+                  <span
+                    className={styles.count}
+                    aria-label={`${count} candidature`}
+                  >
                     {count}
                   </span>
                 </div>
@@ -155,7 +179,11 @@ export default function ApplicationBoard({
       </div>
 
       <section className={styles.mobileView} aria-label="Candidature per stato">
-        <div className={styles.statusFilters} role="group" aria-label="Filtra per stato">
+        <div
+          className={styles.statusFilters}
+          role="group"
+          aria-label="Filtra per stato"
+        >
           {columns.map((column) => {
             const count = applications.filter(
               (application) => application.status === column.status,
@@ -169,7 +197,7 @@ export default function ApplicationBoard({
                 aria-pressed={mobileStatus === column.status}
                 aria-controls="mobile-application-list"
                 key={column.status}
-                onClick={() => setMobileStatus(column.status)}
+                onClick={() => handleStatusFilterChange(column.status)}
               >
                 <span>{column.title}</span>
                 <span className={styles.filterCount} aria-hidden="true">
