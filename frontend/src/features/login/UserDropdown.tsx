@@ -6,13 +6,13 @@ import { ChevronDown } from "lucide-react";
 export default function UserDropdown() {
   return (
     <details
-      onBlur={(e) => {
-        const nextTarget = e.relatedTarget as Node | null;
+      // onBlur={(e) => {
+      //   const nextTarget = e.relatedTarget as Node | null;
 
-        if (!nextTarget || !e.currentTarget.contains(nextTarget)) {
-          e.currentTarget.removeAttribute("open");
-        }
-      }}
+      //   if (!nextTarget || !e.currentTarget.contains(nextTarget)) {
+      //     e.currentTarget.removeAttribute("open");
+      //   }
+      // }}
       className={styles.userMenu}
     >
       <summary className={styles.userMenuSummary}>
