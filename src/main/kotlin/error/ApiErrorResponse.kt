@@ -11,6 +11,7 @@ enum class ErrorCodes{
     VALIDATION_FAILED,
     INTERNAL_ERROR,
     UNAUTHORIZED,
+    STATUS_UNDO_CONFLICT,
 }
 
 @Serializable

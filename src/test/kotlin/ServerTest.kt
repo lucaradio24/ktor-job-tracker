@@ -3,7 +3,9 @@ package com.example
 import com.example.model.ApplicationStatus
 import com.example.model.JobApplication
 import com.example.model.JobApplicationChanges
+import com.example.model.StatusTransition
 import com.example.repository.InMemoryApplicationRepository
+import com.example.repository.UndoStatusResult
 import com.example.routes.applicationRoutes
 import com.example.service.JobApplicationService
 import io.ktor.client.request.get
@@ -217,6 +219,80 @@ class ServerTest {
             )
         )
         assertEquals(ApplicationStatus.REJECTED, changed.statusHistory.single().status)
+    }
+
+    @Test
+    fun `undo restores previous status and removes only the latest transition`() = runBlocking {
+        val repository = InMemoryApplicationRepository(
+            mutableListOf(
+                application(status = ApplicationStatus.INTERVIEW).copy(
+                    statusHistory = listOf(
+                        StatusTransition(ApplicationStatus.APPLIED, "2026-08-01T10:00:00Z"),
+                        StatusTransition(ApplicationStatus.INTERVIEW, "2026-08-02T10:00:00Z"),
+                    ),
+                ),
+            ),
+        )
+        val service = JobApplicationService(repository)
+
+        val result = service.undoStatus(
+            "application-1",
+            "owner-a",
+            "2026-08-02T10:00:00Z",
+            ApplicationStatus.APPLIED,
+        )
+
+        val restored = assertIs<UndoStatusResult.Success>(result).application
+        assertEquals(ApplicationStatus.APPLIED, restored.status)
+        assertEquals(listOf(ApplicationStatus.APPLIED), restored.statusHistory.map { it.status })
+    }
+
+    @Test
+    fun `undo rejects a stale transition without changing the application`() = runBlocking {
+        val original = application(status = ApplicationStatus.OFFER).copy(
+            statusHistory = listOf(
+                StatusTransition(ApplicationStatus.APPLIED, "2026-08-01T10:00:00Z"),
+                StatusTransition(ApplicationStatus.INTERVIEW, "2026-08-02T10:00:00Z"),
+                StatusTransition(ApplicationStatus.OFFER, "2026-08-03T10:00:00Z"),
+            ),
+        )
+        val repository = InMemoryApplicationRepository(mutableListOf(original))
+        val service = JobApplicationService(repository)
+
+        val result = service.undoStatus(
+            "application-1",
+            "owner-a",
+            "2026-08-02T10:00:00Z",
+            ApplicationStatus.APPLIED,
+        )
+
+        assertIs<UndoStatusResult.Conflict>(result)
+        assertEquals(original, repository.findById("application-1", "owner-a"))
+    }
+
+    @Test
+    fun `undo supports a legacy application without an earlier transition`() = runBlocking {
+        val repository = InMemoryApplicationRepository(
+            mutableListOf(
+                application(status = ApplicationStatus.INTERVIEW).copy(
+                    statusHistory = listOf(
+                        StatusTransition(ApplicationStatus.INTERVIEW, "2026-08-02T10:00:00Z"),
+                    ),
+                ),
+            ),
+        )
+        val service = JobApplicationService(repository)
+
+        val result = service.undoStatus(
+            "application-1",
+            "owner-a",
+            "2026-08-02T10:00:00Z",
+            ApplicationStatus.APPLIED,
+        )
+
+        val restored = assertIs<UndoStatusResult.Success>(result).application
+        assertEquals(ApplicationStatus.APPLIED, restored.status)
+        assertTrue(restored.statusHistory.isEmpty())
     }
 }
 

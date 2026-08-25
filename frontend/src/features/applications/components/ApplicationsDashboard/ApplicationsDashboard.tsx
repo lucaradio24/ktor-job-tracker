@@ -10,7 +10,9 @@ import type {
 import {
   ApiError,
   deleteApplication,
+  getApplication,
   patchApplication,
+  undoStatusChange,
 } from "../../api/jobApplicationApi";
 import ApplicationBoard from "../ApplicationBoard/ApplicationBoard";
 import ApplicationInspector from "../ApplicationInspector/ApplicationInspector";
@@ -104,23 +106,79 @@ export default function ApplicationsDashboard({
     }
   }
 
-  async function handleUndo(id: string, previousStatus: ApplicationStatus) {
+  async function handleUndo(
+    id: string,
+    previousStatus: ApplicationStatus,
+    changedAt: string,
+  ) {
     if (pendingStatusChanges.current.has(id)) return;
     pendingStatusChanges.current.add(id);
     setUpdateError(null);
 
     try {
-      const restoredApplication = await patchApplication(id, {
-        status: previousStatus,
-      });
+      const restoredApplication = await undoStatusChange(
+        id,
+        changedAt,
+        previousStatus,
+      );
       setJobApplications((applications) =>
         applications.map((application) =>
           application.id === id ? restoredApplication : application,
         ),
       );
     } catch (requestError) {
+      if (
+        requestError instanceof ApiError &&
+        requestError.code === "STATUS_UNDO_CONFLICT"
+      ) {
+        try {
+          const currentApplication = await getApplication(id);
+          setJobApplications((applications) =>
+            applications.map((application) =>
+              application.id === id ? currentApplication : application,
+            ),
+          );
+          const wasAlreadyUndone =
+            currentApplication.status === previousStatus &&
+            !currentApplication.statusHistory.some(
+              (transition) => transition.changedAt === changedAt,
+            );
+          showToast({
+            title: wasAlreadyUndone
+              ? "Spostamento già annullato"
+              : "Annullamento non disponibile",
+            description: wasAlreadyUndone
+              ? `${currentApplication.company} · ${currentApplication.title}`
+              : "Lo stato è stato modificato nel frattempo. Dati aggiornati.",
+          });
+        } catch (syncError) {
+          if (syncError instanceof ApiError && syncError.status === 404) {
+            removeApplication(id);
+          } else {
+            setUpdateError(
+              "Lo stato è cambiato, ma non è stato possibile aggiornare i dati.",
+            );
+          }
+        }
+        return;
+      }
       if (requestError instanceof ApiError && requestError.status === 404) {
         removeApplication(id);
+      } else if (
+        requestError instanceof ApiError &&
+        requestError.code === "NETWORK_ERROR"
+      ) {
+        showToast({
+          title: "Annullamento non riuscito",
+          description: "Controlla la connessione e riprova.",
+          action: {
+            label: "Riprova",
+            onClick: () => {
+              void handleUndo(id, previousStatus, changedAt);
+            },
+          },
+        });
+        return;
       }
       setUpdateError(
         requestError instanceof ApiError && requestError.status === 404
@@ -164,6 +222,7 @@ export default function ApplicationsDashboard({
 
     try {
       const updatedApplication = await patchApplication(id, { status });
+      const statusTransition = updatedApplication.statusHistory.at(-1);
       setJobApplications((applications) =>
         applications.map((application) =>
           application.id === id ? updatedApplication : application,
@@ -172,12 +231,18 @@ export default function ApplicationsDashboard({
       showToast({
         title: `Spostata in ${statusLabels[updatedApplication.status]}`,
         description: `${updatedApplication.company} · ${updatedApplication.title}`,
-        action: {
-          label: "Annulla",
-          onClick: () => {
-            void handleUndo(updatedApplication.id, previousApplication.status);
-          },
-        },
+        action: statusTransition
+          ? {
+              label: "Annulla",
+              onClick: () => {
+                void handleUndo(
+                  updatedApplication.id,
+                  previousApplication.status,
+                  statusTransition.changedAt,
+                );
+              },
+            }
+          : undefined,
       });
     } catch (requestError) {
       const isMissing =

@@ -80,6 +80,35 @@ class InMemoryApplicationRepository (
         return updated
     }
 
+    override suspend fun undoStatus(
+        id: String,
+        ownerId: String,
+        changedAt: String,
+        previousStatus: ApplicationStatus,
+    ): UndoStatusResult {
+        val index = applications.indexOfFirst { it.id == id && it.ownerId == ownerId }
+        if (index == -1) return UndoStatusResult.NotFound
+
+        val current = applications[index]
+        val lastTransition = current.statusHistory.lastOrNull()
+        val trackedPreviousStatus = current.statusHistory.dropLast(1).lastOrNull()?.status
+        if (
+            lastTransition == null ||
+            lastTransition.changedAt != changedAt ||
+            lastTransition.status != current.status ||
+            (trackedPreviousStatus != null && trackedPreviousStatus != previousStatus)
+        ) {
+            return UndoStatusResult.Conflict
+        }
+
+        val restored = current.copy(
+            status = previousStatus,
+            statusHistory = current.statusHistory.dropLast(1),
+        )
+        applications[index] = restored
+        return UndoStatusResult.Success(restored)
+    }
+
 }
 
 private fun List<StatusTransition>.appendIfChanged(

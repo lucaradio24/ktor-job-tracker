@@ -23,7 +23,8 @@ type ErrorCode =
   | "VALIDATION_FAILED"
   | "INTERNAL_ERROR"
   | "NETWORK_ERROR"
-  | "UNAUTHORIZED";
+  | "UNAUTHORIZED"
+  | "STATUS_UNDO_CONFLICT";
 
 export class ApiError extends Error {
   constructor(
@@ -133,6 +134,20 @@ export async function patchApplication(
       "Content-Type": "application/json",
     },
     body: JSON.stringify(payload),
+  });
+}
+
+export async function undoStatusChange(
+  id: string,
+  changedAt: string,
+  previousStatus: ApplicationStatus,
+): Promise<JobApplication> {
+  return fetcher<JobApplication>(`${APPLICATIONS_URL}/${id}/status/undo`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ changedAt, previousStatus }),
   });
 }
 

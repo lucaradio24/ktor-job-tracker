@@ -547,7 +547,7 @@ frontend/src/components/feedback/ToastViewport/ToastProvider.tsx
 
 Stati visivi: successo, errore, informazione. Conservare una sola notifica visibile: per un tracker personale evita una coda complessa.
 
-Il toast di cambio stato offre `Annulla`. L'annullamento è una nuova transizione inversa, non la cancellazione dello storico. La timeline deve quindi mostrare entrambi gli eventi.
+Il toast di cambio stato offre `Annulla`. L'annullamento rimuove atomicamente l'ultima transizione e ripristina lo stato precedente; se la transizione non è più l'ultima, il server risponde `409 Conflict` e il client risincronizza la candidatura.
 
 Animazioni:
 
@@ -1097,7 +1097,7 @@ Usare due utenti di test distinti quando possibile.
 3. selezionarla con tastiera;
 4. spostarla in `Colloqui` e poi `Offerte`;
 5. verificare date e linea contestuale;
-6. usare `Annulla` dal toast e verificare che compaia una transizione inversa;
+6. usare `Annulla` dal toast e verificare che l'ultima transizione venga rimossa e lo stato precedente ripristinato;
 7. modificare titolo/note e verificare che lo storico non cambi;
 8. segnare una candidatura `Non selezionata` e un'altra `Ritirata`;
 9. controllare statistiche e copertura dati;

@@ -1,11 +1,14 @@
 package com.example.repository
 
+import com.example.model.ApplicationStatus
 import com.example.model.JobApplication
 import com.example.model.JobApplicationChanges
 import com.example.model.StatusTransition
 import com.mongodb.client.model.Filters.and
 import com.mongodb.client.model.Filters.ne
+import com.mongodb.client.model.Filters.size
 import com.mongodb.client.model.Updates.push
+import com.mongodb.client.model.Updates.popLast
 import com.mongodb.client.model.Updates.set
 import com.mongodb.client.model.Updates.combine
 import com.mongodb.client.model.Filters.eq
@@ -106,6 +109,41 @@ class MongoApplicationRepository(
         if(updatedFields.isEmpty()) return findById(id, ownerId)
 
         return updateFields(id, ownerId, updatedFields, statusTransition)
+    }
+
+    override suspend fun undoStatus(
+        id: String,
+        ownerId: String,
+        changedAt: String,
+        previousStatus: ApplicationStatus,
+    ): UndoStatusResult {
+        val current = findById(id, ownerId) ?: return UndoStatusResult.NotFound
+        val lastTransition = current.statusHistory.lastOrNull()
+        val trackedPreviousStatus = current.statusHistory.dropLast(1).lastOrNull()?.status
+        if (
+            lastTransition == null ||
+            lastTransition.changedAt != changedAt ||
+            lastTransition.status != current.status ||
+            (trackedPreviousStatus != null && trackedPreviousStatus != previousStatus)
+        ) {
+            return UndoStatusResult.Conflict
+        }
+
+        val filter = and(
+            eq("id", id),
+            eq("ownerId", ownerId),
+            eq("status", current.status),
+            size("statusHistory", current.statusHistory.size),
+            eq("statusHistory.${current.statusHistory.lastIndex}.changedAt", changedAt),
+        )
+        val result = collection.updateOne(
+            filter,
+            combine(set("status", previousStatus), popLast("statusHistory")),
+        )
+        if (result.matchedCount == 0L) return UndoStatusResult.Conflict
+
+        val restored = findById(id, ownerId) ?: return UndoStatusResult.NotFound
+        return UndoStatusResult.Success(restored)
     }
 
     private suspend fun updateFields(
