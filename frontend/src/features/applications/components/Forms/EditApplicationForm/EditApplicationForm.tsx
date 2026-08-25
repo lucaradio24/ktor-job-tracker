@@ -235,6 +235,17 @@ export default function EditApplicationForm({
           </div>
         </label>
 
+        <label className={styles.field} htmlFor="status">
+          <span>Stato iniziale</span>
+          <select name="status" id="status" defaultValue={application.status}>
+            <option value="APPLIED">Candidatura inviata</option>
+            <option value="INTERVIEW">Colloquio</option>
+            <option value="OFFER">Offerta ricevuta</option>
+            <option value="REJECTED">Non selezionata</option>
+            <option value="WITHDRAWN">Ritirata</option>
+          </select>
+        </label>
+
         <label className={styles.field} htmlFor="city">
           <span>Città</span>
           <input id="city" name="city" defaultValue={application.city ?? ""} />

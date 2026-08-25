@@ -430,7 +430,7 @@ export default function ApplicationsDashboard({
             <Archive aria-hidden="true" size={18} strokeWidth={1.8} />
             <span>{showArchive ? "Torna alla board" : "Archivio"}</span>
             <span className={styles.archiveCount} aria-hidden="true">
-              {archiveCount}
+              {showArchive ? pipelineApplications.length : archiveCount}
             </span>
           </button>
 
