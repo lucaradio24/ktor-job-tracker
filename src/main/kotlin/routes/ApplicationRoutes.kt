@@ -3,6 +3,7 @@ package com.example.routes
 import com.example.dto.CreateJobApplicationRequest
 import com.example.dto.PatchJobApplicationRequest
 import com.example.dto.UpdateJobApplicationRequest
+import com.example.dto.UndoStatusRequest
 import com.example.error.ApiErrorResponse
 import com.example.error.ErrorCodes
 import com.example.model.JobApplication
@@ -12,6 +13,7 @@ import io.ktor.server.routing.Route
 import io.ktor.server.routing.get
 import io.ktor.server.routing.route
 import com.example.service.JobApplicationService
+import com.example.repository.UndoStatusResult
 import com.example.validation.JobApplicationRequestValidator
 import io.ktor.http.HttpStatusCode
 import io.ktor.server.application.ApplicationCall
@@ -146,6 +148,43 @@ fun Route.applicationRoutes(service: JobApplicationService) {
                 ?: return@patch call.respond(HttpStatusCode.NotFound, ApiErrorResponse(ErrorCodes.NOT_FOUND, "Application not found"))
 
             call.respond(HttpStatusCode.OK,updatedApplication)
+        }
+
+        post("/{id}/status/undo") {
+            val id = call.parameters["id"]
+                ?: return@post call.respond(
+                    HttpStatusCode.BadRequest,
+                    ApiErrorResponse(ErrorCodes.INVALID_REQUEST, "Invalid ID"),
+                )
+            val request = call.receive<UndoStatusRequest>()
+            if (request.changedAt.isBlank()) {
+                return@post call.respond(
+                    HttpStatusCode.BadRequest,
+                    ApiErrorResponse(ErrorCodes.INVALID_REQUEST, "Invalid status transition"),
+                )
+            }
+
+            when (
+                val result = service.undoStatus(
+                    id,
+                    call.ownerId,
+                    request.changedAt,
+                    request.previousStatus,
+                )
+            ) {
+                is UndoStatusResult.Success -> call.respond(HttpStatusCode.OK, result.application)
+                UndoStatusResult.NotFound -> call.respond(
+                    HttpStatusCode.NotFound,
+                    ApiErrorResponse(ErrorCodes.NOT_FOUND, "Application not found"),
+                )
+                UndoStatusResult.Conflict -> call.respond(
+                    HttpStatusCode.Conflict,
+                    ApiErrorResponse(
+                        ErrorCodes.STATUS_UNDO_CONFLICT,
+                        "The status changed after this transition",
+                    ),
+                )
+            }
         }
 
         delete( "/{id}" ){

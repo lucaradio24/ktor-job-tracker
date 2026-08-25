@@ -1,9 +1,11 @@
 package com.example.service
 
+import com.example.model.ApplicationStatus
 import com.example.model.JobApplication
 import com.example.model.JobApplicationChanges
 import com.example.model.StatusTransition
 import com.example.repository.ApplicationRepository
+import com.example.repository.UndoStatusResult
 import java.time.Instant
 
 class JobApplicationService(
@@ -45,6 +47,13 @@ class JobApplicationService(
         changes,
         changes.status?.let { StatusTransition(it, Instant.now().toString()) },
     )
+
+    suspend fun undoStatus(
+        id: String,
+        ownerId: String,
+        changedAt: String,
+        previousStatus: ApplicationStatus,
+    ): UndoStatusResult = repository.undoStatus(id, ownerId, changedAt, previousStatus)
 
     suspend fun delete(id: String, ownerId: String): JobApplication? =
         repository.delete(id, ownerId)
