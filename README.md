@@ -114,18 +114,29 @@ Browser
    │
    ▼
 ┌──────────────────────────────────┐
-│ Next.js                          │
+│ Next.js on Vercel                │
 │                                  │
 │ • App Router                     │
 │ • Server Components              │
 │ • Auth0 session                  │
 │ • Same-origin API proxy / BFF    │
 └────────────────┬─────────────────┘
-                 │ Bearer JWT
+                 │ HTTPS + Bearer JWT
                  ▼
 ┌──────────────────────────────────┐
-│ Kotlin / Ktor REST API           │
+│ Tailscale Funnel                 │
 │                                  │
+│ • Public HTTPS endpoint          │
+│ • No router port forwarding      │
+│ • Proxy to 127.0.0.1:8080        │
+└────────────────┬─────────────────┘
+                 │ Local proxy
+                 ▼
+┌──────────────────────────────────┐
+│ Ktor API on Raspberry Pi 5       │
+│                                  │
+│ • Debian 13 / Java 21            │
+│ • Fat JAR managed by systemd     │
 │ • Authentication                 │
 │ • Validation                     │
 │ • Business logic                 │
@@ -134,9 +145,9 @@ Browser
 └────────────────┬─────────────────┘
                  │
                  ▼
-           ┌───────────┐
-           │ MongoDB   │
-           └───────────┘
+           ┌───────────────┐
+           │ MongoDB Atlas │
+           └───────────────┘
 ```
 
 The browser communicates with same-origin Next.js API routes rather than calling Ktor directly. Next.js retrieves the Auth0 access token server-side and forwards authenticated requests to the API.
@@ -157,22 +168,32 @@ The frontend cannot write or rewrite `statusHistory`. Ktor creates a transition 
 
 The backend never trusts a user identifier supplied by the client. Ownership comes from the authenticated JWT, and repository operations always combine the requested resource with that identity.
 
+### Hybrid deployment
+
+The Next.js frontend runs on Vercel, while the Ktor backend is self-hosted on a Raspberry Pi 5 running 64-bit Debian 13. Ktor is packaged as a fat JAR and managed by `systemd`, Linux's service manager, which runs it as a background service and starts it automatically when the Pi boots.
+
+The API listens only on `127.0.0.1:8080`. Tailscale Funnel provides the public HTTPS endpoint and proxies requests to the local Ktor process, avoiding direct port exposure and router port forwarding. The private Tailscale network is also used for remote administration over SSH.
+
+Backend releases are stored as versioned JARs and activated through a `current.jar` symbolic link, keeping the previous release available for manual rollback. MongoDB remains managed separately on Atlas.
+
 ### Responsive interaction patterns
 
 Desktop and mobile share the same product model but use controls suited to their context: drag and drop with an adjacent inspector on larger screens, explicit stage filters and a full-page detail flow on mobile.
 
 ## Tech stack
 
-| Area           | Technologies                     |
-| -------------- | -------------------------------- |
-| Frontend       | Next.js 16, React 19, TypeScript |
-| Backend        | Kotlin, Ktor                     |
-| Database       | MongoDB                          |
-| Authentication | Auth0, JWT                       |
-| Interaction    | dnd-kit                          |
-| Icons          | Lucide                           |
-| CI             | GitHub Actions                   |
-| Web deployment | Vercel                           |
+| Area | Technologies |
+| --- | --- |
+| Frontend | Next.js 16, React 19, TypeScript |
+| Backend | Kotlin, Ktor |
+| Database | MongoDB Atlas |
+| Authentication | Auth0, JWT |
+| Interaction | dnd-kit |
+| Icons | Lucide |
+| CI | GitHub Actions |
+| Frontend deployment | Vercel |
+| Backend deployment | Raspberry Pi 5, Debian 13, systemd |
+| Networking | Tailscale Funnel |
 
 ## Project structure
 
