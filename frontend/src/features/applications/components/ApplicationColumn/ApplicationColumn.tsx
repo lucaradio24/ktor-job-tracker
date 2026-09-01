@@ -43,15 +43,6 @@ export default function ApplicationColumn({
 }: ApplicationColumnProps) {
   const { ref, isDropTarget } = useDroppable({ id: status });
 
-  function sortApplicationsFromTheMostRecentToTheOldest(
-    a: JobApplication,
-    b: JobApplication,
-  ) {
-    return b.appliedAt.localeCompare(a.appliedAt);
-  }
-
-  applications.sort(sortApplicationsFromTheMostRecentToTheOldest);
-
   return (
     <section
       ref={ref}
