@@ -15,6 +15,7 @@ import ApplicationColumn, {
 import ApplicationsList from "../ApplicationsList/ApplicationsList";
 import styles from "./ApplicationBoard.module.css";
 import { useSearchParams } from "next/navigation";
+import { useEffect, useRef } from "react";
 
 interface ApplicationBoardProps {
   applications: JobApplication[];
@@ -68,11 +69,20 @@ export default function ApplicationBoard({
   selectedStatus,
 }: ApplicationBoardProps) {
   const searchParams = useSearchParams();
+  const statusFiltersRef = useRef<HTMLDivElement>(null);
 
   function handleStatusFilterChange(status: ApplicationStatus) {
     const params = new URLSearchParams(searchParams.toString());
     params.set("status", status.toLowerCase());
     window.history.replaceState(null, "", `?${params.toString()}`);
+  }
+
+  function revealActiveFilter(element: HTMLButtonElement | null) {
+    element?.scrollIntoView({
+      behavior: "smooth",
+      block: "nearest",
+      inline: "nearest",
+    });
   }
 
   const boardColumns = columns.map((column) => ({
@@ -181,6 +191,7 @@ export default function ApplicationBoard({
           className={styles.statusFilters}
           role="group"
           aria-label="Filtra per stato"
+          ref={statusFiltersRef}
         >
           {boardColumns.map((column) => {
             const count = column.applications.length;
@@ -193,7 +204,14 @@ export default function ApplicationBoard({
                 aria-pressed={mobileColumn.status === column.status}
                 aria-controls="mobile-application-list"
                 key={column.status}
-                onClick={() => handleStatusFilterChange(column.status)}
+                ref={
+                  mobileColumn.status === column.status
+                    ? revealActiveFilter
+                    : undefined
+                }
+                onClick={() => {
+                  handleStatusFilterChange(column.status);
+                }}
               >
                 <span>{column.title}</span>
                 <span className={styles.filterCount} aria-hidden="true">
