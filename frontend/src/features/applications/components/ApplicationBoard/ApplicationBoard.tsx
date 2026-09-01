@@ -69,37 +69,41 @@ export default function ApplicationBoard({
 }: ApplicationBoardProps) {
   const searchParams = useSearchParams();
 
-  const mobileStatus =
-    (searchParams.get("status")?.toUpperCase() as ApplicationStatus) ??
-    "APPLIED";
-
-  const mobileColumn = columns.find(
-    (column) => column.status === mobileStatus,
-  )!;
-  const mobileApplications = applications.filter(
-    (application) => application.status === mobileStatus,
-  );
-  const MobileEmptyIcon = mobileColumn.emptyIcon;
-  const selectedStage = columns.some(
-    (column) => column.status === selectedStatus,
-  )
-    ? selectedStatus?.toLowerCase()
-    : undefined;
-
   function handleStatusFilterChange(status: ApplicationStatus) {
     const params = new URLSearchParams(searchParams.toString());
     params.set("status", status.toLowerCase());
     window.history.replaceState(null, "", `?${params.toString()}`);
   }
 
+  const boardColumns = columns.map((column) => ({
+    ...column,
+    applications: applications
+      .filter((application) => application.status === column.status)
+      .toSorted((a, b) => b.appliedAt.localeCompare(a.appliedAt)),
+  }));
+
+  const selectedStage = boardColumns.some(
+    (column) => column.status === selectedStatus,
+  )
+    ? selectedStatus?.toLowerCase()
+    : undefined;
+
+  const requestedStatus = searchParams.get("status")?.toUpperCase();
+
+  const mobileColumn =
+    boardColumns.find((column) => column.status === requestedStatus) ??
+    boardColumns[0];
+
+  const mobileApplications = mobileColumn.applications;
+
+  const MobileEmptyIcon = mobileColumn.emptyIcon;
+
   return (
     <>
       <div className={styles.desktopView}>
         <div className={styles.route} data-selected-stage={selectedStage}>
-          {columns.map((column) => {
-            const count = applications.filter(
-              (application) => application.status === column.status,
-            ).length;
+          {boardColumns.map((column) => {
+            const count = column.applications.length;
 
             return (
               <div
@@ -153,11 +157,9 @@ export default function ApplicationBoard({
           }}
         >
           <div className={styles.board} id="application-board">
-            {columns.map((column) => (
+            {boardColumns.map((column) => (
               <ApplicationColumn
-                applications={applications.filter(
-                  (application) => application.status === column.status,
-                )}
+                applications={column.applications}
                 emptyIcon={column.emptyIcon}
                 emptyMessage={column.emptyMessage}
                 id={column.id}
@@ -180,17 +182,15 @@ export default function ApplicationBoard({
           role="group"
           aria-label="Filtra per stato"
         >
-          {columns.map((column) => {
-            const count = applications.filter(
-              (application) => application.status === column.status,
-            ).length;
+          {boardColumns.map((column) => {
+            const count = column.applications.length;
 
             return (
               <button
                 type="button"
                 className={styles.statusFilter}
                 data-tone={column.tone}
-                aria-pressed={mobileStatus === column.status}
+                aria-pressed={mobileColumn.status === column.status}
                 aria-controls="mobile-application-list"
                 key={column.status}
                 onClick={() => handleStatusFilterChange(column.status)}
@@ -214,7 +214,7 @@ export default function ApplicationBoard({
         <div
           id="mobile-application-list"
           className={styles.mobileList}
-          key={mobileStatus}
+          key={mobileColumn.status}
         >
           {mobileApplications.length > 0 ? (
             <ApplicationsList
